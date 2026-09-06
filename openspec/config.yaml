@@ -1,13 +1,17 @@
 schema: spec-driven
 
-# Project context (optional)
+# Project context
 # This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+context: |
+  Universal Expo app (SDK 57) written in TypeScript with strict mode.
+  Navigation: Expo Router (file-based, screens in src/app/).
+  Native UI: @expo/ui universal components (SwiftUI on iOS, Jetpack Compose on
+  Android, React Native fallback on web). Prefer the universal entry point
+  `@expo/ui` over the platform-specific `@expo/ui/swift-ui` and
+  `@expo/ui/jetpack-compose` unless a platform-only component is needed.
+  Path alias: `@/` -> src/, `@/assets/` -> assets/.
+  Styling: StyleSheet plus the theme tokens in src/constants/theme.ts.
+  Targets: iOS, Android, and web.
 
 # Per-artifact rules (optional)
 # Add custom rules for specific artifacts.
