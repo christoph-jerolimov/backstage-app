@@ -46,10 +46,21 @@ In the output, you'll find options to open the app in a
 | Command | What it does |
 | --- | --- |
 | `npm start` | Start the Metro dev server |
-| `npm run ios` / `npm run android` / `npm run web` | Start and open on a platform |
+| `npm run web` | Start and open in the browser |
+| `npm run ios` / `npm run android` | Build a development build and open it on a simulator or device |
 | `npm run lint` | Run ESLint via `expo lint` |
-| `npx tsc --noEmit` | Typecheck |
+| `npm run typecheck` | Typecheck with `tsc` |
+| `npm test` | Run the Jest test suite (`jest-expo` preset) |
 | `npm run reset-project` | Move the starter screens aside and start from a blank `app/` |
+
+## Continuous integration
+
+The [CI workflow](.github/workflows/ci.yml) runs on every pull request and on
+pushes to `main`:
+
+1. **Check** — typecheck, lint, tests, and a static web export (uploaded as an artifact).
+2. **Android** — `expo prebuild` plus a Gradle debug build (APK uploaded as an artifact).
+3. **iOS** — `expo prebuild` plus an Xcode build for the iOS Simulator.
 
 ## Learn more
 
