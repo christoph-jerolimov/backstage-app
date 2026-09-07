@@ -36,10 +36,37 @@ In the output, you'll find options to open the app in a
 
 ## Project layout
 
-- `src/app/` — screens, one file per route (`index.tsx`, `explore.tsx`, `components.tsx`)
-- `src/components/` — shared UI, including the native and web tab bars
-- `src/constants/theme.ts` — colors, fonts, and spacing tokens
+The repository is an npm-workspaces monorepo:
+
+- `packages/app/` — the Expo app (`@backstage-app/app`). `src/app/` holds the Expo Router
+  routes; `_layout.tsx` renders the drawer, and each plugin route is a one-line re-export.
+- `packages/core/` — `@backstage-app/core`: the plugin contract (`createPlugin`,
+  `createPluginRegistry`), shared UI primitives (`Page`, `ListCard`, `ThemedText`, …), the
+  theme tokens, and the color-scheme hooks.
+- `plugins/*/` — one package per plugin (`@backstage-app/plugin-home`, `-catalog`,
+  `-search`, `-notifications`). Each exports a plugin definition and its page components.
 - `openspec/` — OpenSpec specs and change proposals
+
+### Adding a plugin
+
+1. Create `plugins/<name>/` with a `package.json` (`"main": "src/index.ts"`) that depends
+   on `@backstage-app/core`.
+2. Export a plugin from `src/index.ts`:
+
+   ```ts
+   export const myPlugin = createPlugin({
+     id: 'my-plugin',
+     name: 'My Plugin',
+     routes: [{ name: 'my-plugin', component: MyPage }],
+     navItems: [{ title: 'My Plugin', route: 'my-plugin', icon: { ios: 'star', android: 'star', web: 'star' } }],
+   });
+   ```
+
+3. Add the dependency to `packages/app/package.json`, register the plugin in
+   `packages/app/src/plugins.ts`, and mount its route with
+   `packages/app/src/app/my-plugin.tsx` containing
+   `export { MyPage as default } from '@backstage-app/plugin-my-plugin';`.
+4. Run `npm install` at the root to link the workspace.
 
 ## Scripts
 
@@ -51,7 +78,8 @@ In the output, you'll find options to open the app in a
 | `npm run lint` | Run ESLint via `expo lint` |
 | `npm run typecheck` | Typecheck with `tsc` |
 | `npm test` | Run the Jest test suite (`jest-expo` preset) |
-| `npm run reset-project` | Move the starter screens aside and start from a blank `app/` |
+
+All scripts run from the repository root and cover every workspace.
 
 ## Continuous integration
 

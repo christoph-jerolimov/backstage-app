@@ -1,0 +1,23 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "types": ["expo/types", "jest"],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/assets/*": ["./assets/*"]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "../core/src/**/*.ts",
+    "../core/src/**/*.tsx",
+    "../../plugins/*/src/**/*.ts",
+    "../../plugins/*/src/**/*.tsx",
+    "../../jest.config.js",
+    "../../eslint.config.js"
+  ]
+}
