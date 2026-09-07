@@ -1,1 +1,1 @@
-export { SearchPage as default } from '@backstage-app/plugin-search';
+export { SearchScreen as default } from '@backstage-app/plugin-search';
