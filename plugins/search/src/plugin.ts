@@ -1,11 +1,11 @@
 import { createPlugin } from '@backstage-app/core';
 
-import { SearchPage } from './search-page';
+import { SearchScreen } from './search-screen';
 
 export const searchPlugin = createPlugin({
   id: 'search',
   name: 'Search',
-  routes: [{ name: 'search', component: SearchPage }],
+  routes: [{ name: 'search', component: SearchScreen }],
   navItems: [
     {
       title: 'Search',
