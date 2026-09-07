@@ -32,3 +32,7 @@ export { useRemoteData } from './hooks/use-remote-data';
 export type { RemoteData, RemoteDataResult } from './hooks/use-remote-data';
 
 export * from './backstage';
+
+export { ActionButton } from './components/action-button';
+export type { ActionButtonProps } from './components/action-button';
+export { formatRelativeTime } from './utils/relative-time';

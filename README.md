@@ -44,6 +44,11 @@ time (see `.env.example`):
 | `EXPO_PUBLIC_BACKSTAGE_URL` | Base URL of your Backstage instance, for example `https://backstage.example.com` |
 | `EXPO_PUBLIC_BACKSTAGE_TOKEN` | Optional static bearer token sent as `Authorization: Bearer …` |
 
+The Notifications API is scoped to the signed-in user, so Backstage rejects a static
+service token there with 401/403. Until the app has its own sign-in, use a user token
+(for example one copied from a browser session) as `EXPO_PUBLIC_BACKSTAGE_TOKEN` when
+you want live notifications; catalog and search work with either kind of token.
+
 Without a URL the app runs in **demo mode**: plugins show built-in sample data and a banner
 explains how to connect. Put the variables in `packages/app/.env` (gitignored) or export
 them before `npm start`.

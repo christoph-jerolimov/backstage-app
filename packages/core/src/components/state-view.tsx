@@ -1,5 +1,6 @@
-import { ActivityIndicator, Pressable, StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet } from 'react-native';
 
+import { ActionButton } from './action-button';
 import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
 
@@ -24,11 +25,7 @@ export function StateView(props: StateViewProps) {
         </ThemedText>
       ) : null}
       {props.kind === 'error' && props.onRetry ? (
-        <Pressable accessibilityRole="button" onPress={props.onRetry} style={({ pressed }) => pressed && styles.pressed}>
-          <ThemedView type="backgroundElement" style={styles.button}>
-            <ThemedText type="smallBold">{props.retryLabel ?? 'Retry'}</ThemedText>
-          </ThemedView>
-        </Pressable>
+        <ActionButton label={props.retryLabel ?? 'Retry'} onPress={props.onRetry} />
       ) : null}
     </ThemedView>
   );
@@ -42,13 +39,5 @@ const styles = StyleSheet.create({
   },
   message: {
     textAlign: 'center',
-  },
-  button: {
-    paddingHorizontal: Spacing.four,
-    paddingVertical: Spacing.two,
-    borderRadius: Spacing.four,
-  },
-  pressed: {
-    opacity: 0.7,
   },
 });
