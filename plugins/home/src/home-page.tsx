@@ -1,14 +1,22 @@
 import { Page, Spacing, ThemedText, ThemedView } from '@backstage-app/core';
 import { StyleSheet } from 'react-native';
 
-export function HomePage() {
+import { getGreeting } from './greeting';
+
+export type HomePageProps = {
+  /** The instant to greet for. Defaults to the device clock at render time. */
+  now?: Date;
+};
+
+export function HomePage({ now = new Date() }: HomePageProps) {
+  const greeting = getGreeting(now);
+
   return (
     <Page title="Home" description="Your starting point for the developer portal.">
-      <ThemedView type="backgroundElement" style={styles.card}>
-        <ThemedText type="smallBold">Welcome to Backstage</ThemedText>
+      <ThemedView type="backgroundElement" style={styles.card} testID={`greeting-${greeting.period}`}>
+        <ThemedText type="subtitle">{greeting.headline}</ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
-          Use the drawer to jump to the catalog, search, and your notifications. This page
-          will greet you based on the time of day in a later iteration.
+          {greeting.message}
         </ThemedText>
       </ThemedView>
     </Page>

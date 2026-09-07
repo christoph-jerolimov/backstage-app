@@ -8,6 +8,7 @@
     "@backstage-app/core": "*"
   },
   "peerDependencies": {
+    "expo-router": "*",
     "react": "*",
     "react-native": "*"
   }

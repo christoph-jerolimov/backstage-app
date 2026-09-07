@@ -88,7 +88,8 @@ pushes to `main`:
 
 1. **Check** — typecheck, lint, tests, and a static web export (uploaded as an artifact).
 2. **Android** — `expo prebuild` plus a Gradle debug build (APK uploaded as an artifact).
-3. **iOS** — `expo prebuild` plus an Xcode build for the iOS Simulator.
+3. **iOS** — `expo prebuild` plus an Xcode build for the iOS Simulator (currently
+   disabled with `if: false` in the workflow to save macOS runner time).
 
 ## Learn more
 

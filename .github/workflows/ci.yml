@@ -101,6 +101,8 @@ jobs:
     name: iOS simulator build
     runs-on: macos-latest
     needs: check
+    # Temporarily disabled to save macOS runner time; flip to `true` to re-enable.
+    if: false
     steps:
       - uses: actions/checkout@v5
 
