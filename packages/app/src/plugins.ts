@@ -1,4 +1,5 @@
 import { createPluginRegistry } from '@backstage-app/core';
+import { apisPlugin } from '@backstage-app/plugin-apis';
 import { catalogPlugin } from '@backstage-app/plugin-catalog';
 import { homePlugin } from '@backstage-app/plugin-home';
 import { notificationsPlugin } from '@backstage-app/plugin-notifications';
@@ -13,4 +14,5 @@ export const registry = createPluginRegistry([
   catalogPlugin,
   searchPlugin,
   notificationsPlugin,
+  apisPlugin,
 ]);

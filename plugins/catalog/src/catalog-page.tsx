@@ -21,6 +21,12 @@ export type CatalogPageProps = {
   /** Shows the demo banner when true. */
   demo?: boolean;
   initialFilters?: CatalogFilters;
+  /** Page title; defaults to "Catalog". */
+  title?: string;
+  /** Page description; defaults to the catalog blurb. */
+  description?: string;
+  /** Locks the listing to one kind and hides the kind selector. */
+  fixedKind?: string;
 };
 
 const EMPTY_FACETS: CatalogFacets = { types: [], owners: [], lifecycles: [], tags: [] };
@@ -45,8 +51,17 @@ export function entitySubtitle(entity: Entity): string {
   return parts.join(' · ');
 }
 
-export function CatalogPage({ api, demo = false, initialFilters = defaultFilters }: CatalogPageProps) {
-  const [filters, setFilters] = useState<CatalogFilters>(initialFilters);
+export function CatalogPage({
+  api,
+  demo = false,
+  initialFilters,
+  title = 'Catalog',
+  description = 'Browse the software catalog.',
+  fixedKind,
+}: CatalogPageProps) {
+  const [filters, setFilters] = useState<CatalogFilters>(
+    initialFilters ?? (fixedKind ? { kind: fixedKind, text: '' } : defaultFilters)
+  );
 
   const facets = useRemoteData(
     useCallback((signal: AbortSignal) => api.getFacets(filters.kind, signal), [api, filters.kind]),
@@ -61,7 +76,7 @@ export function CatalogPage({ api, demo = false, initialFilters = defaultFilters
   const update = (patch: Partial<CatalogFilters>) => setFilters((current) => ({ ...current, ...patch }));
 
   return (
-    <Page title="Catalog" description="Browse the software catalog.">
+    <Page title={title} description={description}>
       {demo ? (
         <ThemedView type="backgroundElement" style={styles.banner} testID="demo-banner">
           <ThemedText type="smallBold">Showing demo data</ThemedText>
@@ -79,13 +94,15 @@ export function CatalogPage({ api, demo = false, initialFilters = defaultFilters
           placeholder="Filter by name, title, or description"
           testID="catalog-text-filter"
         />
-        <FilterChips
-          label="Kind"
-          options={KIND_OPTIONS.map((kind) => ({ value: kind, label: capitalize(kind) }))}
-          selected={filters.kind}
-          onSelect={(kind) => setFilters((current) => withKind(current, kind ?? defaultFilters.kind))}
-          testID="filter-kind"
-        />
+        {fixedKind ? null : (
+          <FilterChips
+            label="Kind"
+            options={KIND_OPTIONS.map((kind) => ({ value: kind, label: capitalize(kind) }))}
+            selected={filters.kind}
+            onSelect={(kind) => setFilters((current) => withKind(current, kind ?? defaultFilters.kind))}
+            testID="filter-kind"
+          />
+        )}
         <FilterChips label="Type" options={toOptions(facetValues.types)} selected={filters.type} onSelect={(type) => update({ type })} allLabel="All" testID="filter-type" />
         <FilterChips label="Owner" options={toOptions(facetValues.owners)} selected={filters.owner} onSelect={(owner) => update({ owner })} allLabel="All" testID="filter-owner" />
         <FilterChips label="Lifecycle" options={toOptions(facetValues.lifecycles)} selected={filters.lifecycle} onSelect={(lifecycle) => update({ lifecycle })} allLabel="All" testID="filter-lifecycle" />

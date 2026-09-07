@@ -1,12 +1,4 @@
-# demo-plugins
-
-## Purpose
-
-The set of plugins bundled with the app (home, catalog, search, notifications) and the
-guarantee that each one is registered, navigable, and covered by the repository checks.
-Each plugin's page behavior is specified by its own capability.
-
-## Requirements
+## ADDED Requirements
 
 ### Requirement: Bundled plugins are installed
 The app SHALL install the home, catalog, search, notifications, and apis plugins. Each
@@ -17,3 +9,9 @@ SHALL build, lint, and typecheck as part of the repository checks.
 - **WHEN** the app starts
 - **THEN** the drawer shows Home, Catalog, Search, Notifications, and APIs entries
   contributed by the respective plugin packages
+
+## REMOVED Requirements
+
+### Requirement: Four demo plugins are installed
+**Reason**: The bundled set is no longer four plugins.
+**Migration**: Replaced by "Bundled plugins are installed", which lists the current set.

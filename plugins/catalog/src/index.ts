@@ -2,6 +2,7 @@ export { catalogPlugin } from './plugin';
 export { CatalogPage, entitySubtitle } from './catalog-page';
 export type { CatalogPageProps } from './catalog-page';
 export { CatalogScreen } from './catalog-screen';
+export type { CatalogScreenProps } from './catalog-screen';
 export { createRestCatalogApi, buildEntitiesQuery, buildFacetsQuery, parseFacets, PAGE_SIZE } from './api';
 export type { CatalogApi, CatalogFacets, EntityPage } from './api';
 export { createDemoCatalogApi, demoEntities } from './demo-api';
