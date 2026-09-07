@@ -1,4 +1,4 @@
-import { buildFilterParam, defaultFilters, matchesQuery, withKind } from '../filters';
+import { buildFilterParam, defaultFilters, matchesQuery, ownerRefs, withKind } from '../filters';
 import { demoEntities } from '../demo-api';
 
 const byName = (name: string) => demoEntities.find((e) => e.metadata.name === name)!;
@@ -74,5 +74,19 @@ describe('matchesQuery', () => {
     expect(matchesQuery(byName('payments-frontend'), { ownedBy: 'group:default/team-platform', text: '' })).toBe(false);
     expect(matchesQuery(byName('priya.patel'), { kind: 'user', memberOf: 'group:default/team-payments', text: '' })).toBe(true);
     expect(matchesQuery(byName('jane.doe'), { kind: 'user', memberOf: 'group:default/team-payments', text: '' })).toBe(false);
+  });
+
+  it('accepts several owner refs', () => {
+    expect(ownerRefs({ text: '' })).toBeUndefined();
+    expect(ownerRefs({ ownedBy: 'group:default/a', text: '' })).toEqual(['group:default/a']);
+    expect(ownerRefs({ ownedBy: [], text: '' })).toEqual([]);
+
+    const two = { kind: 'component', ownedBy: ['group:default/team-platform', 'group:default/team-payments'], text: '' };
+    expect(buildFilterParam(two, 'group:default/team-payments')).toBe('kind=component,relations.ownedBy=group:default/team-payments');
+
+    expect(matchesQuery(byName('petstore'), two)).toBe(true);
+    expect(matchesQuery(byName('payments-frontend'), two)).toBe(true);
+    expect(matchesQuery(byName('petstore'), { ownedBy: ['group:default/team-payments'], text: '' })).toBe(false);
+    expect(matchesQuery(byName('petstore'), { ownedBy: [], text: '' })).toBe(false);
   });
 });

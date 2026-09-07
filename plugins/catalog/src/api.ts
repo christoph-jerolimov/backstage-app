@@ -2,7 +2,7 @@ import type { Entity } from '@backstage/catalog-model';
 import type { FetchJson } from '@backstage-app/core';
 
 import type { EntityRef } from './entity-ref';
-import { annotationPair, buildFilterParam, type CatalogFilters } from './filters';
+import { annotationPair, buildFilterParam, ownerRefs, type CatalogFilters } from './filters';
 
 export type CatalogFacets = {
   types: string[];
@@ -48,7 +48,13 @@ type FacetsResponse = {
 /** Query string for `/api/catalog/entities/by-query`. */
 export function buildEntitiesQuery(filters: CatalogFilters): string {
   const params = new URLSearchParams();
-  params.set('filter', buildFilterParam(filters));
+  const owners = ownerRefs(filters);
+  if (owners && owners.length > 0) {
+    // Backstage ORs repeated `filter` parameters, so one per owner reference.
+    for (const owner of owners) params.append('filter', buildFilterParam(filters, owner));
+  } else {
+    params.set('filter', buildFilterParam(filters));
+  }
   const term = filters.text.trim();
   if (term) params.set('fullTextFilter[term]', term);
   params.set('limit', String(PAGE_SIZE));
@@ -90,6 +96,8 @@ export function parseFacets(response: FacetsResponse): CatalogFacets {
 export function createRestCatalogApi(fetchJson: FetchJson): CatalogApi {
   return {
     async queryEntities(filters, signal) {
+      const owners = ownerRefs(filters);
+      if (owners && owners.length === 0) return { items: [], totalItems: 0 };
       const response = await fetchJson<QueryEntitiesResponse>(
         `/api/catalog/entities/by-query?${buildEntitiesQuery(filters)}`,
         { signal }

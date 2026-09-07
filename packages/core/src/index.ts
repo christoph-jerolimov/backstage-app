@@ -51,6 +51,9 @@ export type { TextFilterProps } from './components/text-filter';
 export { StateView } from './components/state-view';
 export type { StateViewProps } from './components/state-view';
 
+export { useOwnership } from './use-ownership';
+export type { Ownership } from './use-ownership';
+
 export { useRemoteData } from './hooks/use-remote-data';
 export type { RemoteData, RemoteDataResult } from './hooks/use-remote-data';
 

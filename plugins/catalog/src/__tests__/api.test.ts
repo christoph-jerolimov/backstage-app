@@ -56,6 +56,25 @@ describe('REST catalog api', () => {
   });
 });
 
+  it('sends one filter parameter per owner and keeps the single-owner query unchanged', () => {
+    const many = new URLSearchParams(buildEntitiesQuery({ kind: 'component', ownedBy: ['group:default/team-platform', 'group:default/team-payments'], text: '' }));
+    expect(many.getAll('filter')).toEqual([
+      'kind=component,relations.ownedBy=group:default/team-platform',
+      'kind=component,relations.ownedBy=group:default/team-payments',
+    ]);
+
+    const one = new URLSearchParams(buildEntitiesQuery({ kind: 'component', ownedBy: 'group:default/team-platform', text: '' }));
+    expect(one.getAll('filter')).toEqual(['kind=component,relations.ownedBy=group:default/team-platform']);
+    expect(one.getAll('filter')).toEqual(new URLSearchParams(buildEntitiesQuery({ kind: 'component', ownedBy: ['group:default/team-platform'], text: '' })).getAll('filter'));
+  });
+
+  it('returns an empty page for an empty owner list without a request', async () => {
+    const fetchJson = jest.fn();
+    const api = createRestCatalogApi(fetchJson as never);
+    await expect(api.queryEntities({ ownedBy: [], text: '' })).resolves.toEqual({ items: [], totalItems: 0 });
+    expect(fetchJson).not.toHaveBeenCalled();
+  });
+
 describe('demo catalog api', () => {
   const api = createDemoCatalogApi();
 
