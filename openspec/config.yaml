@@ -4,13 +4,20 @@ schema: spec-driven
 # This is shown to AI when creating artifacts.
 context: |
   Universal Expo app (SDK 57) written in TypeScript with strict mode.
-  Navigation: Expo Router (file-based, screens in src/app/).
+  Monorepo (npm workspaces): the Expo app lives in packages/app, the plugin
+  contract and shared UI in packages/core (@backstage-app/core), and one
+  package per plugin under plugins/* (@backstage-app/plugin-<name>). Plugins
+  are registered in packages/app/src/plugins.ts and mounted by one-line route
+  files in packages/app/src/app/. Main navigation is a drawer built from the
+  plugin registry (expo-router/drawer).
+  Navigation: Expo Router (file-based, routes in packages/app/src/app/).
   Native UI: @expo/ui universal components (SwiftUI on iOS, Jetpack Compose on
   Android, React Native fallback on web). Prefer the universal entry point
   `@expo/ui` over the platform-specific `@expo/ui/swift-ui` and
   `@expo/ui/jetpack-compose` unless a platform-only component is needed.
-  Path alias: `@/` -> src/, `@/assets/` -> assets/.
-  Styling: StyleSheet plus the theme tokens in src/constants/theme.ts.
+  Path alias (app only): `@/` -> packages/app/src/, `@/assets/` -> packages/app/assets/.
+  Plugins import shared primitives and theme tokens from @backstage-app/core.
+  Styling: StyleSheet plus the theme tokens exported by @backstage-app/core.
   Targets: iOS, Android, and web.
 
 # Per-artifact rules (optional)
