@@ -1,4 +1,4 @@
-import { buildEntitiesQuery, buildFacetsQuery, createRestCatalogApi, parseFacets } from '../api';
+import { buildEntitiesQuery, buildEntityByNamePath, buildFacetsQuery, createRestCatalogApi, parseFacets } from '../api';
 import { createDemoCatalogApi, demoEntities } from '../demo-api';
 import { defaultFilters } from '../filters';
 
@@ -81,5 +81,23 @@ describe('demo catalog api', () => {
     expect(facets.owners).toEqual(['team-payments', 'team-platform']);
     expect(facets.lifecycles).toEqual(['experimental', 'production']);
     expect(facets.tags).toEqual(['go', 'java', 'react', 'spring', 'typescript']);
+  });
+
+  it('loads one entity by name', async () => {
+    const fetchJson = jest.fn(async () => ({ kind: 'Component', metadata: { name: 'petstore' } }));
+    const api = createRestCatalogApi(fetchJson as never);
+    const entity = await api.getEntityByName({ kind: 'Component', namespace: 'Default', name: 'petstore' });
+    expect(entity.metadata.name).toBe('petstore');
+    expect(fetchJson).toHaveBeenCalledWith('/api/catalog/entities/by-name/component/default/petstore', expect.anything());
+    expect(buildEntityByNamePath({ kind: 'api', namespace: 'default', name: 'pay ments' })).toBe('/api/catalog/entities/by-name/api/default/pay%20ments');
+  });
+});
+
+describe('demo catalog api entity lookup', () => {
+  it('finds demo entities case-insensitively and rejects unknown ones with 404', async () => {
+    const api = createDemoCatalogApi();
+    const entity = await api.getEntityByName({ kind: 'Component', namespace: 'DEFAULT', name: 'petstore' });
+    expect(entity.metadata.title).toBe('Petstore');
+    await expect(api.getEntityByName({ kind: 'component', namespace: 'default', name: 'nope' })).rejects.toMatchObject({ status: 404 });
   });
 });

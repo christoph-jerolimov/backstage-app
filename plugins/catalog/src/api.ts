@@ -1,6 +1,7 @@
 import type { Entity } from '@backstage/catalog-model';
 import type { FetchJson } from '@backstage-app/core';
 
+import type { EntityRef } from './entity-ref';
 import { annotationPair, buildFilterParam, type CatalogFilters } from './filters';
 
 export type CatalogFacets = {
@@ -10,14 +11,16 @@ export type CatalogFacets = {
   tags: string[];
 };
 
-export type EntityPage = {
+export type EntityQueryPage = {
   items: Entity[];
   totalItems: number;
 };
 
 export interface CatalogApi {
-  queryEntities(filters: CatalogFilters, signal?: AbortSignal): Promise<EntityPage>;
+  queryEntities(filters: CatalogFilters, signal?: AbortSignal): Promise<EntityQueryPage>;
   getFacets(kind: string | undefined, requiredAnnotation: string | undefined, signal?: AbortSignal): Promise<CatalogFacets>;
+  /** Loads one entity; rejects with a `BackstageApiError` of status 404 when it does not exist. */
+  getEntityByName(ref: EntityRef, signal?: AbortSignal): Promise<Entity>;
 }
 
 export const PAGE_SIZE = 50;
@@ -60,6 +63,11 @@ export function buildFacetsQuery(kind: string | undefined, requiredAnnotation?: 
   return params.toString();
 }
 
+/** Path of `/api/catalog/entities/by-name/{kind}/{namespace}/{name}`. */
+export function buildEntityByNamePath(ref: EntityRef): string {
+  return `/api/catalog/entities/by-name/${encodeURIComponent(ref.kind.toLowerCase())}/${encodeURIComponent(ref.namespace.toLowerCase())}/${encodeURIComponent(ref.name)}`;
+}
+
 export function parseFacets(response: FacetsResponse): CatalogFacets {
   const values = (field: string) =>
     (response.facets?.[field] ?? [])
@@ -91,6 +99,9 @@ export function createRestCatalogApi(fetchJson: FetchJson): CatalogApi {
         { signal }
       );
       return parseFacets(response);
+    },
+    getEntityByName(ref, signal) {
+      return fetchJson<Entity>(buildEntityByNamePath(ref), { signal });
     },
   };
 }

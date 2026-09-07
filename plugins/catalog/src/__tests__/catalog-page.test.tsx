@@ -49,6 +49,9 @@ describe('CatalogPage', () => {
         return { items: [], totalItems: 0 };
       },
       getFacets: async () => ({ types: [], owners: [], lifecycles: [], tags: [] }),
+      getEntityByName: async () => {
+        throw new Error('not used');
+      },
     };
 
     await render(<CatalogPage api={api} />);
@@ -96,6 +99,15 @@ describe('CatalogPage', () => {
     await waitFor(() => expect(screen.getByText('1 entity')).toBeTruthy());
     expect(screen.getByText('payments-api')).toBeTruthy();
     expect(screen.queryByText('Petstore')).toBeNull();
+  });
+
+  it('reports the pressed entity', async () => {
+    const onSelectEntity = jest.fn();
+    await render(<CatalogPage api={createDemoCatalogApi()} onSelectEntity={onSelectEntity} />);
+    await waitFor(() => expect(screen.getByText('Petstore')).toBeTruthy());
+
+    await fireEvent.press(screen.getByRole('button', { name: 'Petstore' }));
+    expect(onSelectEntity).toHaveBeenCalledWith(expect.objectContaining({ kind: 'Component', metadata: expect.objectContaining({ name: 'petstore' }) }));
   });
 
   it('is exposed as a plugin with one navigation item', () => {

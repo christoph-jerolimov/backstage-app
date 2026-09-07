@@ -1,9 +1,9 @@
 import { BackstageProvider, ThemeProvider, useResolvedScheme, useTheme } from '@backstage-app/core';
-import { DarkTheme, DefaultTheme, ThemeProvider as NavigationThemeProvider } from 'expo-router';
+import { DarkTheme, DefaultTheme, ThemeProvider as NavigationThemeProvider, useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 import * as SplashScreen from 'expo-splash-screen';
 import { SymbolView, type SymbolViewProps } from 'expo-symbols';
-import { type ColorValue, StyleSheet } from 'react-native';
+import { type ColorValue, Pressable, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
@@ -16,6 +16,29 @@ const EXPO_UI_ICON: SymbolViewProps['name'] = {
   android: 'widgets',
   web: 'widgets',
 };
+
+const BACK_ICON: SymbolViewProps['name'] = {
+  ios: 'chevron.left',
+  android: 'arrow_back',
+  web: 'arrow_back',
+};
+
+/** Header back button for hidden routes: pops history, or opens the route's fallback. */
+function HeaderBackButton({ fallback, tintColor }: { fallback?: string; tintColor?: string }) {
+  const router = useRouter();
+  const goBack = () => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.replace(`/${fallback ?? ''}`);
+    }
+  };
+  return (
+    <Pressable accessibilityRole="button" accessibilityLabel="Back" onPress={goBack} style={styles.backButton} testID="header-back">
+      <SymbolView name={BACK_ICON} tintColor={tintColor} size={24} />
+    </Pressable>
+  );
+}
 
 function drawerIcon(name: SymbolViewProps['name']) {
   return function DrawerIcon({ color, size }: { color: ColorValue; size: number }) {
@@ -67,6 +90,21 @@ function NavigationChrome() {
             }}
           />
         ))}
+        {registry.plugins.flatMap((plugin) =>
+          plugin.routes
+            .filter((route) => route.hidden)
+            .map((route) => (
+              <Drawer.Screen
+                key={route.name}
+                name={route.name}
+                options={{
+                  title: route.title ?? plugin.name,
+                  drawerItemStyle: styles.hiddenDrawerItem,
+                  headerLeft: () => <HeaderBackButton fallback={route.backRoute} tintColor={colors.text} />,
+                }}
+              />
+            ))
+        )}
         <Drawer.Screen
           name="components"
           options={{
@@ -95,5 +133,12 @@ export default function RootLayout() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+  },
+  hiddenDrawerItem: {
+    display: 'none',
+  },
+  backButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
   },
 });
