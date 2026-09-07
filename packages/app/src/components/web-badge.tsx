@@ -1,11 +1,11 @@
 import { version } from 'expo/package.json';
 import { Image } from 'expo-image';
-import { useColorScheme, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import { Spacing, ThemedText, ThemedView } from '@backstage-app/core';
+import { Spacing, ThemedText, ThemedView, useResolvedScheme } from '@backstage-app/core';
 
 export function WebBadge() {
-  const scheme = useColorScheme();
+  const scheme = useResolvedScheme();
 
   return (
     <ThemedView style={styles.container}>

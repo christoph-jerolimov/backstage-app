@@ -19,7 +19,18 @@ export { useColorScheme } from './hooks/use-color-scheme';
 export { useTheme } from './hooks/use-theme';
 
 export { Colors, Fonts, MaxContentWidth, Spacing } from './theme';
-export type { ThemeColor } from './theme';
+export type { ColorScheme, ThemeColor, ThemeColors } from './theme';
+export {
+  THEME_PREFERENCES,
+  THEME_PREFERENCE_KEY,
+  ThemeProvider,
+  isThemePreference,
+  resolveScheme,
+  useResolvedScheme,
+  useThemeContext,
+  useThemePreference,
+} from './theme-provider';
+export type { ThemeContextValue, ThemePreference, ThemeProviderProps } from './theme-provider';
 
 export { FilterChips } from './components/filter-chips';
 export type { FilterChipOption, FilterChipsProps } from './components/filter-chips';

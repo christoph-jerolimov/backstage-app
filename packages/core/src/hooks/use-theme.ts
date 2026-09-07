@@ -1,14 +1,7 @@
-/**
- * Learn more about light and dark modes:
- * https://docs.expo.dev/guides/color-schemes/
- */
+import { Colors, type ThemeColors } from '../theme';
+import { useResolvedScheme } from '../theme-provider';
 
-import { Colors } from '../theme';
-import { useColorScheme } from './use-color-scheme';
-
-export function useTheme() {
-  const scheme = useColorScheme();
-  const theme = scheme === 'unspecified' ? 'light' : scheme;
-
-  return Colors[theme];
+/** The active color set: the user's preference inside a `ThemeProvider`, else the device scheme. */
+export function useTheme(): ThemeColors {
+  return Colors[useResolvedScheme()];
 }
