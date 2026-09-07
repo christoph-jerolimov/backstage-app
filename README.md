@@ -36,22 +36,40 @@ In the output, you'll find options to open the app in a
 
 ## Connecting to Backstage
 
-The app reads its backend from two public Expo environment variables, inlined at build
-time (see `.env.example`):
+Open **Account** in the drawer to add one or more Backstage instances (name, base URL,
+auth provider). Exactly one instance is active; every plugin loads its data from the
+active instance, and switching instances reloads everything. Instances and the active
+selection are stored on the device; session tokens go to the platform secure store on
+iOS and Android.
+
+Sign-in options per instance:
+
+- **Sign in** opens Backstage's auth flow for the instance's provider (`github`,
+  `google`, `microsoft`, `okta`, `oidc`, or any custom provider id). On iOS and Android
+  this runs in an in-app browser and captures the session through Backstage's refresh
+  endpoint; on web it uses a popup, which requires the app's origin to be allowed by the
+  backend (`app.baseUrl` or `auth.experimentalExtraAllowedOrigins` in `app-config.yaml`).
+- **Guest** provider instances sign in directly against `/api/auth/guest/refresh`.
+- **Use a token** stores a pasted Backstage identity token (a JWT); its user and expiry
+  are read from the token.
+
+Sessions expire with the token (about an hour); the Account page then shows "Session
+expired" and one tap signs in again.
+
+On a fresh install with no instances, the public environment variables seed a first
+instance named "Default" (see `.env.example`):
 
 | Variable | Purpose |
 | --- | --- |
-| `EXPO_PUBLIC_BACKSTAGE_URL` | Base URL of your Backstage instance, for example `https://backstage.example.com` |
-| `EXPO_PUBLIC_BACKSTAGE_TOKEN` | Optional static bearer token sent as `Authorization: Bearer …` |
+| `EXPO_PUBLIC_BACKSTAGE_URL` | Base URL of the seeded instance, for example `https://backstage.example.com` |
+| `EXPO_PUBLIC_BACKSTAGE_TOKEN` | Optional token stored as that instance's session |
 
-The Notifications API is scoped to the signed-in user, so Backstage rejects a static
-service token there with 401/403. Until the app has its own sign-in, use a user token
-(for example one copied from a browser session) as `EXPO_PUBLIC_BACKSTAGE_TOKEN` when
-you want live notifications; catalog and search work with either kind of token.
+The Notifications API is scoped to the signed-in user, so it needs a real user session
+(browser sign-in or a pasted user token); a static service token is rejected there with
+401/403. Catalog and search work with either kind of token.
 
-Without a URL the app runs in **demo mode**: plugins show built-in sample data and a banner
-explains how to connect. Put the variables in `packages/app/.env` (gitignored) or export
-them before `npm start`.
+Without any instance the app runs in **demo mode**: plugins show built-in sample data and
+a banner explains how to connect.
 
 ## Project layout
 
@@ -63,7 +81,7 @@ The repository is an npm-workspaces monorepo:
   `createPluginRegistry`), shared UI primitives (`Page`, `ListCard`, `ThemedText`, …), the
   theme tokens, and the color-scheme hooks.
 - `plugins/*/` — one package per plugin (`@backstage-app/plugin-home`, `-catalog`,
-  `-search`, `-notifications`, `-apis`, `-techdocs`). Each exports a plugin definition and
+  `-search`, `-notifications`, `-apis`, `-techdocs`, `-auth`). Each exports a plugin definition and
   its page components. `plugin-apis` and `plugin-techdocs` compose the catalog listing
   (fixed to API entities, and to entities with the TechDocs annotation).
 - `openspec/` — OpenSpec specs and change proposals

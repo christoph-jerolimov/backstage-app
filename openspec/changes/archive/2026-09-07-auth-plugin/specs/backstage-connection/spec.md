@@ -1,12 +1,4 @@
-# backstage-connection
-
-## Purpose
-
-Defines how the app connects to a Backstage backend: where the base URL and token come
-from, how plugins access them, how requests are authenticated, and the loading states
-plugins expose while fetching.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Connection is configured through public environment variables
 The app SHALL derive its connection from the active Backstage instance in the instance
@@ -46,30 +38,3 @@ connection value without environment variables or storage.
 #### Scenario: Active instance changes
 - **WHEN** the active instance changes while a plugin page is open
 - **THEN** the page's data reloads against the new instance
-
-### Requirement: Requests are authenticated JSON calls
-Requests to the backend SHALL be sent to `<baseUrl><path>`, SHALL include
-`Authorization: Bearer <token>` when a token is configured, SHALL request JSON, and
-SHALL surface a non-2xx response as an error carrying the HTTP status and any message
-from the response body.
-
-#### Scenario: Authenticated request
-- **WHEN** a token is configured and a plugin requests `/api/catalog/entities/by-query`
-- **THEN** the request carries the bearer token and the parsed JSON body is returned
-
-#### Scenario: Server error
-- **WHEN** the backend responds with status 500
-- **THEN** the caller receives an error that includes the status 500
-
-### Requirement: Remote data exposes loading, success, and error states with reload
-Plugins SHALL fetch through a shared remote-data hook that reports `loading`, `success`
-with data, or `error` with the failure, re-runs when its inputs change, ignores results
-from superseded requests, and offers a reload action.
-
-#### Scenario: Inputs change
-- **WHEN** the filter inputs change while a request is in flight
-- **THEN** the hook reports loading again and only the latest request's result is shown
-
-#### Scenario: Reload after error
-- **WHEN** a request failed and the user triggers reload
-- **THEN** the hook re-requests and reports the new outcome
