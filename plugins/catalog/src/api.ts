@@ -1,7 +1,7 @@
 import type { Entity } from '@backstage/catalog-model';
-import type { FetchJson } from '@backstage-app/core';
+import { BackstageApiError, type FetchJson } from '@backstage-app/core';
 
-import type { EntityRef } from './entity-ref';
+import { stringifyEntityRef, type EntityRef } from './entity-ref';
 import { annotationPair, buildFilterParam, ownerRefs, type CatalogFilters } from './filters';
 
 export type CatalogFacets = {
@@ -23,6 +23,29 @@ export interface CatalogApi {
   getEntityByName(ref: EntityRef, signal?: AbortSignal): Promise<Entity>;
   /** Loads several entities by ref, in the requested order; unknown refs are omitted. */
   getEntitiesByRefs(refs: string[], signal?: AbortSignal): Promise<Entity[]>;
+  /** Asks the catalog to re-read the entity from its source. */
+  refreshEntity(ref: EntityRef): Promise<void>;
+  /** The location that produced the entity, or undefined when the catalog knows none. */
+  getLocationByEntity(ref: EntityRef, signal?: AbortSignal): Promise<CatalogLocation | undefined>;
+  /** Removes a location, unregistering everything it produced. */
+  deleteLocation(id: string): Promise<void>;
+}
+
+/** A catalog location record (`type` is for example `url`, `target` its address). */
+export type CatalogLocation = {
+  id: string;
+  type: string;
+  target: string;
+};
+
+export const REFRESH_PATH = '/api/catalog/refresh';
+
+export function locationByEntityPath(ref: EntityRef): string {
+  return `/api/catalog/locations/by-entity/${encodeURIComponent(ref.kind.toLowerCase())}/${encodeURIComponent(ref.namespace.toLowerCase())}/${encodeURIComponent(ref.name)}`;
+}
+
+export function locationPath(id: string): string {
+  return `/api/catalog/locations/${encodeURIComponent(id)}`;
 }
 
 export const ENTITIES_BY_REFS_PATH = '/api/catalog/entities/by-refs';
@@ -124,6 +147,24 @@ export function createRestCatalogApi(fetchJson: FetchJson): CatalogApi {
         signal,
       });
       return (response.items ?? []).filter((item): item is Entity => !!item);
+    },
+    async refreshEntity(ref) {
+      await fetchJson(REFRESH_PATH, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ entityRef: stringifyEntityRef(ref) }),
+      });
+    },
+    async getLocationByEntity(ref, signal) {
+      try {
+        return await fetchJson<CatalogLocation>(locationByEntityPath(ref), { signal });
+      } catch (error) {
+        if (error instanceof BackstageApiError && error.status === 404) return undefined;
+        throw error;
+      }
+    },
+    async deleteLocation(id) {
+      await fetchJson(locationPath(id), { method: 'DELETE' });
     },
   };
 }
