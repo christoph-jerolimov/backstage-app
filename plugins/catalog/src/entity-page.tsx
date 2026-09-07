@@ -26,11 +26,16 @@ export type EntityPageProps = {
   baseUrl?: string;
   /** Called when the user presses a relation target. */
   onOpenEntity?: (ref: EntityRef) => void;
-  /** When set, documented entities (TechDocs annotation) offer a "Documentation" action. */
-  onOpenDocs?: (ref: EntityRef) => void;
+  /** Plugin-contributed actions for the loaded entity, rendered as buttons. */
+  actionsFor?: (entity: Entity) => EntityActionItem[];
 };
 
-export const TECHDOCS_ANNOTATION = 'backstage.io/techdocs-ref';
+export type EntityActionItem = {
+  id: string;
+  title: string;
+  onPress: () => void;
+  testID?: string;
+};
 
 const DETAIL_FIELDS = ['type', 'lifecycle', 'owner', 'system'] as const;
 
@@ -79,9 +84,9 @@ function DetailRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-function EntityDetails({ entity, entityRef, baseUrl, onOpenEntity, onOpenDocs }: { entity: Entity } & Omit<EntityPageProps, 'api'>) {
+function EntityDetails({ entity, entityRef, baseUrl, onOpenEntity, actionsFor }: { entity: Entity } & Omit<EntityPageProps, 'api'>) {
   const theme = useTheme();
-  const documented = entity.metadata.annotations?.[TECHDOCS_ANNOTATION] !== undefined;
+  const actions = actionsFor?.(entity) ?? [];
   const tags = entity.metadata.tags ?? [];
   const links = entity.metadata.links ?? [];
   const annotations = Object.entries(entity.metadata.annotations ?? {}).sort(([a], [b]) => a.localeCompare(b));
@@ -117,9 +122,11 @@ function EntityDetails({ entity, entityRef, baseUrl, onOpenEntity, onOpenDocs }:
             </ThemedText>
           </ExternalLink>
         ) : null}
-        {documented && onOpenDocs ? (
-          <View style={styles.actions}>
-            <ActionButton label="Documentation" onPress={() => onOpenDocs(entityRef)} compact testID="open-docs" />
+        {actions.length ? (
+          <View style={styles.actions} testID="entity-actions">
+            {actions.map((action) => (
+              <ActionButton key={action.id} label={action.title} onPress={action.onPress} compact testID={action.testID} />
+            ))}
           </View>
         ) : null}
       </ThemedView>
@@ -156,7 +163,7 @@ function EntityDetails({ entity, entityRef, baseUrl, onOpenEntity, onOpenDocs }:
 }
 
 /** Details of one catalog entity: about card, links, relations, and annotations. */
-export function EntityPage({ entityRef, api, baseUrl, onOpenEntity, onOpenDocs }: EntityPageProps) {
+export function EntityPage({ entityRef, api, baseUrl, onOpenEntity, actionsFor }: EntityPageProps) {
   const ref = stringifyEntityRef(entityRef);
   const entity = useRemoteData(
     useCallback((signal: AbortSignal) => api.getEntityByName(entityRef, signal), [api, entityRef]),
@@ -171,7 +178,7 @@ export function EntityPage({ entityRef, api, baseUrl, onOpenEntity, onOpenDocs }
       {notFound ? <StateView kind="empty" message={`Entity ${ref} was not found`} /> : null}
       {entity.status === 'error' && !notFound ? <StateView kind="error" message={entity.error.message} onRetry={entity.reload} /> : null}
       {entity.status === 'success' ? (
-        <EntityDetails entity={entity.data} entityRef={entityRef} baseUrl={baseUrl} onOpenEntity={onOpenEntity} onOpenDocs={onOpenDocs} />
+        <EntityDetails entity={entity.data} entityRef={entityRef} baseUrl={baseUrl} onOpenEntity={onOpenEntity} actionsFor={actionsFor} />
       ) : null}
     </Page>
   );
@@ -208,6 +215,7 @@ const styles = StyleSheet.create({
   },
   actions: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: Spacing.two,
   },
   annotations: {

@@ -3,6 +3,7 @@ import { apisPlugin } from '@backstage-app/plugin-apis';
 import { authPlugin } from '@backstage-app/plugin-auth';
 import { catalogPlugin } from '@backstage-app/plugin-catalog';
 import { homePlugin } from '@backstage-app/plugin-home';
+import { kubernetesPlugin } from '@backstage-app/plugin-kubernetes';
 import { notificationsPlugin } from '@backstage-app/plugin-notifications';
 import { searchPlugin } from '@backstage-app/plugin-search';
 import { settingsPlugin } from '@backstage-app/plugin-settings';
@@ -19,6 +20,7 @@ export const registry = createPluginRegistry([
   notificationsPlugin,
   apisPlugin,
   techdocsPlugin,
+  kubernetesPlugin,
   authPlugin,
   settingsPlugin,
 ]);

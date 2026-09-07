@@ -28,14 +28,17 @@ workspaces so the app can import any plugin package by name.
 
 ### Requirement: Plugin definition contract
 The shared core SHALL expose a `createPlugin` factory that produces a plugin definition
-from an id, a display name, a list of routes, and a list of navigation items. Each route
-SHALL declare a route name (the path segment the app mounts it at, which MAY contain
-nested and dynamic segments such as `entity/[kind]/[namespace]/[name]`) and the page
-component to render, and MAY declare a title, whether it is hidden from the main
-navigation, and the route to go back to when the page was opened directly. Each
-navigation item SHALL declare a title, the route name it opens, and an icon. The factory
-SHALL reject definitions whose navigation items reference a route name the plugin does
-not declare, and SHALL reject hidden routes whose back route the plugin does not declare.
+from an id, a display name, a list of routes, a list of navigation items, and an optional
+list of entity actions. Each route SHALL declare a route name (the path segment the app
+mounts it at, which MAY contain nested and dynamic segments such as
+`entity/[kind]/[namespace]/[name]`) and the page component to render, and MAY declare a
+title, whether it is hidden from the main navigation, and the route to go back to when
+the page was opened directly. Each navigation item SHALL declare a title, the route name
+it opens, and an icon. Each entity action SHALL declare an id, a title, a predicate
+deciding whether it applies to a given entity (kind, name, namespace, annotations), and a
+function producing the in-app path to open for an entity reference. The factory SHALL
+reject definitions whose navigation items reference a route name the plugin does not
+declare, and SHALL reject hidden routes whose back route the plugin does not declare.
 
 #### Scenario: Valid plugin definition
 - **WHEN** a plugin calls `createPlugin` with id `catalog`, one route named `catalog`, and
@@ -57,10 +60,18 @@ not declare, and SHALL reject hidden routes whose back route the plugin does not
 - **WHEN** a plugin declares a hidden route whose back route is not in the plugin's routes
 - **THEN** `createPlugin` throws an error naming the plugin id and the missing route
 
+#### Scenario: Entity action
+- **WHEN** a plugin declares an entity action "Documentation" applying to entities with
+  the TechDocs annotation
+- **THEN** the definition exposes the action and the registry lists it among all
+  plugins' entity actions in registration order
+
 ### Requirement: App registers installed plugins in one place
 The app SHALL keep a single ordered list of installed plugin definitions. Navigation
-entries and mounted pages SHALL be derived from that list, so adding a plugin requires
-adding it to the list and mounting its route file, and nothing else.
+entries, mounted pages, and entity actions SHALL be derived from that list, so adding a
+plugin requires adding it to the list and mounting its route files, and nothing else.
+The app SHALL provide the registry to every page through a context so plugin pages can
+discover other plugins' contributions.
 
 #### Scenario: Plugin appears after registration
 - **WHEN** a plugin definition is added to the app's plugin list and its route is mounted
@@ -69,6 +80,11 @@ adding it to the list and mounting its route file, and nothing else.
 #### Scenario: Duplicate plugin ids are rejected
 - **WHEN** two plugin definitions with the same id are registered
 - **THEN** the registry throws an error naming the duplicated id
+
+#### Scenario: Pages read the registry
+- **WHEN** a plugin page calls the registry hook inside the app
+- **THEN** it receives the app's registry, and outside the app it receives an empty
+  registry
 
 ### Requirement: Shared UI primitives live in core
 Themed text, themed view, hint row, collapsible, external link, the theme tokens, and the

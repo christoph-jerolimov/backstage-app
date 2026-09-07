@@ -139,14 +139,17 @@ and an error state with the message and a retry action for other failures.
 - **WHEN** the request fails with a network error
 - **THEN** the page shows the error message and a "Retry" action that reloads the entity
 
-### Requirement: Documentation action on the entity page
-When the entity carries the `backstage.io/techdocs-ref` annotation, the entity details
-page SHALL offer a "Documentation" action that opens `/docs/<kind>/<namespace>/<name>`.
+### Requirement: Plugin entity actions on the entity page
+The entity details page SHALL show one action button per entity action, contributed by
+the installed plugins through the registry, whose predicate accepts the loaded entity,
+in plugin registration order. Pressing an action SHALL open the path it produces for the
+entity's reference. Without a registry no actions are shown.
 
 #### Scenario: Documented entity
-- **WHEN** the entity page shows `component:default/petstore`, which is annotated
-- **THEN** a "Documentation" action is shown and opens the TechDocs reader for it
+- **WHEN** the TechDocs plugin is installed and the entity page shows
+  `component:default/petstore`, which carries the TechDocs annotation
+- **THEN** a "Documentation" action is shown and opens `/docs/component/default/petstore`
 
 #### Scenario: Undocumented entity
-- **WHEN** the entity page shows an entity without the annotation
-- **THEN** no "Documentation" action is shown
+- **WHEN** the entity page shows an entity without any action's annotation
+- **THEN** no action buttons are shown

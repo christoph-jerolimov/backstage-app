@@ -1,9 +1,10 @@
-import { useBackstage } from '@backstage-app/core';
+import type { Entity } from '@backstage/catalog-model';
+import { useBackstage, usePluginRegistry } from '@backstage-app/core';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { EntityPage } from './entity-page';
-import { DEFAULT_NAMESPACE, entityDocsHref, entityHref, type EntityRef } from './entity-ref';
+import { DEFAULT_NAMESPACE, entityHref, entityRefOf, type EntityRef } from './entity-ref';
 import { useCatalogApi } from './use-catalog-api';
 
 function first(value: string | string[] | undefined): string | undefined {
@@ -16,11 +17,26 @@ export function EntityScreen() {
   const router = useRouter();
   const api = useCatalogApi();
   const { instance } = useBackstage();
+  const registry = usePluginRegistry();
 
   const kind = first(params.kind) ?? '';
   const namespace = first(params.namespace) ?? DEFAULT_NAMESPACE;
   const name = first(params.name) ?? '';
   const entityRef = useMemo<EntityRef>(() => ({ kind, namespace, name }), [kind, namespace, name]);
+
+  const actionsFor = useCallback(
+    (entity: Entity) =>
+      registry
+        .entityActions()
+        .filter((action) => action.isAvailable(entity))
+        .map((action) => ({
+          id: action.id,
+          title: action.title,
+          testID: action.testID,
+          onPress: () => router.push(action.href(entityRefOf(entity))),
+        })),
+    [registry, router]
+  );
 
   return (
     <EntityPage
@@ -28,7 +44,7 @@ export function EntityScreen() {
       api={api}
       baseUrl={instance?.baseUrl}
       onOpenEntity={(target) => router.push(entityHref(target))}
-      onOpenDocs={(target) => router.push(entityDocsHref(target))}
+      actionsFor={actionsFor}
     />
   );
 }

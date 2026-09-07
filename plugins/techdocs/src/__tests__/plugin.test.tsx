@@ -11,6 +11,14 @@ describe('techdocs plugin', () => {
     expect(techdocsPlugin.routes[0].component).toBe(DocsScreen);
   });
 
+  it('contributes the Documentation entity action for annotated entities', () => {
+    const action = techdocsPlugin.entityActions?.[0];
+    expect(action).toMatchObject({ id: 'techdocs', title: 'Documentation' });
+    expect(action?.isAvailable({ kind: 'Component', metadata: { name: 'a', annotations: { 'backstage.io/techdocs-ref': 'dir:.' } } })).toBe(true);
+    expect(action?.isAvailable({ kind: 'Component', metadata: { name: 'a' } })).toBe(false);
+    expect(action?.href({ kind: 'component', namespace: 'default', name: 'petstore' })).toBe('/docs/component/default/petstore');
+  });
+
   it('lists documented entities of all kinds in demo mode', async () => {
     await render(
       <BackstageProvider value={{ demo: true }}>

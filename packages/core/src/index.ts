@@ -1,7 +1,8 @@
-export { createPlugin } from './plugin';
-export type { BackstagePlugin, PluginIcon, PluginNavItem, PluginRoute } from './plugin';
+export { createPlugin, hasAnnotation } from './plugin';
+export type { BackstagePlugin, EntityAction, EntityLike, EntityRefLike, PluginIcon, PluginNavItem, PluginRoute } from './plugin';
 export { createPluginRegistry } from './registry';
 export type { PluginRegistry } from './registry';
+export { PluginRegistryProvider, usePluginRegistry } from './registry-context';
 
 export { Collapsible } from './components/collapsible';
 export { ExternalLink } from './components/external-link';

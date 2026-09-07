@@ -9,6 +9,7 @@ describe('plugin registry', () => {
       'Notifications',
       'APIs',
       'Docs',
+      'Kubernetes',
       'Account',
       'Settings',
     ]);
