@@ -9,8 +9,8 @@ export type CatalogFilters = {
   owner?: string;
   lifecycle?: string;
   tag?: string;
-  /** Entity ref whose `ownedBy` relation targets are listed (for example `group:default/team-platform`). */
-  ownedBy?: string;
+  /** Entity ref, or refs (matched with OR), whose `ownedBy` relation targets are listed. */
+  ownedBy?: string | string[];
   /** Group ref whose members are listed (`memberOf` relation target). */
   memberOf?: string;
   text: string;
@@ -40,11 +40,18 @@ export function annotationPair(annotation: string): string {
   return `metadata.annotations.${annotation}`;
 }
 
+/** The owner refs of a filter set, as a list; `undefined` means "no owner condition". */
+export function ownerRefs(filters: CatalogFilters): string[] | undefined {
+  if (filters.ownedBy === undefined) return undefined;
+  return Array.isArray(filters.ownedBy) ? filters.ownedBy : [filters.ownedBy];
+}
+
 /**
  * Builds the value of one Backstage `filter` query parameter: comma-separated
- * `key=value` pairs that are ANDed together.
+ * `key=value` pairs that are ANDed together. `ownedBy` names the single owner this
+ * parameter is for; several owners become several parameters, which Backstage ORs.
  */
-export function buildFilterParam(filters: CatalogFilters): string {
+export function buildFilterParam(filters: CatalogFilters, ownedBy?: string): string {
   const pairs: string[] = [];
   if (filters.kind) pairs.push(`kind=${filters.kind}`);
   if (filters.requiredAnnotation) pairs.push(annotationPair(filters.requiredAnnotation));
@@ -52,7 +59,8 @@ export function buildFilterParam(filters: CatalogFilters): string {
   if (filters.owner) pairs.push(`spec.owner=${filters.owner}`);
   if (filters.lifecycle) pairs.push(`spec.lifecycle=${filters.lifecycle}`);
   if (filters.tag) pairs.push(`metadata.tags=${filters.tag}`);
-  if (filters.ownedBy) pairs.push(`relations.ownedBy=${filters.ownedBy.toLowerCase()}`);
+  const owner = ownedBy ?? (typeof filters.ownedBy === 'string' ? filters.ownedBy : undefined);
+  if (owner) pairs.push(`relations.ownedBy=${owner.toLowerCase()}`);
   if (filters.memberOf) pairs.push(`relations.memberOf=${filters.memberOf.toLowerCase()}`);
   return pairs.join(',');
 }
@@ -81,7 +89,8 @@ export function matchesQuery(entity: Entity, filters: CatalogFilters): boolean {
   if (filters.tag && !(entity.metadata.tags ?? []).some((tag) => equalsIgnoreCase(tag, filters.tag!))) {
     return false;
   }
-  if (filters.ownedBy && !hasRelation(entity, 'ownedBy', filters.ownedBy)) return false;
+  const owners = ownerRefs(filters);
+  if (owners && !owners.some((owner) => hasRelation(entity, 'ownedBy', owner))) return false;
   if (filters.memberOf && !hasRelation(entity, 'memberOf', filters.memberOf)) return false;
 
   const term = filters.text.trim().toLowerCase();
