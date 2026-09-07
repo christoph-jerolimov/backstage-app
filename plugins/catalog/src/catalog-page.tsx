@@ -31,6 +31,8 @@ export type CatalogPageProps = {
   allowAllKinds?: boolean;
   /** Only entities carrying this annotation key are listed. */
   requiredAnnotation?: string;
+  /** Called when the user presses an entity row. */
+  onSelectEntity?: (entity: Entity) => void;
 };
 
 const EMPTY_FACETS: CatalogFacets = { types: [], owners: [], lifecycles: [], tags: [] };
@@ -64,6 +66,7 @@ export function CatalogPage({
   fixedKind,
   allowAllKinds = false,
   requiredAnnotation,
+  onSelectEntity,
 }: CatalogPageProps) {
   const [filters, setFilters] = useState<CatalogFilters>(
     initialFilters ?? {
@@ -140,6 +143,7 @@ export function CatalogPage({
                 key: `${entity.kind}:${entity.metadata.namespace ?? 'default'}/${entity.metadata.name}`,
                 title: entity.metadata.title ?? entity.metadata.name,
                 subtitle: entitySubtitle(entity),
+                onPress: onSelectEntity ? () => onSelectEntity(entity) : undefined,
               }))}
             />
           </ThemedView>

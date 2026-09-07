@@ -107,6 +107,11 @@ The repository is an npm-workspaces monorepo:
    `export { MyPage as default } from '@backstage-app/plugin-my-plugin';`.
 4. Run `npm install` at the root to link the workspace.
 
+Pages that should not appear in the drawer (detail pages, for example) are declared as
+hidden routes: `{ name: 'entity/[kind]/[namespace]/[name]', component: EntityScreen,
+title: 'Entity', hidden: true, backRoute: 'catalog' }`. The app mounts them with a header
+back button, and the route file lives at the matching nested path under `src/app/`.
+
 ## Scripts
 
 | Command | What it does |
