@@ -9,6 +9,10 @@ export type CatalogFilters = {
   owner?: string;
   lifecycle?: string;
   tag?: string;
+  /** Entity ref whose `ownedBy` relation targets are listed (for example `group:default/team-platform`). */
+  ownedBy?: string;
+  /** Group ref whose members are listed (`memberOf` relation target). */
+  memberOf?: string;
   text: string;
 };
 
@@ -28,7 +32,7 @@ export const defaultFilters: CatalogFilters = { kind: 'component', text: '' };
 
 /** Switches kind and resets the kind-dependent selections; the required annotation and text survive. */
 export function withKind(filters: CatalogFilters, kind: string | undefined): CatalogFilters {
-  return { kind, text: filters.text, requiredAnnotation: filters.requiredAnnotation };
+  return { kind, text: filters.text, requiredAnnotation: filters.requiredAnnotation, ownedBy: filters.ownedBy, memberOf: filters.memberOf };
 }
 
 /** Bare `key` pairs are existence checks in Backstage's filter syntax. */
@@ -48,6 +52,8 @@ export function buildFilterParam(filters: CatalogFilters): string {
   if (filters.owner) pairs.push(`spec.owner=${filters.owner}`);
   if (filters.lifecycle) pairs.push(`spec.lifecycle=${filters.lifecycle}`);
   if (filters.tag) pairs.push(`metadata.tags=${filters.tag}`);
+  if (filters.ownedBy) pairs.push(`relations.ownedBy=${filters.ownedBy.toLowerCase()}`);
+  if (filters.memberOf) pairs.push(`relations.memberOf=${filters.memberOf.toLowerCase()}`);
   return pairs.join(',');
 }
 
@@ -57,6 +63,10 @@ function asString(value: unknown): string | undefined {
 
 function equalsIgnoreCase(a: string | undefined, b: string): boolean {
   return a !== undefined && a.toLowerCase() === b.toLowerCase();
+}
+
+function hasRelation(entity: Entity, type: string, targetRef: string): boolean {
+  return (entity.relations ?? []).some((relation) => relation.type === type && equalsIgnoreCase(relation.targetRef, targetRef));
 }
 
 /** Applies the same semantics as the REST filter locally (demo mode and tests). */
@@ -71,6 +81,8 @@ export function matchesQuery(entity: Entity, filters: CatalogFilters): boolean {
   if (filters.tag && !(entity.metadata.tags ?? []).some((tag) => equalsIgnoreCase(tag, filters.tag!))) {
     return false;
   }
+  if (filters.ownedBy && !hasRelation(entity, 'ownedBy', filters.ownedBy)) return false;
+  if (filters.memberOf && !hasRelation(entity, 'memberOf', filters.memberOf)) return false;
 
   const term = filters.text.trim().toLowerCase();
   if (term) {

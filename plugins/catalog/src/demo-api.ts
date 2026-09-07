@@ -55,16 +55,28 @@ export const demoEntities: Entity[] = [
     },
     [rel('ownedBy', 'group:default/team-payments'), rel('partOf', 'system:default/payments'), rel('consumesApi', 'api:default/payments-api')]
   ),
-  entity('Component', 'ledger-worker', { type: 'service', owner: 'team-payments', lifecycle: 'experimental' }, {
-    description: 'Batch worker that reconciles payment ledgers',
-    tags: ['go'],
-    annotations: { 'backstage.io/kubernetes-id': 'ledger-worker' },
-  }),
-  entity('Component', 'shared-ui', { type: 'library', owner: 'team-platform', lifecycle: 'production' }, {
-    description: 'Design system components',
-    tags: ['react', 'typescript'],
-    annotations: { 'backstage.io/techdocs-ref': 'dir:.' },
-  }),
+  entity(
+    'Component',
+    'ledger-worker',
+    { type: 'service', owner: 'team-payments', lifecycle: 'experimental' },
+    {
+      description: 'Batch worker that reconciles payment ledgers',
+      tags: ['go'],
+      annotations: { 'backstage.io/kubernetes-id': 'ledger-worker' },
+    },
+    [rel('ownedBy', 'group:default/team-payments')]
+  ),
+  entity(
+    'Component',
+    'shared-ui',
+    { type: 'library', owner: 'team-platform', lifecycle: 'production' },
+    {
+      description: 'Design system components',
+      tags: ['react', 'typescript'],
+      annotations: { 'backstage.io/techdocs-ref': 'dir:.' },
+    },
+    [rel('ownedBy', 'group:default/team-platform')]
+  ),
   entity(
     'API',
     'payments-api',
@@ -80,9 +92,9 @@ export const demoEntities: Entity[] = [
   entity(
     'API',
     'petstore-grpc',
-    { type: 'grpc', owner: 'team-platform', lifecycle: 'experimental' },
+    { type: 'grpc', owner: 'user:jane.doe', lifecycle: 'experimental' },
     { description: 'Pet store gRPC surface' },
-    [rel('ownedBy', 'group:default/team-platform'), rel('apiProvidedBy', 'component:default/petstore')]
+    [rel('ownedBy', 'user:default/jane.doe'), rel('apiProvidedBy', 'component:default/petstore')]
   ),
   entity(
     'System',
@@ -94,16 +106,43 @@ export const demoEntities: Entity[] = [
     },
     [rel('ownedBy', 'group:default/team-payments'), rel('hasPart', 'component:default/payments-frontend'), rel('hasPart', 'api:default/payments-api')]
   ),
-  entity('Group', 'team-platform', { type: 'team' }, { title: 'Platform Team' }, [
-    rel('ownerOf', 'component:default/petstore'),
-    rel('ownerOf', 'api:default/petstore-grpc'),
-    rel('hasMember', 'user:default/jane.doe'),
-  ]),
-  entity('Group', 'team-payments', { type: 'team' }, { title: 'Payments Team' }, [
-    rel('ownerOf', 'system:default/payments'),
-    rel('ownerOf', 'component:default/payments-frontend'),
-    rel('ownerOf', 'api:default/payments-api'),
-  ]),
+  entity(
+    'Group',
+    'engineering',
+    { type: 'department', profile: { displayName: 'Engineering', email: 'engineering@example.com' }, children: ['team-platform', 'team-payments'] },
+    { title: 'Engineering', description: 'All engineering teams.' },
+    [rel('parentOf', 'group:default/team-platform'), rel('parentOf', 'group:default/team-payments')]
+  ),
+  entity(
+    'Group',
+    'team-platform',
+    { type: 'team', profile: { displayName: 'Platform Team', email: 'platform@example.com' }, parent: 'engineering', children: [] },
+    { title: 'Platform Team', description: 'Owns the developer platform and shared libraries.' },
+    [
+      rel('childOf', 'group:default/engineering'),
+      rel('ownerOf', 'component:default/petstore'),
+      rel('ownerOf', 'component:default/shared-ui'),
+      rel('ownerOf', 'template:default/nodejs-service'),
+      rel('ownerOf', 'template:default/docs-site'),
+      rel('hasMember', 'user:default/jane.doe'),
+      rel('hasMember', 'user:default/priya.patel'),
+    ]
+  ),
+  entity(
+    'Group',
+    'team-payments',
+    { type: 'team', profile: { displayName: 'Payments Team', email: 'payments@example.com' }, parent: 'engineering', children: [] },
+    { title: 'Payments Team', description: 'Everything that moves money.' },
+    [
+      rel('childOf', 'group:default/engineering'),
+      rel('ownerOf', 'system:default/payments'),
+      rel('ownerOf', 'component:default/payments-frontend'),
+      rel('ownerOf', 'component:default/ledger-worker'),
+      rel('ownerOf', 'api:default/payments-api'),
+      rel('hasMember', 'user:default/priya.patel'),
+      rel('hasMember', 'user:default/john.smith'),
+    ]
+  ),
   entity(
     'Template',
     'nodejs-service',
@@ -163,9 +202,27 @@ export const demoEntities: Entity[] = [
     { title: 'Documentation site', description: 'A TechDocs-only site for guides and runbooks.', tags: ['docs'] },
     [rel('ownedBy', 'group:default/team-platform')]
   ),
-  entity('User', 'jane.doe', { profile: { displayName: 'Jane Doe', email: 'jane.doe@example.com' }, memberOf: ['team-platform'] }, { title: 'Jane Doe' }, [
-    rel('memberOf', 'group:default/team-platform'),
-  ]),
+  entity(
+    'User',
+    'jane.doe',
+    { profile: { displayName: 'Jane Doe', email: 'jane.doe@example.com', picture: 'https://avatars.example.com/jane.png' }, memberOf: ['team-platform'] },
+    { title: 'Jane Doe', description: 'Platform engineer.' },
+    [rel('memberOf', 'group:default/team-platform'), rel('ownerOf', 'api:default/petstore-grpc')]
+  ),
+  entity(
+    'User',
+    'priya.patel',
+    { profile: { displayName: 'Priya Patel', email: 'priya.patel@example.com' }, memberOf: ['team-platform', 'team-payments'] },
+    { title: 'Priya Patel' },
+    [rel('memberOf', 'group:default/team-platform'), rel('memberOf', 'group:default/team-payments')]
+  ),
+  entity(
+    'User',
+    'john.smith',
+    { profile: { displayName: 'John Smith', email: 'john.smith@example.com' }, memberOf: ['team-payments'] },
+    { title: 'John Smith' },
+    [rel('memberOf', 'group:default/team-payments')]
+  ),
 ];
 
 function collect(entities: Entity[], pick: (entity: Entity) => string | string[] | undefined): string[] {

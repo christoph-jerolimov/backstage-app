@@ -4,7 +4,8 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 
 import type { CatalogApi } from '../api';
 import { createDemoCatalogApi } from '../demo-api';
-import { EntityPage, groupRelations, relationLabel } from '../entity-page';
+import { EntityPage, groupRelations, initialsOf, profileOf, refListOf, relationLabel } from '../entity-page';
+import { entitySubtitle } from '../catalog-page';
 import { catalogPlugin } from '../plugin';
 
 const petstore = { kind: 'component', namespace: 'default', name: 'petstore' };
@@ -121,5 +122,89 @@ describe('EntityPage', () => {
   it('is declared as a hidden catalog route', () => {
     const route = catalogPlugin.routes.find((item) => item.hidden);
     expect(route).toMatchObject({ name: 'entity/[kind]/[namespace]/[name]', title: 'Entity', backRoute: 'catalog' });
+  });
+
+  it('shows a user profile, memberships, and owned entities', async () => {
+    const onOpenEntity = jest.fn();
+    await render(<EntityPage entityRef={{ kind: 'user', namespace: 'default', name: 'jane.doe' }} api={createDemoCatalogApi()} onOpenEntity={onOpenEntity} />);
+
+    await waitFor(() => expect(screen.getByTestId('entity-profile')).toBeTruthy());
+    const profile = within(screen.getByTestId('entity-profile'));
+    expect(profile.getByText('Jane Doe')).toBeTruthy();
+    expect(profile.getByText('jane.doe@example.com')).toBeTruthy();
+    expect(profile.getByTestId('profile-picture')).toBeTruthy();
+
+    expect(within(screen.getByTestId('user-member-of')).getByText('team-platform')).toBeTruthy();
+    await waitFor(() => expect(within(screen.getByTestId('owned-entities')).getByText('Owned entities (1)')).toBeTruthy());
+    expect(within(screen.getByTestId('owned-entities')).getByText('petstore-grpc')).toBeTruthy();
+    expect(screen.queryByTestId('relations-memberOf')).toBeNull();
+    expect(screen.queryByTestId('relations-ownerOf')).toBeNull();
+
+    await fireEvent.press(within(screen.getByTestId('user-member-of')).getByRole('button', { name: 'team-platform' }));
+    expect(onOpenEntity).toHaveBeenCalledWith({ kind: 'group', namespace: 'default', name: 'team-platform' });
+  });
+
+  it('shows a group profile with parent, members, and owned entities grouped by kind', async () => {
+    const onOpenEntity = jest.fn();
+    await render(<EntityPage entityRef={{ kind: 'group', namespace: 'default', name: 'team-platform' }} api={createDemoCatalogApi()} onOpenEntity={onOpenEntity} />);
+
+    await waitFor(() => expect(screen.getByTestId('entity-profile')).toBeTruthy());
+    const profile = within(screen.getByTestId('entity-profile'));
+    expect(profile.getByText('Platform Team')).toBeTruthy();
+    expect(profile.getByText('platform@example.com')).toBeTruthy();
+    expect(profile.getByTestId('profile-initials')).toHaveTextContent('PT');
+    expect(profile.getByText('team')).toBeTruthy();
+
+    await waitFor(() => expect(within(screen.getByTestId('group-members')).getByText('Members (2)')).toBeTruthy());
+    const members = within(screen.getByTestId('group-members'));
+    expect(members.getByText('Jane Doe')).toBeTruthy();
+    expect(members.getByText('User · Priya Patel · priya.patel@example.com')).toBeTruthy();
+
+    await waitFor(() => expect(within(screen.getByTestId('owned-entities')).getByText('Owned entities (4)')).toBeTruthy());
+    const owned = within(screen.getByTestId('owned-entities'));
+    expect(owned.getByText('Component')).toBeTruthy();
+    expect(owned.getByText('Template')).toBeTruthy();
+    expect(owned.getByText('Petstore')).toBeTruthy();
+    expect(screen.queryByTestId('relations-hasMember')).toBeNull();
+    expect(screen.queryByTestId('relations-childOf')).toBeNull();
+
+    await fireEvent.press(profile.getByTestId('parent-engineering'));
+    expect(onOpenEntity).toHaveBeenCalledWith({ kind: 'group', namespace: 'default', name: 'engineering' });
+
+    await fireEvent.press(members.getByRole('button', { name: 'Jane Doe' }));
+    expect(onOpenEntity).toHaveBeenCalledWith({ kind: 'user', namespace: 'default', name: 'jane.doe' });
+  });
+
+  it('lists child groups on a department', async () => {
+    await render(<EntityPage entityRef={{ kind: 'group', namespace: 'default', name: 'engineering' }} api={createDemoCatalogApi()} />);
+    await waitFor(() => expect(screen.getByTestId('group-children')).toBeTruthy());
+    expect(within(screen.getByTestId('group-children')).getByText('team-platform')).toBeTruthy();
+    expect(within(screen.getByTestId('group-children')).getByText('team-payments')).toBeTruthy();
+    await waitFor(() => expect(within(screen.getByTestId('group-members')).getByText('No members')).toBeTruthy());
+  });
+
+  it('opens the owner and system from the detail rows', async () => {
+    const onOpenEntity = jest.fn();
+    await render(<EntityPage entityRef={{ kind: 'component', namespace: 'default', name: 'payments-frontend' }} api={createDemoCatalogApi()} onOpenEntity={onOpenEntity} />);
+    await waitFor(() => expect(screen.getByTestId('detail-owner')).toBeTruthy());
+
+    await fireEvent.press(screen.getByTestId('detail-owner'));
+    expect(onOpenEntity).toHaveBeenCalledWith({ kind: 'group', namespace: 'default', name: 'team-payments' });
+    await fireEvent.press(screen.getByTestId('detail-system'));
+    expect(onOpenEntity).toHaveBeenCalledWith({ kind: 'system', namespace: 'default', name: 'payments' });
+    expect(screen.queryByTestId('entity-profile')).toBeNull();
+  });
+
+  it('derives profiles, initials, ref lists, and listing summaries', () => {
+    const jane = createDemoCatalogApi();
+    expect(initialsOf('Jane Doe')).toBe('JD');
+    expect(initialsOf('priya.patel')).toBe('PP');
+    expect(initialsOf('Engineering')).toBe('E');
+    return jane.getEntityByName({ kind: 'user', namespace: 'default', name: 'priya.patel' }).then((entity) => {
+      expect(profileOf(entity)).toEqual({ displayName: 'Priya Patel', email: 'priya.patel@example.com', picture: undefined, initials: 'PP' });
+      expect(refListOf(entity, 'memberOf', 'memberOf', 'group').map((ref) => ref.name)).toEqual(['team-platform', 'team-payments']);
+      expect(entitySubtitle(entity)).toBe('User · Priya Patel · priya.patel@example.com');
+      expect(profileOf({ apiVersion: 'v1', kind: 'Group', metadata: { name: 'ops' } })).toMatchObject({ displayName: 'ops', initials: 'O' });
+    });
   });
 });
