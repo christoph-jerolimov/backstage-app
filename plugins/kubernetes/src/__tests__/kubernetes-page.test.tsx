@@ -35,6 +35,7 @@ describe('KubernetesPage', () => {
     const demo = createDemoKubernetesApi();
     let calls = 0;
     const api: KubernetesApi = {
+      ...demo,
       getObjectsByEntity: async (entity, signal) => {
         calls += 1;
         return demo.getObjectsByEntity(entity, signal);
@@ -66,6 +67,7 @@ describe('KubernetesPage', () => {
   it('shows the error state and retries', async () => {
     let attempts = 0;
     const api: KubernetesApi = {
+      ...createDemoKubernetesApi(),
       getObjectsByEntity: async () => {
         attempts += 1;
         if (attempts === 1) throw new Error('Backend unreachable');
@@ -102,5 +104,16 @@ describe('kubernetes plugin', () => {
     expect(screen.getByText('Petstore')).toBeTruthy();
     expect(screen.getByText('ledger-worker')).toBeTruthy();
     expect(screen.queryByText('shared-ui')).toBeNull();
+  });
+
+  it('opens a pod with the cluster it was listed under', async () => {
+    const onOpenPod = jest.fn();
+    await render(<KubernetesPage entity={petstore} api={createDemoKubernetesApi()} onOpenPod={onOpenPod} />);
+
+    await waitFor(() => expect(screen.getByTestId('pod-petstore-7d9f8-ghi56')).toBeTruthy());
+    await fireEvent.press(screen.getByTestId('pod-petstore-7d9f8-ghi56'));
+    expect(onOpenPod).toHaveBeenCalledWith('prod', 'default', 'petstore-7d9f8-ghi56');
+
+    expect(within(screen.getByTestId('group-prod-deployments')).queryByRole('button')).toBeNull();
   });
 });

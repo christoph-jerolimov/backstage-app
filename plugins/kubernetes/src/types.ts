@@ -50,3 +50,28 @@ export type ObjectsByEntityResponse = {
 
 export const KUBERNETES_ANNOTATION = 'backstage.io/kubernetes-id';
 export const KUBERNETES_LABEL_SELECTOR_ANNOTATION = 'backstage.io/kubernetes-label-selector';
+
+/** A Kubernetes event about an object, as returned by the core API. */
+export type KubernetesEvent = {
+  metadata: { name: string; namespace?: string; creationTimestamp?: string };
+  type?: string;
+  reason?: string;
+  message?: string;
+  count?: number;
+  firstTimestamp?: string;
+  lastTimestamp?: string;
+  eventTime?: string;
+};
+
+export type PodRef = {
+  cluster: string;
+  namespace: string;
+  name: string;
+};
+
+export type PodLogQuery = PodRef & {
+  container?: string;
+  tailLines?: number;
+  /** Log of the container instance that ran before the current one. */
+  previous?: boolean;
+};

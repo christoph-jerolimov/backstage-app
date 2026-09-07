@@ -5,6 +5,6 @@ import { createDemoKubernetesApi, createRestKubernetesApi, type KubernetesApi } 
 
 /** Picks the REST Kubernetes API when a backend is configured, otherwise the demo API. */
 export function useKubernetesApi(): KubernetesApi {
-  const { demo, fetchJson } = useBackstage();
-  return useMemo(() => (demo ? createDemoKubernetesApi() : createRestKubernetesApi(fetchJson)), [demo, fetchJson]);
+  const { demo, fetchJson, fetchText } = useBackstage();
+  return useMemo(() => (demo ? createDemoKubernetesApi() : createRestKubernetesApi(fetchJson, fetchText)), [demo, fetchJson, fetchText]);
 }
