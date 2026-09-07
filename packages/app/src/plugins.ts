@@ -4,6 +4,7 @@ import { catalogPlugin } from '@backstage-app/plugin-catalog';
 import { homePlugin } from '@backstage-app/plugin-home';
 import { notificationsPlugin } from '@backstage-app/plugin-notifications';
 import { searchPlugin } from '@backstage-app/plugin-search';
+import { techdocsPlugin } from '@backstage-app/plugin-techdocs';
 
 /**
  * The installed plugins, in drawer order. To add a plugin: add it here and mount its
@@ -15,4 +16,5 @@ export const registry = createPluginRegistry([
   searchPlugin,
   notificationsPlugin,
   apisPlugin,
+  techdocsPlugin,
 ]);

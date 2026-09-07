@@ -27,6 +27,10 @@ export type CatalogPageProps = {
   description?: string;
   /** Locks the listing to one kind and hides the kind selector. */
   fixedKind?: string;
+  /** Offers an "All" kind chip, selected by default, that lifts the kind restriction. */
+  allowAllKinds?: boolean;
+  /** Only entities carrying this annotation key are listed. */
+  requiredAnnotation?: string;
 };
 
 const EMPTY_FACETS: CatalogFacets = { types: [], owners: [], lifecycles: [], tags: [] };
@@ -58,14 +62,23 @@ export function CatalogPage({
   title = 'Catalog',
   description = 'Browse the software catalog.',
   fixedKind,
+  allowAllKinds = false,
+  requiredAnnotation,
 }: CatalogPageProps) {
   const [filters, setFilters] = useState<CatalogFilters>(
-    initialFilters ?? (fixedKind ? { kind: fixedKind, text: '' } : defaultFilters)
+    initialFilters ?? {
+      ...defaultFilters,
+      kind: fixedKind ?? (allowAllKinds ? undefined : defaultFilters.kind),
+      requiredAnnotation,
+    }
   );
 
   const facets = useRemoteData(
-    useCallback((signal: AbortSignal) => api.getFacets(filters.kind, signal), [api, filters.kind]),
-    filters.kind
+    useCallback(
+      (signal: AbortSignal) => api.getFacets(filters.kind, filters.requiredAnnotation, signal),
+      [api, filters.kind, filters.requiredAnnotation]
+    ),
+    `${filters.kind ?? '*'}|${filters.requiredAnnotation ?? ''}`
   );
   const entities = useRemoteData(
     useCallback((signal: AbortSignal) => api.queryEntities(filters, signal), [api, filters]),
@@ -99,7 +112,8 @@ export function CatalogPage({
             label="Kind"
             options={KIND_OPTIONS.map((kind) => ({ value: kind, label: capitalize(kind) }))}
             selected={filters.kind}
-            onSelect={(kind) => setFilters((current) => withKind(current, kind ?? defaultFilters.kind))}
+            onSelect={(kind) => setFilters((current) => withKind(current, kind ?? (allowAllKinds ? undefined : defaultFilters.kind)))}
+            allLabel={allowAllKinds ? 'All' : undefined}
             testID="filter-kind"
           />
         )}

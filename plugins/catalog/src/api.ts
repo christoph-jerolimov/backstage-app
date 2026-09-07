@@ -1,7 +1,7 @@
 import type { Entity } from '@backstage/catalog-model';
 import type { FetchJson } from '@backstage-app/core';
 
-import { buildFilterParam, type CatalogFilters } from './filters';
+import { annotationPair, buildFilterParam, type CatalogFilters } from './filters';
 
 export type CatalogFacets = {
   types: string[];
@@ -17,7 +17,7 @@ export type EntityPage = {
 
 export interface CatalogApi {
   queryEntities(filters: CatalogFilters, signal?: AbortSignal): Promise<EntityPage>;
-  getFacets(kind: string, signal?: AbortSignal): Promise<CatalogFacets>;
+  getFacets(kind: string | undefined, requiredAnnotation: string | undefined, signal?: AbortSignal): Promise<CatalogFacets>;
 }
 
 export const PAGE_SIZE = 50;
@@ -50,9 +50,12 @@ export function buildEntitiesQuery(filters: CatalogFilters): string {
 }
 
 /** Query string for `/api/catalog/entity-facets`. */
-export function buildFacetsQuery(kind: string): string {
+export function buildFacetsQuery(kind: string | undefined, requiredAnnotation?: string): string {
   const params = new URLSearchParams();
-  params.set('filter', `kind=${kind}`);
+  const pairs: string[] = [];
+  if (kind) pairs.push(`kind=${kind}`);
+  if (requiredAnnotation) pairs.push(annotationPair(requiredAnnotation));
+  if (pairs.length) params.set('filter', pairs.join(','));
   for (const field of Object.values(FACET_FIELDS)) params.append('facet', field);
   return params.toString();
 }
@@ -82,10 +85,11 @@ export function createRestCatalogApi(fetchJson: FetchJson): CatalogApi {
       const items = response.items ?? [];
       return { items, totalItems: response.totalItems ?? items.length };
     },
-    async getFacets(kind, signal) {
-      const response = await fetchJson<FacetsResponse>(`/api/catalog/entity-facets?${buildFacetsQuery(kind)}`, {
-        signal,
-      });
+    async getFacets(kind, requiredAnnotation, signal) {
+      const response = await fetchJson<FacetsResponse>(
+        `/api/catalog/entity-facets?${buildFacetsQuery(kind, requiredAnnotation)}`,
+        { signal }
+      );
       return parseFacets(response);
     },
   };

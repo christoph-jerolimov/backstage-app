@@ -6,6 +6,6 @@ export type { CatalogScreenProps } from './catalog-screen';
 export { createRestCatalogApi, buildEntitiesQuery, buildFacetsQuery, parseFacets, PAGE_SIZE } from './api';
 export type { CatalogApi, CatalogFacets, EntityPage } from './api';
 export { createDemoCatalogApi, demoEntities } from './demo-api';
-export { KIND_OPTIONS, buildFilterParam, defaultFilters, matchesQuery, withKind } from './filters';
+export { KIND_OPTIONS, annotationPair, buildFilterParam, defaultFilters, matchesQuery, withKind } from './filters';
 export type { CatalogFilters } from './filters';
 export { useCatalogApi } from './use-catalog-api';

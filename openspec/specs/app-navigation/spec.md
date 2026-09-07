@@ -14,9 +14,10 @@ showing the item's title and icon. The drawer SHALL also contain an app-level "E
 entry that opens the component showcase screen.
 
 #### Scenario: Drawer contents
-- **WHEN** the home, catalog, search, notifications, and apis plugins are installed
-- **THEN** the drawer lists Home, Catalog, Search, Notifications, APIs, and Expo UI, in
-  that order
+- **WHEN** the home, catalog, search, notifications, apis, and techdocs plugins are
+  installed
+- **THEN** the drawer lists Home, Catalog, Search, Notifications, APIs, Docs, and Expo
+  UI, in that order
 
 #### Scenario: Selecting an entry opens the page
 - **WHEN** the user selects "Catalog" in the drawer

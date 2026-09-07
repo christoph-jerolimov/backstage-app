@@ -12,6 +12,31 @@ describe('buildFilterParam', () => {
   });
 });
 
+describe('buildFilterParam with optional kind and annotation', () => {
+  it('omits kind when unset and adds a bare annotation pair', () => {
+    expect(buildFilterParam({ text: '' })).toBe('');
+    expect(buildFilterParam({ kind: 'api', requiredAnnotation: 'backstage.io/techdocs-ref', text: '' })).toBe(
+      'kind=api,metadata.annotations.backstage.io/techdocs-ref'
+    );
+  });
+
+  it('matches any kind when unset and requires the annotation', () => {
+    const docs = { requiredAnnotation: 'backstage.io/techdocs-ref', text: '' };
+    expect(matchesQuery(byName('petstore'), docs)).toBe(true);
+    expect(matchesQuery(byName('payments-api'), docs)).toBe(true);
+    expect(matchesQuery(byName('ledger-worker'), docs)).toBe(false);
+    expect(matchesQuery(byName('payments'), { text: '' })).toBe(true);
+  });
+
+  it('withKind keeps the annotation', () => {
+    expect(withKind({ kind: 'api', requiredAnnotation: 'a', type: 'x', text: 't' }, undefined)).toEqual({
+      kind: undefined,
+      text: 't',
+      requiredAnnotation: 'a',
+    });
+  });
+});
+
 describe('withKind', () => {
   it('resets the dependent selections but keeps the text', () => {
     expect(withKind({ kind: 'component', type: 'service', owner: 'x', lifecycle: 'y', tag: 'z', text: 'pay' }, 'api')).toEqual({
