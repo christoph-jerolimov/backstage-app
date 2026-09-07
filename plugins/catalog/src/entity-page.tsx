@@ -10,16 +10,18 @@ import {
   StateView,
   ThemedText,
   ThemedView,
+  useRecentEntities,
   useRemoteData,
   useTheme,
 } from '@backstage-app/core';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 
 import type { CatalogApi } from './api';
 import { entitySubtitle } from './catalog-page';
 import { backstageEntityUrl, type EntityRef, entityRefOf, parseEntityRef, stringifyEntityRef } from './entity-ref';
 import type { CatalogFilters } from './filters';
+import { StarButton } from './star-button';
 
 export type EntityPageProps = {
   entityRef: EntityRef;
@@ -301,13 +303,12 @@ function EntityDetails({ entity, entityRef, api, baseUrl, onOpenEntity, actionsF
             </ThemedText>
           </ExternalLink>
         ) : null}
-        {actions.length ? (
-          <View style={styles.actions} testID="entity-actions">
-            {actions.map((action) => (
-              <ActionButton key={action.id} label={action.title} onPress={action.onPress} compact testID={action.testID} />
-            ))}
-          </View>
-        ) : null}
+        <View style={styles.actions} testID="entity-actions">
+          <StarButton entityRef={ref} />
+          {actions.map((action) => (
+            <ActionButton key={action.id} label={action.title} onPress={action.onPress} compact testID={action.testID} />
+          ))}
+        </View>
       </ThemedView>
 
       {isUser && memberOf.length ? (
@@ -361,6 +362,13 @@ export function EntityPage({ entityRef, api, baseUrl, onOpenEntity, actionsFor }
     useCallback((signal: AbortSignal) => api.getEntityByName(entityRef, signal), [api, entityRef]),
     ref
   );
+  const { recordVisit } = useRecentEntities();
+  const visited = entity.status === 'success' ? ref : undefined;
+
+  useEffect(() => {
+    if (visited) recordVisit(visited);
+  }, [visited, recordVisit]);
+
   const title = entity.data?.metadata.title ?? entityRef.name;
   const notFound = entity.status === 'error' && entity.error instanceof BackstageApiError && entity.error.status === 404;
 

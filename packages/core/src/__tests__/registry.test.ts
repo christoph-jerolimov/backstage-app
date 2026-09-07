@@ -36,4 +36,24 @@ describe('createPluginRegistry', () => {
 
     expect(registry.entityActions().map((item) => item.id)).toEqual(['docs', 'k8s']);
   });
+
+  it('sorts home widgets by priority then registration order', () => {
+    const Widget = () => null;
+    const widget = (id: string, priority?: number) => ({ id, title: id, component: Widget, priority });
+    const withWidgets = (id: string, widgets: ReturnType<typeof widget>[]) => ({ ...plugin(id, id), homeWidgets: widgets });
+    const registry = createPluginRegistry([
+      withWidgets('a', [widget('late', 40), widget('default')]),
+      plugin('plain', 'Plain'),
+      withWidgets('b', [widget('early', 10), widget('other-default')]),
+    ]);
+
+    expect(registry.homeWidgets().map((item) => item.id)).toEqual(['early', 'late', 'default', 'other-default']);
+    expect(createPluginRegistry([plugin('a', 'A')]).homeWidgets()).toEqual([]);
+  });
+
+  it('rejects duplicate home widget ids across plugins', () => {
+    const Widget = () => null;
+    const withWidget = (id: string) => ({ ...plugin(id, id), homeWidgets: [{ id: 'starred', title: 'Starred', component: Widget }] });
+    expect(() => createPluginRegistry([withWidget('a'), withWidget('b')])).toThrow('Home widget id "starred" is registered more than once');
+  });
 });

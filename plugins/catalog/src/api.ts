@@ -21,7 +21,11 @@ export interface CatalogApi {
   getFacets(kind: string | undefined, requiredAnnotation: string | undefined, signal?: AbortSignal): Promise<CatalogFacets>;
   /** Loads one entity; rejects with a `BackstageApiError` of status 404 when it does not exist. */
   getEntityByName(ref: EntityRef, signal?: AbortSignal): Promise<Entity>;
+  /** Loads several entities by ref, in the requested order; unknown refs are omitted. */
+  getEntitiesByRefs(refs: string[], signal?: AbortSignal): Promise<Entity[]>;
 }
+
+export const ENTITIES_BY_REFS_PATH = '/api/catalog/entities/by-refs';
 
 export const PAGE_SIZE = 50;
 
@@ -102,6 +106,16 @@ export function createRestCatalogApi(fetchJson: FetchJson): CatalogApi {
     },
     getEntityByName(ref, signal) {
       return fetchJson<Entity>(buildEntityByNamePath(ref), { signal });
+    },
+    async getEntitiesByRefs(refs, signal) {
+      if (refs.length === 0) return [];
+      const response = await fetchJson<{ items?: (Entity | null)[] }>(ENTITIES_BY_REFS_PATH, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ entityRefs: refs }),
+        signal,
+      });
+      return (response.items ?? []).filter((item): item is Entity => !!item);
     },
   };
 }

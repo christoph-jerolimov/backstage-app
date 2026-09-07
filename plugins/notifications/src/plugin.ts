@@ -1,5 +1,6 @@
 import { createPlugin } from '@backstage-app/core';
 
+import { UnreadWidget } from './home-widget';
 import { NotificationsScreen } from './notifications-screen';
 
 export const notificationsPlugin = createPlugin({
@@ -13,4 +14,5 @@ export const notificationsPlugin = createPlugin({
       icon: { ios: 'bell', android: 'notifications', web: 'notifications' },
     },
   ],
+  homeWidgets: [{ id: 'notifications-unread', title: 'Unread notifications', component: UnreadWidget, priority: 40, testID: 'widget-unread' }],
 });

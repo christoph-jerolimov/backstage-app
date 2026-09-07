@@ -1,4 +1,4 @@
-import { buildEntitiesQuery, buildEntityByNamePath, buildFacetsQuery, createRestCatalogApi, parseFacets } from '../api';
+import { ENTITIES_BY_REFS_PATH, buildEntitiesQuery, buildEntityByNamePath, buildFacetsQuery, createRestCatalogApi, parseFacets } from '../api';
 import { createDemoCatalogApi, demoEntities } from '../demo-api';
 import { defaultFilters } from '../filters';
 
@@ -99,5 +99,27 @@ describe('demo catalog api entity lookup', () => {
     const entity = await api.getEntityByName({ kind: 'Component', namespace: 'DEFAULT', name: 'petstore' });
     expect(entity.metadata.title).toBe('Petstore');
     await expect(api.getEntityByName({ kind: 'component', namespace: 'default', name: 'nope' })).rejects.toMatchObject({ status: 404 });
+  });
+
+  it('loads several entities by ref and drops unknown ones', async () => {
+    const fetchJson = jest.fn(async () => ({ items: [{ kind: 'Component', metadata: { name: 'petstore' } }, null, { kind: 'API', metadata: { name: 'payments-api' } }] }));
+    const api = createRestCatalogApi(fetchJson as never);
+
+    const entities = await api.getEntitiesByRefs(['component:default/petstore', 'component:default/gone', 'api:default/payments-api']);
+    expect(entities.map((entity) => entity.metadata.name)).toEqual(['petstore', 'payments-api']);
+
+    const [path, init] = fetchJson.mock.calls[0] as unknown as [string, RequestInit];
+    expect(path).toBe(ENTITIES_BY_REFS_PATH);
+    expect(init.method).toBe('POST');
+    expect(JSON.parse(init.body as string)).toEqual({ entityRefs: ['component:default/petstore', 'component:default/gone', 'api:default/payments-api'] });
+
+    await expect(api.getEntitiesByRefs([])).resolves.toEqual([]);
+    expect(fetchJson).toHaveBeenCalledTimes(1);
+  });
+
+  it('resolves demo entities by ref in the requested order', async () => {
+    const api = createDemoCatalogApi();
+    const entities = await api.getEntitiesByRefs(['api:default/payments-api', 'component:default/nope', 'Component:Default/petstore']);
+    expect(entities.map((entity) => entity.metadata.name)).toEqual(['payments-api', 'petstore']);
   });
 });

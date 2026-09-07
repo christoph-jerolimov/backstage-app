@@ -1,8 +1,19 @@
-export { createPlugin, hasAnnotation } from './plugin';
-export type { BackstagePlugin, EntityAction, EntityLike, EntityRefLike, PluginIcon, PluginNavItem, PluginRoute } from './plugin';
+export { DEFAULT_WIDGET_PRIORITY, createPlugin, hasAnnotation } from './plugin';
+export type { BackstagePlugin, EntityAction, EntityLike, EntityRefLike, HomeWidget, PluginIcon, PluginNavItem, PluginRoute } from './plugin';
 export { createPluginRegistry } from './registry';
 export type { PluginRegistry } from './registry';
 export { PluginRegistryProvider, usePluginRegistry } from './registry-context';
+export {
+  EntityPrefsProvider,
+  RECENT_KEY,
+  RECENT_LIMIT,
+  STARRED_KEY,
+  useRecentEntities,
+  useStarredEntities,
+  withStarToggled,
+  withVisit,
+} from './entity-prefs';
+export type { EntityPrefsProviderProps, EntityPrefsValue } from './entity-prefs';
 
 export { Collapsible } from './components/collapsible';
 export { ExternalLink } from './components/external-link';

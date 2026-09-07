@@ -50,6 +50,7 @@ describe('CatalogPage', () => {
         return { items: [], totalItems: 0 };
       },
       getFacets: async () => ({ types: [], owners: [], lifecycles: [], tags: [] }),
+      getEntitiesByRefs: async () => [],
       getEntityByName: async () => {
         throw new Error('not used');
       },

@@ -12,6 +12,8 @@ export { TaskScreen } from './task-screen';
 export { ActionsPage, matchesActionFilter, schemaProperties } from './actions-page';
 export type { ActionsPageProps, SchemaProperty } from './actions-page';
 export { ActionsScreen } from './actions-screen';
+export { OpenTasksList, OpenTasksWidget, OPEN_TASKS_LIMIT } from './home-widget';
+export type { OpenTasksListProps } from './home-widget';
 export { SchemaForm } from './schema-form-view';
 export type { SchemaFormProps } from './schema-form-view';
 export { fieldsFromSchema, formStepsFromSchema, initialValues, isComplete, isFieldFilled, parameterSchemaFromTemplate, submitValues } from './schema-form';

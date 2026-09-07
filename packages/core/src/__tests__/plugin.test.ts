@@ -51,4 +51,19 @@ describe('createPlugin', () => {
       })
     ).toThrow('Plugin "catalog" route "entity" references unknown back route "catalog"');
   });
+
+  it('rejects a plugin that declares one widget id twice', () => {
+    expect(() =>
+      createPlugin({
+        id: 'home',
+        name: 'Home',
+        routes: [{ name: 'index', component: Page }],
+        navItems: [],
+        homeWidgets: [
+          { id: 'starred', title: 'Starred', component: Page },
+          { id: 'starred', title: 'Again', component: Page },
+        ],
+      })
+    ).toThrow('Plugin "home" declares the home widget "starred" more than once');
+  });
 });
