@@ -5,6 +5,7 @@ import { catalogPlugin } from '@backstage-app/plugin-catalog';
 import { homePlugin } from '@backstage-app/plugin-home';
 import { notificationsPlugin } from '@backstage-app/plugin-notifications';
 import { searchPlugin } from '@backstage-app/plugin-search';
+import { settingsPlugin } from '@backstage-app/plugin-settings';
 import { techdocsPlugin } from '@backstage-app/plugin-techdocs';
 
 /**
@@ -19,4 +20,5 @@ export const registry = createPluginRegistry([
   apisPlugin,
   techdocsPlugin,
   authPlugin,
+  settingsPlugin,
 ]);

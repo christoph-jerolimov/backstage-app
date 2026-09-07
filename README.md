@@ -81,7 +81,7 @@ The repository is an npm-workspaces monorepo:
   `createPluginRegistry`), shared UI primitives (`Page`, `ListCard`, `ThemedText`, …), the
   theme tokens, and the color-scheme hooks.
 - `plugins/*/` — one package per plugin (`@backstage-app/plugin-home`, `-catalog`,
-  `-search`, `-notifications`, `-apis`, `-techdocs`, `-auth`). Each exports a plugin definition and
+  `-search`, `-notifications`, `-apis`, `-techdocs`, `-auth`, `-settings`). Each exports a plugin definition and
   its page components. `plugin-apis` and `plugin-techdocs` compose the catalog listing
   (fixed to API entities, and to entities with the TechDocs annotation).
 - `openspec/` — OpenSpec specs and change proposals

@@ -17,6 +17,7 @@
     "@backstage-app/plugin-home": "*",
     "@backstage-app/plugin-notifications": "*",
     "@backstage-app/plugin-search": "*",
+    "@backstage-app/plugin-settings": "*",
     "@backstage-app/plugin-techdocs": "*",
     "@expo/ui": "~57.0.16",
     "@react-native-async-storage/async-storage": "^2.2.0",

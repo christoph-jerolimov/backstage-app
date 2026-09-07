@@ -10,6 +10,7 @@ describe('plugin registry', () => {
       'APIs',
       'Docs',
       'Account',
+      'Settings',
     ]);
   });
 
