@@ -8,6 +8,7 @@ describe('plugin registry', () => {
       'Search',
       'Notifications',
       'APIs',
+      'Docs',
     ]);
   });
 

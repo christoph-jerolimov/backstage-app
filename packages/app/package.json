@@ -16,6 +16,7 @@
     "@backstage-app/plugin-home": "*",
     "@backstage-app/plugin-notifications": "*",
     "@backstage-app/plugin-search": "*",
+    "@backstage-app/plugin-techdocs": "*",
     "@expo/ui": "~57.0.16",
     "expo": "~57.0.20",
     "expo-constants": "~57.0.17",

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
 
 import type { CatalogApi } from '../api';
 import { CatalogPage } from '../catalog-page';
@@ -78,6 +78,24 @@ describe('CatalogPage', () => {
 
     expect(screen.getByTestId('filter-kind')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Component', selected: true })).toBeTruthy();
+  });
+
+  it('lists documented entities of all kinds and narrows by kind', async () => {
+    await render(
+      <CatalogPage api={createDemoCatalogApi()} allowAllKinds requiredAnnotation="backstage.io/techdocs-ref" title="Docs" />
+    );
+
+    expect(within(screen.getByTestId('filter-kind')).getByRole('button', { name: 'All', selected: true })).toBeTruthy();
+    await waitFor(() => expect(screen.getByText('4 entities')).toBeTruthy());
+    expect(screen.getByText('Petstore')).toBeTruthy();
+    expect(screen.getByText('payments-api')).toBeTruthy();
+    expect(screen.getByText('payments')).toBeTruthy();
+    expect(screen.queryByText('ledger-worker')).toBeNull();
+
+    await fireEvent.press(screen.getByRole('button', { name: 'Api' }));
+    await waitFor(() => expect(screen.getByText('1 entity')).toBeTruthy());
+    expect(screen.getByText('payments-api')).toBeTruthy();
+    expect(screen.queryByText('Petstore')).toBeNull();
   });
 
   it('is exposed as a plugin with one navigation item', () => {

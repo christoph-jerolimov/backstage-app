@@ -7,7 +7,7 @@ function entity(
   kind: string,
   name: string,
   spec: Entity['spec'],
-  metadata: { title?: string; description?: string; tags?: string[] } = {}
+  metadata: { title?: string; description?: string; tags?: string[]; annotations?: Record<string, string> } = {}
 ): Entity {
   return {
     apiVersion: 'backstage.io/v1alpha1',
@@ -23,6 +23,7 @@ export const demoEntities: Entity[] = [
     title: 'Petstore',
     description: 'Reference pet store service used in demos',
     tags: ['java', 'spring'],
+    annotations: { 'backstage.io/techdocs-ref': 'dir:.' },
   }),
   entity('Component', 'payments-frontend', { type: 'website', owner: 'team-payments', lifecycle: 'production' }, {
     description: 'Customer-facing payments UI',
@@ -35,15 +36,20 @@ export const demoEntities: Entity[] = [
   entity('Component', 'shared-ui', { type: 'library', owner: 'team-platform', lifecycle: 'production' }, {
     description: 'Design system components',
     tags: ['react', 'typescript'],
+    annotations: { 'backstage.io/techdocs-ref': 'dir:.' },
   }),
   entity('API', 'payments-api', { type: 'openapi', owner: 'team-payments', lifecycle: 'production' }, {
     description: 'Public payments REST API',
     tags: ['rest'],
+    annotations: { 'backstage.io/techdocs-ref': 'dir:.' },
   }),
   entity('API', 'petstore-grpc', { type: 'grpc', owner: 'team-platform', lifecycle: 'experimental' }, {
     description: 'Pet store gRPC surface',
   }),
-  entity('System', 'payments', { owner: 'team-payments' }, { description: 'Everything that moves money' }),
+  entity('System', 'payments', { owner: 'team-payments' }, {
+    description: 'Everything that moves money',
+    annotations: { 'backstage.io/techdocs-ref': 'dir:.' },
+  }),
   entity('Group', 'team-platform', { type: 'team' }, { title: 'Platform Team' }),
   entity('Group', 'team-payments', { type: 'team' }, { title: 'Payments Team' }),
   entity('User', 'jane.doe', { profile: { displayName: 'Jane Doe' } }, { title: 'Jane Doe' }),
@@ -67,8 +73,12 @@ export function createDemoCatalogApi(entities: Entity[] = demoEntities): Catalog
         .sort((a, b) => a.metadata.name.localeCompare(b.metadata.name));
       return { items, totalItems: items.length };
     },
-    async getFacets(kind): Promise<CatalogFacets> {
-      const ofKind = entities.filter((item) => item.kind.toLowerCase() === kind.toLowerCase());
+    async getFacets(kind, requiredAnnotation): Promise<CatalogFacets> {
+      const ofKind = entities.filter(
+        (item) =>
+          (!kind || item.kind.toLowerCase() === kind.toLowerCase()) &&
+          (!requiredAnnotation || item.metadata.annotations?.[requiredAnnotation] !== undefined)
+      );
       const spec = (item: Entity) => (item.spec ?? {}) as Record<string, unknown>;
       const str = (value: unknown) => (typeof value === 'string' ? value : undefined);
       return {

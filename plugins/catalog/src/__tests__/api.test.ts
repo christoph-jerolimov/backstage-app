@@ -17,6 +17,11 @@ describe('REST catalog api', () => {
     const params = new URLSearchParams(buildFacetsQuery('api'));
     expect(params.get('filter')).toBe('kind=api');
     expect(params.getAll('facet')).toEqual(['spec.type', 'spec.owner', 'spec.lifecycle', 'metadata.tags']);
+
+    expect(new URLSearchParams(buildFacetsQuery(undefined)).has('filter')).toBe(false);
+    expect(new URLSearchParams(buildFacetsQuery(undefined, 'backstage.io/techdocs-ref')).get('filter')).toBe(
+      'metadata.annotations.backstage.io/techdocs-ref'
+    );
   });
 
   it('parses facets defensively and sorts values', () => {
@@ -45,7 +50,7 @@ describe('REST catalog api', () => {
       '/api/catalog/entities/by-query?filter=kind%3Dcomponent&limit=50&orderField=metadata.name%2Casc'
     );
 
-    const facets = await api.getFacets('component');
+    const facets = await api.getFacets('component', undefined);
     expect(facets.owners).toEqual(['team-platform']);
     expect(fetchJson.mock.calls[1][0]).toContain('/api/catalog/entity-facets?filter=kind%3Dcomponent&facet=spec.type');
   });
@@ -63,8 +68,15 @@ describe('demo catalog api', () => {
     expect(apis.items.map((e) => e.metadata.name)).toEqual(['payments-api']);
   });
 
+  it('derives facets across all kinds and honors the annotation', async () => {
+    const all = await api.getFacets(undefined, undefined);
+    expect(all.types).toEqual(['grpc', 'library', 'openapi', 'service', 'team', 'website']);
+    const docs = await api.getFacets(undefined, 'backstage.io/techdocs-ref');
+    expect(docs.types).toEqual(['library', 'openapi', 'service']);
+  });
+
   it('derives facets for the kind', async () => {
-    const facets = await api.getFacets('component');
+    const facets = await api.getFacets('component', undefined);
     expect(facets.types).toEqual(['library', 'service', 'website']);
     expect(facets.owners).toEqual(['team-payments', 'team-platform']);
     expect(facets.lifecycles).toEqual(['experimental', 'production']);
