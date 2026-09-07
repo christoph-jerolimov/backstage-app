@@ -1,11 +1,11 @@
 import { createPlugin } from '@backstage-app/core';
 
-import { CatalogPage } from './catalog-page';
+import { CatalogScreen } from './catalog-screen';
 
 export const catalogPlugin = createPlugin({
   id: 'catalog',
   name: 'Catalog',
-  routes: [{ name: 'catalog', component: CatalogPage }],
+  routes: [{ name: 'catalog', component: CatalogScreen }],
   navItems: [
     {
       title: 'Catalog',

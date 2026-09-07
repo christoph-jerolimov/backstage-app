@@ -34,6 +34,20 @@ In the output, you'll find options to open the app in a
 > [development build](https://docs.expo.dev/develop/development-builds/introduction/)
 > on iOS and Android. On web the components fall back to plain React Native views.
 
+## Connecting to Backstage
+
+The app reads its backend from two public Expo environment variables, inlined at build
+time (see `.env.example`):
+
+| Variable | Purpose |
+| --- | --- |
+| `EXPO_PUBLIC_BACKSTAGE_URL` | Base URL of your Backstage instance, for example `https://backstage.example.com` |
+| `EXPO_PUBLIC_BACKSTAGE_TOKEN` | Optional static bearer token sent as `Authorization: Bearer …` |
+
+Without a URL the app runs in **demo mode**: plugins show built-in sample data and a banner
+explains how to connect. Put the variables in `packages/app/.env` (gitignored) or export
+them before `npm start`.
+
 ## Project layout
 
 The repository is an npm-workspaces monorepo:

@@ -1,4 +1,4 @@
-import { Colors, useColorScheme } from '@backstage-app/core';
+import { BackstageProvider, Colors, useColorScheme } from '@backstage-app/core';
 import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 import * as SplashScreen from 'expo-splash-screen';
@@ -29,40 +29,42 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={styles.root}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <AnimatedSplashOverlay />
-        <Drawer
-          initialRouteName="index"
-          screenOptions={{
-            headerTintColor: colors.text,
-            headerStyle: { backgroundColor: colors.background },
-            drawerStyle: { backgroundColor: colors.background },
-            drawerActiveTintColor: colors.text,
-            drawerActiveBackgroundColor: colors.backgroundSelected,
-            drawerInactiveTintColor: colors.textSecondary,
-            sceneStyle: { backgroundColor: colors.background },
-          }}>
-          {registry.navItems().map((item) => (
+      <BackstageProvider>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <AnimatedSplashOverlay />
+          <Drawer
+            initialRouteName="index"
+            screenOptions={{
+              headerTintColor: colors.text,
+              headerStyle: { backgroundColor: colors.background },
+              drawerStyle: { backgroundColor: colors.background },
+              drawerActiveTintColor: colors.text,
+              drawerActiveBackgroundColor: colors.backgroundSelected,
+              drawerInactiveTintColor: colors.textSecondary,
+              sceneStyle: { backgroundColor: colors.background },
+            }}>
+            {registry.navItems().map((item) => (
+              <Drawer.Screen
+                key={item.route}
+                name={item.route}
+                options={{
+                  title: item.title,
+                  drawerLabel: item.title,
+                  drawerIcon: drawerIcon(item.icon),
+                }}
+              />
+            ))}
             <Drawer.Screen
-              key={item.route}
-              name={item.route}
+              name="components"
               options={{
-                title: item.title,
-                drawerLabel: item.title,
-                drawerIcon: drawerIcon(item.icon),
+                title: 'Expo UI',
+                drawerLabel: 'Expo UI',
+                drawerIcon: drawerIcon(EXPO_UI_ICON),
               }}
             />
-          ))}
-          <Drawer.Screen
-            name="components"
-            options={{
-              title: 'Expo UI',
-              drawerLabel: 'Expo UI',
-              drawerIcon: drawerIcon(EXPO_UI_ICON),
-            }}
-          />
-        </Drawer>
-      </ThemeProvider>
+            </Drawer>
+        </ThemeProvider>
+      </BackstageProvider>
     </GestureHandlerRootView>
   );
 }
