@@ -5,9 +5,11 @@ import { EntityScreen } from './entity-screen';
 import { RecentWidget, StarredWidget } from './home-widgets';
 import { MineScreen } from './mine-screen';
 import { MyEntitiesWidget, MyTeamsWidget } from './ownership-widgets';
+import { RelationsScreen, relationsHref } from './relations-screen';
 
 export const ENTITY_ROUTE = 'entity/[kind]/[namespace]/[name]';
 export const MINE_ROUTE = 'mine';
+export const RELATIONS_ROUTE = 'relations/[kind]/[namespace]/[name]';
 
 export const catalogPlugin = createPlugin({
   id: 'catalog',
@@ -16,12 +18,22 @@ export const catalogPlugin = createPlugin({
     { name: 'catalog', component: CatalogScreen },
     { name: ENTITY_ROUTE, component: EntityScreen, title: 'Entity', hidden: true, backRoute: 'catalog' },
     { name: MINE_ROUTE, component: MineScreen, title: 'My entities', hidden: true, backRoute: 'catalog' },
+    { name: RELATIONS_ROUTE, component: RelationsScreen, title: 'Relations', hidden: true, backRoute: 'catalog' },
   ],
   navItems: [
     {
       title: 'Catalog',
       route: 'catalog',
       icon: { ios: 'square.grid.2x2', android: 'category', web: 'category' },
+    },
+  ],
+  entityActions: [
+    {
+      id: 'catalog-relations',
+      title: 'Relations',
+      isAvailable: () => true,
+      href: (ref) => relationsHref(ref),
+      testID: 'open-relations',
     },
   ],
   homeWidgets: [
