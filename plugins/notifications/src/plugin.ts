@@ -1,11 +1,11 @@
 import { createPlugin } from '@backstage-app/core';
 
-import { NotificationsPage } from './notifications-page';
+import { NotificationsScreen } from './notifications-screen';
 
 export const notificationsPlugin = createPlugin({
   id: 'notifications',
   name: 'Notifications',
-  routes: [{ name: 'notifications', component: NotificationsPage }],
+  routes: [{ name: 'notifications', component: NotificationsScreen }],
   navItems: [
     {
       title: 'Notifications',

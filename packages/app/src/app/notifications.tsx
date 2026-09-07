@@ -1,1 +1,1 @@
-export { NotificationsPage as default } from '@backstage-app/plugin-notifications';
+export { NotificationsScreen as default } from '@backstage-app/plugin-notifications';
