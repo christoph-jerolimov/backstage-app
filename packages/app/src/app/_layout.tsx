@@ -1,4 +1,13 @@
-import { BackstageProvider, EntityPrefsProvider, PluginRegistryProvider, ThemeProvider, useResolvedScheme, useTheme } from '@backstage-app/core';
+import {
+  BackstageProvider,
+  EntityPrefsProvider,
+  PluginRegistryProvider,
+  QueryProvider,
+  ThemeProvider,
+  useBackstage,
+  useResolvedScheme,
+  useTheme,
+} from '@backstage-app/core';
 import { DarkTheme, DefaultTheme, ThemeProvider as NavigationThemeProvider, useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 import * as SplashScreen from 'expo-splash-screen';
@@ -44,6 +53,12 @@ function drawerIcon(name: SymbolViewProps['name']) {
   return function DrawerIcon({ color, size }: { color: ColorValue; size: number }) {
     return <SymbolView name={name} tintColor={color} size={size} />;
   };
+}
+
+/** Scopes the persisted query cache to the active Backstage instance. */
+function CachedData({ children }: { children: React.ReactNode }) {
+  const { instance } = useBackstage();
+  return <QueryProvider cacheKey={instance?.id ?? ''}>{children}</QueryProvider>;
 }
 
 /** Builds the navigation theme and drawer from the active theme tokens. */
@@ -124,9 +139,11 @@ export default function RootLayout() {
       <PluginRegistryProvider registry={registry}>
         <ThemeProvider>
           <BackstageProvider>
-            <EntityPrefsProvider>
-              <NavigationChrome />
-            </EntityPrefsProvider>
+            <CachedData>
+              <EntityPrefsProvider>
+                <NavigationChrome />
+              </EntityPrefsProvider>
+            </CachedData>
           </BackstageProvider>
         </ThemeProvider>
       </PluginRegistryProvider>

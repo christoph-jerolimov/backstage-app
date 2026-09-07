@@ -51,6 +51,9 @@ export type { TextFilterProps } from './components/text-filter';
 export { StateView } from './components/state-view';
 export type { StateViewProps } from './components/state-view';
 
+export { CACHE_STORAGE_KEY, CACHE_TIME_MS, QueryProvider, STALE_TIME_MS, createQueryClient } from './query-provider';
+export type { QueryProviderProps } from './query-provider';
+
 export { useOwnership } from './use-ownership';
 export type { Ownership } from './use-ownership';
 
