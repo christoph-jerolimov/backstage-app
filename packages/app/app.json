@@ -7,6 +7,9 @@
     "icon": "./assets/images/icon.png",
     "scheme": "backstage-app",
     "userInterfaceStyle": "automatic",
+    "updates": {
+      "enabled": false
+    },
     "ios": {
       "icon": "./assets/expo.icon",
       "bundleIdentifier": "com.anonymous.backstageapp"

@@ -37,6 +37,9 @@ jobs:
       - name: Test
         run: npm test -- --ci
 
+      - name: Knip reports
+        run: npm run knip-reports:check
+
       - name: Export web bundle
         run: npx expo export --platform web
         working-directory: packages/app
