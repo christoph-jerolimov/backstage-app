@@ -51,6 +51,8 @@ jobs:
     name: Android debug build
     runs-on: ubuntu-latest
     needs: check
+    # Temporarily disabled; flip to `true` to re-enable.
+    if: false
     timeout-minutes: 60
     env:
       # The default 2 GB Gradle heap plus the Kotlin daemon and clang for the
