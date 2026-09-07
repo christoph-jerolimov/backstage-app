@@ -49,6 +49,15 @@ function toOptions(values: string[]) {
 
 export function entitySubtitle(entity: Entity): string {
   const spec = (entity.spec ?? {}) as Record<string, unknown>;
+  const kind = entity.kind.toLowerCase();
+  if (kind === 'user' || kind === 'group') {
+    const profile = (spec.profile ?? {}) as Record<string, unknown>;
+    const parts = [entity.kind];
+    if (kind === 'group' && typeof spec.type === 'string') parts.push(spec.type);
+    if (kind === 'user' && typeof profile.displayName === 'string') parts.push(profile.displayName);
+    if (typeof profile.email === 'string') parts.push(profile.email);
+    return parts.join(' · ');
+  }
   const parts = [entity.kind];
   for (const key of ['type', 'owner', 'lifecycle'] as const) {
     const value = spec[key];

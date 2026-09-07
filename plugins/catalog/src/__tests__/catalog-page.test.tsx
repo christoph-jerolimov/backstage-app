@@ -111,6 +111,12 @@ describe('CatalogPage', () => {
     expect(screen.getByText('2 entities')).toBeTruthy();
   });
 
+  it('summarizes users and groups by profile', async () => {
+    await render(<CatalogPage api={createDemoCatalogApi()} initialFilters={{ kind: 'group', text: '' }} />);
+    await waitFor(() => expect(screen.getByText('Group · team · platform@example.com')).toBeTruthy());
+    expect(screen.getByText('Group · department · engineering@example.com')).toBeTruthy();
+  });
+
   it('reports the pressed entity', async () => {
     const onSelectEntity = jest.fn();
     await render(<CatalogPage api={createDemoCatalogApi()} onSelectEntity={onSelectEntity} />);

@@ -70,7 +70,7 @@ describe('demo catalog api', () => {
 
   it('derives facets across all kinds and honors the annotation', async () => {
     const all = await api.getFacets(undefined, undefined);
-    expect(all.types).toEqual(['documentation', 'grpc', 'library', 'openapi', 'service', 'team', 'website']);
+    expect(all.types).toEqual(['department', 'documentation', 'grpc', 'library', 'openapi', 'service', 'team', 'website']);
     const docs = await api.getFacets(undefined, 'backstage.io/techdocs-ref');
     expect(docs.types).toEqual(['library', 'openapi', 'service']);
   });

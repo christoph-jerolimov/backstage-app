@@ -64,4 +64,15 @@ describe('matchesQuery', () => {
     expect(matchesQuery(byName('petstore'), { ...defaultFilters, text: 'reference' })).toBe(true);
     expect(matchesQuery(byName('shared-ui'), { ...defaultFilters, text: 'pay' })).toBe(false);
   });
+
+  it('filters by ownership and membership relations', () => {
+    expect(buildFilterParam({ ownedBy: 'group:default/Team-Platform', text: '' })).toBe('relations.ownedBy=group:default/team-platform');
+    expect(buildFilterParam({ kind: 'user', memberOf: 'group:default/team-payments', text: '' })).toBe('kind=user,relations.memberOf=group:default/team-payments');
+    expect(withKind({ kind: 'component', ownedBy: 'group:default/team-platform', text: 'x' }, undefined)).toEqual({ kind: undefined, text: 'x', requiredAnnotation: undefined, ownedBy: 'group:default/team-platform', memberOf: undefined });
+
+    expect(matchesQuery(byName('petstore'), { ownedBy: 'group:default/team-platform', text: '' })).toBe(true);
+    expect(matchesQuery(byName('payments-frontend'), { ownedBy: 'group:default/team-platform', text: '' })).toBe(false);
+    expect(matchesQuery(byName('priya.patel'), { kind: 'user', memberOf: 'group:default/team-payments', text: '' })).toBe(true);
+    expect(matchesQuery(byName('jane.doe'), { kind: 'user', memberOf: 'group:default/team-payments', text: '' })).toBe(false);
+  });
 });
