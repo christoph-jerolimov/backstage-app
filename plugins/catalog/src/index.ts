@@ -12,5 +12,5 @@ export { useCatalogApi } from './use-catalog-api';
 export { EntityPage, entityDetails, groupRelations, relationLabel } from './entity-page';
 export type { EntityActionItem, EntityPageProps } from './entity-page';
 export { EntityScreen } from './entity-screen';
-export { DEFAULT_NAMESPACE, backstageEntityUrl, entityDocsHref, entityHref, entityKubernetesHref, entityRefOf, parseEntityRef, stringifyEntityRef } from './entity-ref';
+export { DEFAULT_NAMESPACE, backstageEntityUrl, entityDocsHref, entityHref, entityKubernetesHref, entityRefOf, entityTemplateHref, parseEntityRef, stringifyEntityRef } from './entity-ref';
 export type { EntityRef } from './entity-ref';

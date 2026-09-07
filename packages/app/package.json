@@ -17,6 +17,7 @@
     "@backstage-app/plugin-home": "*",
     "@backstage-app/plugin-kubernetes": "*",
     "@backstage-app/plugin-notifications": "*",
+    "@backstage-app/plugin-scaffolder": "*",
     "@backstage-app/plugin-search": "*",
     "@backstage-app/plugin-settings": "*",
     "@backstage-app/plugin-techdocs": "*",

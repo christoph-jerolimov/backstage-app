@@ -60,3 +60,8 @@ export function entityDocsHref(ref: EntityRef, path?: string): string {
 export function entityKubernetesHref(ref: EntityRef): string {
   return `/kubernetes/${encodeURIComponent(ref.kind.toLowerCase())}/${encodeURIComponent(ref.namespace.toLowerCase())}/${encodeURIComponent(ref.name)}`;
 }
+
+/** In-app path of the template page for a Template entity (owned by the scaffolder plugin). */
+export function entityTemplateHref(ref: EntityRef): string {
+  return `/create/templates/${encodeURIComponent(ref.namespace.toLowerCase())}/${encodeURIComponent(ref.name)}`;
+}

@@ -1,4 +1,4 @@
-import { backstageEntityUrl, entityDocsHref, entityHref, entityKubernetesHref, entityRefOf, parseEntityRef, stringifyEntityRef } from '../entity-ref';
+import { backstageEntityUrl, entityDocsHref, entityHref, entityKubernetesHref, entityRefOf, entityTemplateHref, parseEntityRef, stringifyEntityRef } from '../entity-ref';
 
 describe('entity references', () => {
   it('parses the full, kind-only, and namespace-only forms', () => {
@@ -25,5 +25,6 @@ describe('entity references', () => {
     expect(entityDocsHref(ref)).toBe('/docs/component/default/petstore');
     expect(entityDocsHref(ref, 'getting-started/')).toBe('/docs/component/default/petstore?path=getting-started%2F');
     expect(entityKubernetesHref(ref)).toBe('/kubernetes/component/default/petstore');
+    expect(entityTemplateHref({ kind: 'template', namespace: 'default', name: 'nodejs-service' })).toBe('/create/templates/default/nodejs-service');
   });
 });

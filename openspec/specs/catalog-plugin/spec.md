@@ -64,13 +64,13 @@ the same filters applied locally.
 
 ### Requirement: Catalog page can be fixed to one kind
 The catalog listing SHALL support a configuration with a custom title and description,
-an optional fixed kind, an optional "all kinds" mode, and an optional required
-annotation. With a fixed kind the kind selector SHALL be hidden and the kind SHALL not
-be changeable. In "all kinds" mode the kind selector SHALL offer an "All" option,
-selected by default, under which queries and filter options are not restricted by kind.
-With a required annotation only entities carrying that annotation key SHALL be listed,
-in both REST and demo modes. All other filters, states, and the demo fallback SHALL
-behave as on the catalog page.
+an optional fixed kind, an optional "all kinds" mode, an optional required annotation,
+and an optional toolbar rendered between the description and the filters. With a fixed
+kind the kind selector SHALL be hidden and the kind SHALL not be changeable. In "all
+kinds" mode the kind selector SHALL offer an "All" option, selected by default, under
+which queries and filter options are not restricted by kind. With a required annotation
+only entities carrying that annotation key SHALL be listed, in both REST and demo modes.
+All other filters, states, and the demo fallback SHALL behave as on the catalog page.
 
 #### Scenario: Fixed kind hides the selector
 - **WHEN** the listing is configured with fixed kind `api`
@@ -85,6 +85,10 @@ behave as on the catalog page.
   `backstage.io/techdocs-ref`
 - **THEN** the kind selector shows "All" selected and every listed entity, of any kind,
   carries that annotation
+
+#### Scenario: Toolbar slot
+- **WHEN** the listing is configured with a toolbar
+- **THEN** the toolbar is rendered above the filters
 
 ### Requirement: Opening an entity from a listing
 Every catalog listing (the catalog page and its fixed-kind and required-annotation

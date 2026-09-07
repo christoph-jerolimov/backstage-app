@@ -10,7 +10,7 @@ import {
   ThemedView,
   useRemoteData,
 } from '@backstage-app/core';
-import { useCallback, useState } from 'react';
+import { type ReactNode, useCallback, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import type { CatalogApi, CatalogFacets } from './api';
@@ -33,6 +33,8 @@ export type CatalogPageProps = {
   requiredAnnotation?: string;
   /** Called when the user presses an entity row. */
   onSelectEntity?: (entity: Entity) => void;
+  /** Rendered between the description and the filters. */
+  toolbar?: ReactNode;
 };
 
 const EMPTY_FACETS: CatalogFacets = { types: [], owners: [], lifecycles: [], tags: [] };
@@ -67,6 +69,7 @@ export function CatalogPage({
   allowAllKinds = false,
   requiredAnnotation,
   onSelectEntity,
+  toolbar,
 }: CatalogPageProps) {
   const [filters, setFilters] = useState<CatalogFilters>(
     initialFilters ?? {
@@ -102,6 +105,8 @@ export function CatalogPage({
           </ThemedText>
         </ThemedView>
       ) : null}
+
+      {toolbar ? <ThemedView testID="catalog-toolbar">{toolbar}</ThemedView> : null}
 
       <ThemedView style={styles.filters}>
         <TextFilter

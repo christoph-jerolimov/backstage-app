@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
+import { Text } from 'react-native';
 
 import type { CatalogApi } from '../api';
 import { CatalogPage } from '../catalog-page';
@@ -99,6 +100,15 @@ describe('CatalogPage', () => {
     await waitFor(() => expect(screen.getByText('1 entity')).toBeTruthy());
     expect(screen.getByText('payments-api')).toBeTruthy();
     expect(screen.queryByText('Petstore')).toBeNull();
+  });
+
+  it('renders the toolbar above the filters and lists templates for the template kind', async () => {
+    await render(<CatalogPage api={createDemoCatalogApi()} fixedKind="template" toolbar={<Text>Toolbar here</Text>} />);
+
+    expect(within(screen.getByTestId('catalog-toolbar')).getByText('Toolbar here')).toBeTruthy();
+    await waitFor(() => expect(screen.getByText('Node.js service')).toBeTruthy());
+    expect(screen.getByText('Documentation site')).toBeTruthy();
+    expect(screen.getByText('2 entities')).toBeTruthy();
   });
 
   it('reports the pressed entity', async () => {
