@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@backstage-app/core": "*",
+    "@backstage-app/plugin-apis": "*",
     "@backstage-app/plugin-catalog": "*",
     "@backstage-app/plugin-home": "*",
     "@backstage-app/plugin-notifications": "*",

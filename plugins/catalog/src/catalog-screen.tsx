@@ -1,11 +1,13 @@
 import { useBackstage } from '@backstage-app/core';
 
-import { CatalogPage } from './catalog-page';
+import { CatalogPage, type CatalogPageProps } from './catalog-page';
 import { useCatalogApi } from './use-catalog-api';
 
+export type CatalogScreenProps = Pick<CatalogPageProps, 'title' | 'description' | 'fixedKind'>;
+
 /** The routed catalog screen: wires the configured catalog API into the page. */
-export function CatalogScreen() {
+export function CatalogScreen(props: CatalogScreenProps) {
   const { demo } = useBackstage();
   const api = useCatalogApi();
-  return <CatalogPage api={api} demo={demo} />;
+  return <CatalogPage api={api} demo={demo} {...props} />;
 }

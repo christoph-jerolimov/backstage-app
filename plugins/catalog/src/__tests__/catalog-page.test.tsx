@@ -59,6 +59,27 @@ describe('CatalogPage', () => {
     expect(attempts).toBe(2);
   });
 
+  it('hides the kind selector and lists only the fixed kind', async () => {
+    await render(<CatalogPage api={createDemoCatalogApi()} fixedKind="api" title="APIs" description="APIs in the catalog." />);
+
+    expect(screen.getByText('APIs')).toBeTruthy();
+    expect(screen.queryByTestId('filter-kind')).toBeNull();
+    await waitFor(() => expect(screen.getByText('payments-api')).toBeTruthy());
+    expect(screen.getByText('petstore-grpc')).toBeTruthy();
+    expect(screen.queryByText('Petstore')).toBeNull();
+
+    await fireEvent.press(screen.getByRole('button', { name: 'openapi' }));
+    await waitFor(() => expect(screen.queryByText('petstore-grpc')).toBeNull());
+    expect(screen.getByText('payments-api')).toBeTruthy();
+  });
+
+  it('shows the kind selector with Component selected by default', async () => {
+    await render(<CatalogPage api={createDemoCatalogApi()} />);
+
+    expect(screen.getByTestId('filter-kind')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Component', selected: true })).toBeTruthy();
+  });
+
   it('is exposed as a plugin with one navigation item', () => {
     expect(catalogPlugin.id).toBe('catalog');
     expect(catalogPlugin.navItems.map((item) => item.route)).toEqual(['catalog']);
