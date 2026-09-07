@@ -26,6 +26,35 @@ export type PluginNavItem = {
   icon: PluginIcon;
 };
 
+/** The subset of a catalog entity that entity actions may inspect. */
+export type EntityLike = {
+  kind: string;
+  metadata: {
+    name: string;
+    namespace?: string;
+    annotations?: Record<string, string>;
+  };
+};
+
+/** A lower-cased kind and namespace plus the entity name. */
+export type EntityRefLike = {
+  kind: string;
+  namespace: string;
+  name: string;
+};
+
+/** An action a plugin offers on the catalog entity page, such as "Documentation". */
+export type EntityAction = {
+  /** Unique across plugins (kebab-case). */
+  id: string;
+  title: string;
+  /** Whether the action applies to the entity, typically by annotation. */
+  isAvailable: (entity: EntityLike) => boolean;
+  /** The in-app path the action opens for the entity. */
+  href: (ref: EntityRefLike) => string;
+  testID?: string;
+};
+
 export interface BackstagePlugin {
   /** Unique, stable identifier (kebab-case). */
   id: string;
@@ -33,6 +62,13 @@ export interface BackstagePlugin {
   name: string;
   routes: PluginRoute[];
   navItems: PluginNavItem[];
+  /** Actions offered on the catalog entity page. */
+  entityActions?: EntityAction[];
+}
+
+/** True when the entity carries the annotation key. */
+export function hasAnnotation(entity: EntityLike, key: string): boolean {
+  return entity.metadata.annotations?.[key] !== undefined;
 }
 
 /**

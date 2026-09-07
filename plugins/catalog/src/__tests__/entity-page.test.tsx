@@ -1,3 +1,4 @@
+import type { Entity } from '@backstage/catalog-model';
 import { BackstageApiError } from '@backstage-app/core';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
 
@@ -31,22 +32,25 @@ describe('EntityPage', () => {
     await fireEvent.press(within(screen.getByTestId('relations-ownedBy')).getByRole('button', { name: 'group:default/team-platform' }));
     expect(onOpenEntity).toHaveBeenCalledWith({ kind: 'group', namespace: 'default', name: 'team-platform' });
 
-    expect(screen.getByText('Annotations (2)')).toBeTruthy();
-    await fireEvent.press(screen.getByText('Annotations (2)'));
+    expect(screen.getByText('Annotations (3)')).toBeTruthy();
+    await fireEvent.press(screen.getByText('Annotations (3)'));
     expect(within(screen.getByTestId('entity-annotations')).getByText('backstage.io/techdocs-ref')).toBeTruthy();
   });
 
-  it('offers the Documentation action only for annotated entities', async () => {
-    const onOpenDocs = jest.fn();
-    const first = await render(<EntityPage entityRef={petstore} api={createDemoCatalogApi()} onOpenDocs={onOpenDocs} />);
+  it('renders plugin actions for the loaded entity', async () => {
+    const onPress = jest.fn();
+    const actionsFor = jest.fn((entity: Entity) =>
+      entity.metadata.annotations?.['backstage.io/techdocs-ref'] ? [{ id: 'docs', title: 'Documentation', onPress, testID: 'open-docs' }] : []
+    );
+    const first = await render(<EntityPage entityRef={petstore} api={createDemoCatalogApi()} actionsFor={actionsFor} />);
     await waitFor(() => expect(screen.getByTestId('open-docs')).toBeTruthy());
     await fireEvent.press(screen.getByTestId('open-docs'));
-    expect(onOpenDocs).toHaveBeenCalledWith(petstore);
+    expect(onPress).toHaveBeenCalledTimes(1);
     await first.unmount();
 
-    await render(<EntityPage entityRef={{ ...petstore, name: 'payments-frontend' }} api={createDemoCatalogApi()} onOpenDocs={onOpenDocs} />);
-    await waitFor(() => expect(screen.getByText('Customer-facing payments UI')).toBeTruthy());
-    expect(screen.queryByTestId('open-docs')).toBeNull();
+    await render(<EntityPage entityRef={{ kind: 'api', namespace: 'default', name: 'petstore-grpc' }} api={createDemoCatalogApi()} actionsFor={actionsFor} />);
+    await waitFor(() => expect(screen.getByText('Pet store gRPC surface')).toBeTruthy());
+    expect(screen.queryByTestId('entity-actions')).toBeNull();
   });
 
   it('links to the entity in Backstage when an instance is active', async () => {

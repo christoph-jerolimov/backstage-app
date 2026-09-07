@@ -35,7 +35,11 @@ export const demoEntities: Entity[] = [
       title: 'Petstore',
       description: 'Reference pet store service used in demos',
       tags: ['java', 'spring'],
-      annotations: { 'backstage.io/techdocs-ref': 'dir:.', 'github.com/project-slug': 'example/petstore' },
+      annotations: {
+        'backstage.io/techdocs-ref': 'dir:.',
+        'github.com/project-slug': 'example/petstore',
+        'backstage.io/kubernetes-id': 'petstore',
+      },
       links: [{ url: 'https://petstore.example/dashboard', title: 'Dashboard' }],
     },
     [rel('ownedBy', 'group:default/team-platform'), rel('providesApi', 'api:default/petstore-grpc')]
@@ -47,12 +51,14 @@ export const demoEntities: Entity[] = [
     {
       description: 'Customer-facing payments UI',
       tags: ['react', 'typescript'],
+      annotations: { 'backstage.io/kubernetes-id': 'payments-frontend' },
     },
     [rel('ownedBy', 'group:default/team-payments'), rel('partOf', 'system:default/payments'), rel('consumesApi', 'api:default/payments-api')]
   ),
   entity('Component', 'ledger-worker', { type: 'service', owner: 'team-payments', lifecycle: 'experimental' }, {
     description: 'Batch worker that reconciles payment ledgers',
     tags: ['go'],
+    annotations: { 'backstage.io/kubernetes-id': 'ledger-worker' },
   }),
   entity('Component', 'shared-ui', { type: 'library', owner: 'team-platform', lifecycle: 'production' }, {
     description: 'Design system components',

@@ -15,6 +15,7 @@
     "@backstage-app/plugin-auth": "*",
     "@backstage-app/plugin-catalog": "*",
     "@backstage-app/plugin-home": "*",
+    "@backstage-app/plugin-kubernetes": "*",
     "@backstage-app/plugin-notifications": "*",
     "@backstage-app/plugin-search": "*",
     "@backstage-app/plugin-settings": "*",

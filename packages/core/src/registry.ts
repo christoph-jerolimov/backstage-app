@@ -1,4 +1,4 @@
-import type { BackstagePlugin, PluginNavItem, PluginRoute } from './plugin';
+import type { BackstagePlugin, EntityAction, PluginNavItem, PluginRoute } from './plugin';
 
 export interface PluginRegistry {
   /** Installed plugins in registration order. */
@@ -7,6 +7,8 @@ export interface PluginRegistry {
   navItems(): PluginNavItem[];
   /** Every route, in plugin registration order. */
   routes(): PluginRoute[];
+  /** Every entity action, in plugin registration order. */
+  entityActions(): EntityAction[];
   /** Look up a plugin by id. */
   get(id: string): BackstagePlugin | undefined;
 }
@@ -26,6 +28,7 @@ export function createPluginRegistry(plugins: BackstagePlugin[]): PluginRegistry
     plugins,
     navItems: () => plugins.flatMap((plugin) => plugin.navItems),
     routes: () => plugins.flatMap((plugin) => plugin.routes),
+    entityActions: () => plugins.flatMap((plugin) => plugin.entityActions ?? []),
     get: (id) => plugins.find((plugin) => plugin.id === id),
   };
 }

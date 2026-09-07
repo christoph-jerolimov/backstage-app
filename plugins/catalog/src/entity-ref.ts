@@ -55,3 +55,8 @@ export function entityDocsHref(ref: EntityRef, path?: string): string {
   const base = `/docs/${encodeURIComponent(ref.kind.toLowerCase())}/${encodeURIComponent(ref.namespace.toLowerCase())}/${encodeURIComponent(ref.name)}`;
   return path ? `${base}?path=${encodeURIComponent(path)}` : base;
 }
+
+/** In-app path of the Kubernetes page for the entity (owned by the kubernetes plugin). */
+export function entityKubernetesHref(ref: EntityRef): string {
+  return `/kubernetes/${encodeURIComponent(ref.kind.toLowerCase())}/${encodeURIComponent(ref.namespace.toLowerCase())}/${encodeURIComponent(ref.name)}`;
+}

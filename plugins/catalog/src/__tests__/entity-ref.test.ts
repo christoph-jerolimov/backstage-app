@@ -1,4 +1,4 @@
-import { backstageEntityUrl, entityDocsHref, entityHref, entityRefOf, parseEntityRef, stringifyEntityRef } from '../entity-ref';
+import { backstageEntityUrl, entityDocsHref, entityHref, entityKubernetesHref, entityRefOf, parseEntityRef, stringifyEntityRef } from '../entity-ref';
 
 describe('entity references', () => {
   it('parses the full, kind-only, and namespace-only forms', () => {
@@ -24,5 +24,6 @@ describe('entity references', () => {
     expect(backstageEntityUrl('https://backstage.example', ref)).toBe('https://backstage.example/catalog/default/component/petstore');
     expect(entityDocsHref(ref)).toBe('/docs/component/default/petstore');
     expect(entityDocsHref(ref, 'getting-started/')).toBe('/docs/component/default/petstore?path=getting-started%2F');
+    expect(entityKubernetesHref(ref)).toBe('/kubernetes/component/default/petstore');
   });
 });
