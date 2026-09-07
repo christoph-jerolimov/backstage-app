@@ -83,7 +83,8 @@ The repository is an npm-workspaces monorepo:
 - `plugins/*/` — one package per plugin (`@backstage-app/plugin-home`, `-catalog`,
   `-search`, `-notifications`, `-apis`, `-techdocs`, `-auth`, `-settings`). Each exports a plugin definition and
   its page components. `plugin-apis` and `plugin-techdocs` compose the catalog listing
-  (fixed to API entities, and to entities with the TechDocs annotation).
+  (fixed to API entities, and to entities with the TechDocs annotation); `plugin-techdocs`
+  also renders the built TechDocs HTML of an entity in a web view (iframe on web).
 - `openspec/` — OpenSpec specs and change proposals
 
 ### Adding a plugin

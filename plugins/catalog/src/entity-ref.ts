@@ -49,3 +49,9 @@ export function entityHref(ref: EntityRef): string {
 export function backstageEntityUrl(baseUrl: string, ref: EntityRef): string {
   return `${baseUrl}/catalog/${encodeURIComponent(ref.namespace.toLowerCase())}/${encodeURIComponent(ref.kind.toLowerCase())}/${encodeURIComponent(ref.name)}`;
 }
+
+/** In-app path of the TechDocs reader for the entity (owned by the techdocs plugin). */
+export function entityDocsHref(ref: EntityRef, path?: string): string {
+  const base = `/docs/${encodeURIComponent(ref.kind.toLowerCase())}/${encodeURIComponent(ref.namespace.toLowerCase())}/${encodeURIComponent(ref.name)}`;
+  return path ? `${base}?path=${encodeURIComponent(path)}` : base;
+}
