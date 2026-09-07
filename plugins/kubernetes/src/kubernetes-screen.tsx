@@ -1,9 +1,10 @@
 import { BackstageApiError, Page, StateView, hasAnnotation, useRemoteData } from '@backstage-app/core';
 import { DEFAULT_NAMESPACE, type EntityRef, stringifyEntityRef, useCatalogApi } from '@backstage-app/plugin-catalog';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useMemo } from 'react';
 
 import { KubernetesPage } from './kubernetes-page';
+import { podHref } from './pod-screen';
 import { KUBERNETES_ANNOTATION } from './types';
 import { useKubernetesApi } from './use-kubernetes-api';
 
@@ -16,6 +17,7 @@ export function KubernetesScreen() {
   const params = useLocalSearchParams<{ kind: string; namespace: string; name: string }>();
   const catalog = useCatalogApi();
   const kubernetes = useKubernetesApi();
+  const router = useRouter();
 
   const kind = first(params.kind) ?? '';
   const namespace = first(params.namespace) ?? DEFAULT_NAMESPACE;
@@ -36,7 +38,13 @@ export function KubernetesScreen() {
         </Page>
       );
     }
-    return <KubernetesPage entity={entity.data} api={kubernetes} />;
+    return (
+      <KubernetesPage
+        entity={entity.data}
+        api={kubernetes}
+        onOpenPod={(cluster, namespace, name) => router.push(podHref({ cluster, namespace, name }))}
+      />
+    );
   }
 
   const notFound = entity.status === 'error' && entity.error instanceof BackstageApiError && entity.error.status === 404;

@@ -1,4 +1,4 @@
-import type { ClusterObjects, KubernetesObject, ObjectsByEntityResponse } from './types';
+import type { ClusterObjects, KubernetesEvent, KubernetesObject, ObjectsByEntityResponse } from './types';
 
 const ns = 'default';
 
@@ -89,4 +89,57 @@ export const demoObjects: Record<string, ObjectsByEntityResponse> = {
       ]),
     ],
   },
+};
+
+/** Sample container logs for the demo pods, current and previous instance. */
+export const demoLogs: Record<string, { current: string; previous?: string }> = {
+  'petstore-7d9f8-abc12': {
+    current: [
+      '2026-09-07T08:00:01Z INFO  Starting petstore 1.4.2',
+      '2026-09-07T08:00:02Z INFO  Connected to postgres://petstore-db:5432',
+      '2026-09-07T08:00:02Z INFO  Listening on :8080',
+      '2026-09-07T11:59:41Z INFO  GET /api/pets 200 12ms',
+    ].join('\n'),
+  },
+  'petstore-7d9f8-ghi56': {
+    current: ['2026-09-07T11:58:00Z INFO  Starting petstore 1.4.3', '2026-09-07T11:58:01Z ERROR Failed to read /config/database.yaml: no such file'].join('\n'),
+    previous: [
+      '2026-09-07T11:56:31Z INFO  Starting petstore 1.4.3',
+      '2026-09-07T11:56:32Z ERROR Failed to read /config/database.yaml: no such file',
+      '2026-09-07T11:56:32Z FATAL Configuration missing, exiting with status 1',
+    ].join('\n'),
+  },
+  'payments-frontend-5c4b-x1': { current: '2026-09-07T09:12:00Z INFO  ready in 412ms' },
+  'ledger-reconcile-29000-k9s': { current: '' },
+};
+
+/** Sample cluster events for the demo pods, newest first. */
+export const demoEvents: Record<string, KubernetesEvent[]> = {
+  'petstore-7d9f8-ghi56': [
+    {
+      metadata: { name: 'petstore-7d9f8-ghi56.1', namespace: ns },
+      type: 'Warning',
+      reason: 'BackOff',
+      message: 'Back-off restarting failed container app in pod petstore-7d9f8-ghi56',
+      count: 12,
+      lastTimestamp: '2026-09-07T11:59:00Z',
+    },
+    {
+      metadata: { name: 'petstore-7d9f8-ghi56.2', namespace: ns },
+      type: 'Normal',
+      reason: 'Pulled',
+      message: 'Container image "example/petstore:1.4.3" already present on machine',
+      count: 12,
+      lastTimestamp: '2026-09-07T11:58:00Z',
+    },
+  ],
+  'petstore-7d9f8-abc12': [
+    {
+      metadata: { name: 'petstore-7d9f8-abc12.1', namespace: ns },
+      type: 'Normal',
+      reason: 'Started',
+      message: 'Started container app',
+      lastTimestamp: '2026-09-07T08:00:02Z',
+    },
+  ],
 };

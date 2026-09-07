@@ -8,7 +8,7 @@ const petstore: Entity = { apiVersion: 'backstage.io/v1alpha1', kind: 'Component
 describe('REST kubernetes api', () => {
   it('posts the entity to the services endpoint and normalizes the response', async () => {
     const fetchJson = jest.fn(async () => ({ items: [{ cluster: { name: 'prod' } }] })) as unknown as FetchJson;
-    const api = createRestKubernetesApi(fetchJson);
+    const api = createRestKubernetesApi(fetchJson, jest.fn() as never);
 
     const response = await api.getObjectsByEntity(petstore);
     expect(response).toEqual({ items: [{ cluster: { name: 'prod' }, resources: [], errors: [] }] });

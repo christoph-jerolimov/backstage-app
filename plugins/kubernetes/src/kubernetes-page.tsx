@@ -11,6 +11,8 @@ import type { ClusterObjects } from './types';
 export type KubernetesPageProps = {
   entity: Entity;
   api: KubernetesApi;
+  /** Opens a pod's logs and events. */
+  onOpenPod?: (cluster: string, namespace: string, name: string) => void;
 };
 
 function presentTypes(items: ClusterObjects[]): string[] {
@@ -23,7 +25,7 @@ function presentTypes(items: ClusterObjects[]): string[] {
   return [...types].sort((a, b) => typeLabel(a).localeCompare(typeLabel(b)));
 }
 
-function ClusterCard({ cluster, type }: { cluster: ClusterObjects; type?: string }) {
+function ClusterCard({ cluster, type, onOpenPod }: { cluster: ClusterObjects; type?: string; onOpenPod?: (namespace: string, name: string) => void }) {
   const summary = clusterSummary(cluster);
   const groups = cluster.resources.filter((group) => group.resources.length && !HIDDEN_RESOURCE_TYPES.has(group.type) && (!type || group.type === type));
   const problems = clusterHasProblems(cluster);
@@ -52,7 +54,14 @@ function ClusterCard({ cluster, type }: { cluster: ClusterObjects; type?: string
           <ListCard
             items={group.resources.map((resource) => {
               const summary = resourceSummary(group.type, resource);
-              return { key: summary.key, title: summary.name, subtitle: [summary.namespace, summary.status].filter(Boolean).join(' · ') };
+              const namespace = summary.namespace ?? 'default';
+              return {
+                key: summary.key,
+                title: summary.name,
+                subtitle: [summary.namespace, summary.status].filter(Boolean).join(' · '),
+                onPress: group.type === 'pods' && onOpenPod ? () => onOpenPod(namespace, summary.name) : undefined,
+                testID: group.type === 'pods' ? `pod-${summary.name}` : undefined,
+              };
             })}
           />
         </ThemedView>
@@ -62,7 +71,7 @@ function ClusterCard({ cluster, type }: { cluster: ClusterObjects; type?: string
 }
 
 /** Kubernetes objects of one entity, per cluster, with cluster and type filters. */
-export function KubernetesPage({ entity, api }: KubernetesPageProps) {
+export function KubernetesPage({ entity, api, onOpenPod }: KubernetesPageProps) {
   const ref = stringifyEntityRef(entityRefOf(entity));
   const objects = useRemoteData(
     useCallback((signal: AbortSignal) => api.getObjectsByEntity(entity, signal), [api, entity]),
@@ -97,7 +106,12 @@ export function KubernetesPage({ entity, api }: KubernetesPageProps) {
       {objects.status === 'error' ? <StateView kind="error" message={objects.error.message} onRetry={objects.reload} /> : null}
       {objects.data && items.length === 0 ? <StateView kind="empty" message={`No Kubernetes objects were found for ${ref}`} /> : null}
       {visible.map((item) => (
-        <ClusterCard key={item.cluster.name} cluster={item} type={type} />
+        <ClusterCard
+          key={item.cluster.name}
+          cluster={item}
+          type={type}
+          onOpenPod={onOpenPod ? (namespace, name) => onOpenPod(item.cluster.name, namespace, name) : undefined}
+        />
       ))}
     </Page>
   );
