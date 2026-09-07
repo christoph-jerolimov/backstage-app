@@ -9,6 +9,7 @@
   },
   "peerDependencies": {
     "expo-router": "*",
+    "expo-symbols": "*",
     "react": "*",
     "react-native": "*"
   },
