@@ -20,3 +20,15 @@ export { useTheme } from './hooks/use-theme';
 
 export { Colors, Fonts, MaxContentWidth, Spacing } from './theme';
 export type { ThemeColor } from './theme';
+
+export { FilterChips } from './components/filter-chips';
+export type { FilterChipOption, FilterChipsProps } from './components/filter-chips';
+export { TextFilter } from './components/text-filter';
+export type { TextFilterProps } from './components/text-filter';
+export { StateView } from './components/state-view';
+export type { StateViewProps } from './components/state-view';
+
+export { useRemoteData } from './hooks/use-remote-data';
+export type { RemoteData, RemoteDataResult } from './hooks/use-remote-data';
+
+export * from './backstage';

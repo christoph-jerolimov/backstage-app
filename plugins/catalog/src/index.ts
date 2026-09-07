@@ -1,2 +1,10 @@
 export { catalogPlugin } from './plugin';
-export { CatalogItems, CatalogPage } from './catalog-page';
+export { CatalogPage, entitySubtitle } from './catalog-page';
+export type { CatalogPageProps } from './catalog-page';
+export { CatalogScreen } from './catalog-screen';
+export { createRestCatalogApi, buildEntitiesQuery, buildFacetsQuery, parseFacets, PAGE_SIZE } from './api';
+export type { CatalogApi, CatalogFacets, EntityPage } from './api';
+export { createDemoCatalogApi, demoEntities } from './demo-api';
+export { KIND_OPTIONS, buildFilterParam, defaultFilters, matchesQuery, withKind } from './filters';
+export type { CatalogFilters } from './filters';
+export { useCatalogApi } from './use-catalog-api';

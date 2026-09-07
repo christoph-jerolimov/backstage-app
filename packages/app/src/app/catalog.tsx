@@ -1,1 +1,1 @@
-export { CatalogPage as default } from '@backstage-app/plugin-catalog';
+export { CatalogScreen as default } from '@backstage-app/plugin-catalog';

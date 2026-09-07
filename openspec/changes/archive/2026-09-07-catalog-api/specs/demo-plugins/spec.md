@@ -1,21 +1,4 @@
-# demo-plugins
-
-## Purpose
-
-Placeholder plugins for home, catalog, search, and notifications that prove the plugin
-infrastructure end to end with static content until real Backstage data replaces it.
-
-## Requirements
-
-### Requirement: Four demo plugins are installed
-The app SHALL install the home, catalog, search, and notifications plugins. Each plugin
-SHALL contribute exactly one navigation item and one main page, and each package SHALL
-build, lint, and typecheck as part of the repository checks.
-
-#### Scenario: Plugins are registered
-- **WHEN** the app starts
-- **THEN** the drawer shows Home, Catalog, Search, and Notifications entries contributed
-  by the respective plugin packages
+## ADDED Requirements
 
 ### Requirement: Static demo pages show placeholder content
 The search and notifications pages SHALL show a title, a one-sentence description of
@@ -38,3 +21,12 @@ not fetch any network data.
 #### Scenario: No network access
 - **WHEN** any static demo page is rendered without network connectivity
 - **THEN** it renders its static content without errors
+
+## REMOVED Requirements
+
+### Requirement: Demo pages show static placeholder content
+**Reason**: The catalog page now loads real data (see `catalog-plugin`), so the
+requirement that lumped catalog together with the static pages no longer describes the
+system.
+**Migration**: The static behavior for search and notifications continues under "Static
+demo pages show placeholder content"; catalog behavior is specified by `catalog-plugin`.

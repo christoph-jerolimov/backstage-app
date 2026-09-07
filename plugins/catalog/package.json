@@ -10,5 +10,8 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*"
+  },
+  "devDependencies": {
+    "@backstage/catalog-model": "^1.10.0"
   }
 }
