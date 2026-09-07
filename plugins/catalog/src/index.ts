@@ -3,8 +3,19 @@ export { CatalogPage, entitySubtitle } from './catalog-page';
 export type { CatalogPageProps } from './catalog-page';
 export { CatalogScreen } from './catalog-screen';
 export type { CatalogScreenProps } from './catalog-screen';
-export { createRestCatalogApi, buildEntitiesQuery, buildEntityByNamePath, buildFacetsQuery, parseFacets, ENTITIES_BY_REFS_PATH, PAGE_SIZE } from './api';
-export type { CatalogApi, CatalogFacets, EntityQueryPage } from './api';
+export {
+  createRestCatalogApi,
+  buildEntitiesQuery,
+  buildEntityByNamePath,
+  buildFacetsQuery,
+  locationByEntityPath,
+  locationPath,
+  parseFacets,
+  ENTITIES_BY_REFS_PATH,
+  PAGE_SIZE,
+  REFRESH_PATH,
+} from './api';
+export type { CatalogApi, CatalogFacets, CatalogLocation, EntityQueryPage } from './api';
 export { createDemoCatalogApi, demoEntities } from './demo-api';
 export { KIND_OPTIONS, annotationPair, buildFilterParam, defaultFilters, matchesQuery, ownerRefs, withKind } from './filters';
 export type { CatalogFilters } from './filters';

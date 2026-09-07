@@ -51,6 +51,9 @@ describe('CatalogPage', () => {
       },
       getFacets: async () => ({ types: [], owners: [], lifecycles: [], tags: [] }),
       getEntitiesByRefs: async () => [],
+      refreshEntity: async () => {},
+      getLocationByEntity: async () => undefined,
+      deleteLocation: async () => {},
       getEntityByName: async () => {
         throw new Error('not used');
       },

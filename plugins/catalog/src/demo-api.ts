@@ -258,6 +258,15 @@ export function createDemoCatalogApi(entities: Entity[] = demoEntities): Catalog
         tags: collect(ofKind, (item) => item.metadata.tags),
       };
     },
+    async refreshEntity() {
+      throw new BackstageApiError(400, 'Demo entities have no source to refresh. Sign in to a Backstage instance to refresh entities.');
+    },
+    async getLocationByEntity() {
+      return undefined;
+    },
+    async deleteLocation(id: string) {
+      throw new BackstageApiError(404, `Demo mode has no location ${id}`);
+    },
     async getEntitiesByRefs(refs: string[]) {
       const byRef = new Map(entities.map((item) => [stringifyEntityRef(entityRefOf(item)), item]));
       return refs.map((ref) => byRef.get(ref.toLowerCase())).filter((item): item is Entity => !!item);

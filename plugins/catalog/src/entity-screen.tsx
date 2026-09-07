@@ -45,6 +45,7 @@ export function EntityScreen() {
       baseUrl={instance?.baseUrl}
       onOpenEntity={(target) => router.push(entityHref(target))}
       actionsFor={actionsFor}
+      onUnregistered={() => router.replace('/catalog')}
     />
   );
 }

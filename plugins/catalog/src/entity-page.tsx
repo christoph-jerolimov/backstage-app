@@ -14,10 +14,10 @@ import {
   useRemoteData,
   useTheme,
 } from '@backstage-app/core';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 
-import type { CatalogApi } from './api';
+import type { CatalogApi, CatalogLocation } from './api';
 import { entitySubtitle } from './catalog-page';
 import { backstageEntityUrl, type EntityRef, entityRefOf, parseEntityRef, stringifyEntityRef } from './entity-ref';
 import type { CatalogFilters } from './filters';
@@ -32,6 +32,8 @@ export type EntityPageProps = {
   onOpenEntity?: (ref: EntityRef) => void;
   /** Plugin-contributed actions for the loaded entity, rendered as buttons. */
   actionsFor?: (entity: Entity) => EntityActionItem[];
+  /** Called after the entity's location has been removed. */
+  onUnregistered?: () => void;
 };
 
 export type EntityActionItem = {
@@ -251,6 +253,80 @@ function refOfSpecField(entity: Entity, value: string, defaultKind: string): Ent
   return parseEntityRef(value.includes('/') || value.includes(':') ? value : `${defaultKind}:${namespace}/${value}`, defaultKind);
 }
 
+/** Refresh and Unregister, the two catalog write operations offered on an entity. */
+function MaintenanceActions({ entityRef, api, onRefreshed, onUnregistered }: { entityRef: EntityRef; api: CatalogApi; onRefreshed: () => void; onUnregistered?: () => void }) {
+  const ref = stringifyEntityRef(entityRef);
+  const [busy, setBusy] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  const [message, setMessage] = useState<{ kind: 'info' | 'error'; text: string } | undefined>(undefined);
+
+  const location = useRemoteData(
+    useCallback((signal: AbortSignal) => api.getLocationByEntity(entityRef, signal), [api, entityRef]),
+    ref
+  );
+  const target: CatalogLocation | undefined = location.data;
+
+  const refresh = async () => {
+    setBusy(true);
+    setMessage(undefined);
+    try {
+      await api.refreshEntity(entityRef);
+      setMessage({ kind: 'info', text: 'Refresh requested. The catalog re-reads this entity from its source.' });
+      onRefreshed();
+    } catch (error) {
+      setMessage({ kind: 'error', text: error instanceof Error ? error.message : String(error) });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const unregister = async () => {
+    if (!target) return;
+    setBusy(true);
+    setMessage(undefined);
+    try {
+      await api.deleteLocation(target.id);
+      setConfirming(false);
+      setMessage({ kind: 'info', text: 'Location removed.' });
+      onUnregistered?.();
+    } catch (error) {
+      setMessage({ kind: 'error', text: error instanceof Error ? error.message : String(error) });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <ThemedView type="backgroundElement" style={styles.card} testID="entity-maintenance">
+      <View style={styles.actions}>
+        <ActionButton label="Refresh" onPress={refresh} disabled={busy} compact testID="refresh-entity" />
+        {target && !confirming ? (
+          <ActionButton label="Unregister" onPress={() => setConfirming(true)} disabled={busy} compact testID="unregister-entity" />
+        ) : null}
+      </View>
+
+      {confirming && target ? (
+        <ThemedView style={styles.confirm} testID="unregister-confirm">
+          <ThemedText type="small">
+            {`Unregistering removes the ${target.type} location that produced this entity:`}
+          </ThemedText>
+          <ThemedText type="code">{target.target}</ThemedText>
+          <View style={styles.actions}>
+            <ActionButton label="Cancel" onPress={() => setConfirming(false)} disabled={busy} compact testID="unregister-cancel" />
+            <ActionButton label={`Unregister ${entityRef.name}`} onPress={unregister} disabled={busy} compact testID="unregister-confirm-button" />
+          </View>
+        </ThemedView>
+      ) : null}
+
+      {message ? (
+        <ThemedText type="small" themeColor={message.kind === 'error' ? 'danger' : 'textSecondary'} testID="maintenance-message">
+          {message.text}
+        </ThemedText>
+      ) : null}
+    </ThemedView>
+  );
+}
+
 function EntityDetails({ entity, entityRef, api, baseUrl, onOpenEntity, actionsFor }: { entity: Entity } & EntityPageProps) {
   const theme = useTheme();
   const actions = actionsFor?.(entity) ?? [];
@@ -356,7 +432,7 @@ function EntityDetails({ entity, entityRef, api, baseUrl, onOpenEntity, actionsF
 }
 
 /** Details of one catalog entity: about card, links, relations, and annotations. */
-export function EntityPage({ entityRef, api, baseUrl, onOpenEntity, actionsFor }: EntityPageProps) {
+export function EntityPage({ entityRef, api, baseUrl, onOpenEntity, actionsFor, onUnregistered }: EntityPageProps) {
   const ref = stringifyEntityRef(entityRef);
   const entity = useRemoteData(
     useCallback((signal: AbortSignal) => api.getEntityByName(entityRef, signal), [api, entityRef]),
@@ -374,11 +450,14 @@ export function EntityPage({ entityRef, api, baseUrl, onOpenEntity, actionsFor }
 
   return (
     <Page title={title} description={ref}>
-      {entity.status === 'loading' ? <StateView kind="loading" /> : null}
+      {entity.status === 'loading' && !entity.data ? <StateView kind="loading" /> : null}
       {notFound ? <StateView kind="empty" message={`Entity ${ref} was not found`} /> : null}
       {entity.status === 'error' && !notFound ? <StateView kind="error" message={entity.error.message} onRetry={entity.reload} /> : null}
-      {entity.status === 'success' ? (
-        <EntityDetails entity={entity.data} entityRef={entityRef} api={api} baseUrl={baseUrl} onOpenEntity={onOpenEntity} actionsFor={actionsFor} />
+      {entity.data ? (
+        <>
+          <EntityDetails entity={entity.data} entityRef={entityRef} api={api} baseUrl={baseUrl} onOpenEntity={onOpenEntity} actionsFor={actionsFor} />
+          <MaintenanceActions entityRef={entityRef} api={api} onRefreshed={entity.reload} onUnregistered={onUnregistered} />
+        </>
       ) : null}
     </Page>
   );
@@ -433,6 +512,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: Spacing.two,
+  },
+  confirm: {
+    gap: Spacing.one,
   },
   annotations: {
     gap: Spacing.two,

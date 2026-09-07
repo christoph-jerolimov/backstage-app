@@ -75,6 +75,9 @@ describe('EntityPage', () => {
       queryEntities: async () => ({ items: [], totalItems: 0 }),
       getFacets: async () => ({ types: [], owners: [], lifecycles: [], tags: [] }),
       getEntitiesByRefs: async () => [],
+      refreshEntity: async () => {},
+      getLocationByEntity: async () => undefined,
+      deleteLocation: async () => {},
       getEntityByName: async (ref) => {
         attempts += 1;
         if (attempts === 1) throw new Error('Backend unreachable');
@@ -95,6 +98,9 @@ describe('EntityPage', () => {
       queryEntities: async () => ({ items: [], totalItems: 0 }),
       getFacets: async () => ({ types: [], owners: [], lifecycles: [], tags: [] }),
       getEntitiesByRefs: async () => [],
+      refreshEntity: async () => {},
+      getLocationByEntity: async () => undefined,
+      deleteLocation: async () => {},
       getEntityByName: async () => {
         throw new BackstageApiError(404, 'Not Found');
       },
