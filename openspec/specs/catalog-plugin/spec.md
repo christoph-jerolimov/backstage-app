@@ -278,3 +278,11 @@ in shows the user's entities and SHALL offer to open the Account page.
 #### Scenario: Signed out
 - **WHEN** no session exists
 - **THEN** the page explains that signing in is required and offers the Account page
+
+### Requirement: Relations entity action
+The catalog plugin SHALL contribute a "Relations" entity action, available for every
+entity, that opens the relations browser centered on it.
+
+#### Scenario: Action on the entity page
+- **WHEN** any entity page is shown
+- **THEN** a "Relations" action opens `/relations/<kind>/<namespace>/<name>`

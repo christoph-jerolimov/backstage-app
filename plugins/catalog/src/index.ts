@@ -1,4 +1,4 @@
-export { catalogPlugin, ENTITY_ROUTE, MINE_ROUTE } from './plugin';
+export { catalogPlugin, ENTITY_ROUTE, MINE_ROUTE, RELATIONS_ROUTE } from './plugin';
 export { CatalogPage, entitySubtitle } from './catalog-page';
 export type { CatalogPageProps } from './catalog-page';
 export { CatalogScreen } from './catalog-screen';
@@ -16,6 +16,11 @@ export { RecentWidget, StarredWidget, refToHref } from './home-widgets';
 export { MineScreen, MINE_HREF } from './mine-screen';
 export { MyEntitiesList, MyEntitiesWidget, MyTeamsList, MyTeamsWidget, MY_ENTITIES_LIMIT, ownershipHref } from './ownership-widgets';
 export type { OwnershipWidgetProps } from './ownership-widgets';
+export { RELATION_GROUPS, OTHER_GROUP, groupNameOf, groupRelationsByMeaning } from './relation-groups';
+export type { RelationGroup, RelationGroupName, RelationRow } from './relation-groups';
+export { RelationsPage } from './relations-page';
+export type { RelationsPageProps } from './relations-page';
+export { RelationsScreen, parseTrail, relationsHref } from './relations-screen';
 export { StarButton } from './star-button';
 export type { StarButtonProps } from './star-button';
 export { DEFAULT_NAMESPACE, backstageEntityUrl, entityDocsHref, entityHref, entityKubernetesHref, entityRefOf, entityTemplateHref, parseEntityRef, stringifyEntityRef } from './entity-ref';
