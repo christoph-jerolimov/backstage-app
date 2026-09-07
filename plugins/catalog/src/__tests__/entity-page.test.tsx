@@ -36,6 +36,19 @@ describe('EntityPage', () => {
     expect(within(screen.getByTestId('entity-annotations')).getByText('backstage.io/techdocs-ref')).toBeTruthy();
   });
 
+  it('offers the Documentation action only for annotated entities', async () => {
+    const onOpenDocs = jest.fn();
+    const first = await render(<EntityPage entityRef={petstore} api={createDemoCatalogApi()} onOpenDocs={onOpenDocs} />);
+    await waitFor(() => expect(screen.getByTestId('open-docs')).toBeTruthy());
+    await fireEvent.press(screen.getByTestId('open-docs'));
+    expect(onOpenDocs).toHaveBeenCalledWith(petstore);
+    await first.unmount();
+
+    await render(<EntityPage entityRef={{ ...petstore, name: 'payments-frontend' }} api={createDemoCatalogApi()} onOpenDocs={onOpenDocs} />);
+    await waitFor(() => expect(screen.getByText('Customer-facing payments UI')).toBeTruthy());
+    expect(screen.queryByTestId('open-docs')).toBeNull();
+  });
+
   it('links to the entity in Backstage when an instance is active', async () => {
     await render(<EntityPage entityRef={petstore} api={createDemoCatalogApi()} baseUrl="https://backstage.example" />);
 

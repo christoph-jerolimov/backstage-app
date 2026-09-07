@@ -1,2 +1,12 @@
-export { techdocsPlugin } from './plugin';
+export { techdocsPlugin, TECHDOCS_ROUTE } from './plugin';
 export { DocsScreen, TECHDOCS_ANNOTATION } from './docs-screen';
+export { TechDocsPage, notFoundMessage } from './techdocs-page';
+export type { TechDocsPageProps } from './techdocs-page';
+export { TechDocsScreen, useTechDocsApi } from './techdocs-screen';
+export { DocsReader, parseDocsLinkMessage } from './docs-reader';
+export type { DocsReaderProps } from './docs-reader';
+export { createDemoTechDocsApi, createRestTechDocsApi, TECHDOCS_COOKIE_PATH } from './api';
+export type { TechDocsApi } from './api';
+export { DOCS_LINK_MESSAGE, docsBasePath, normalizeDocsPath, resolveDocsLink, transformDocsHtml } from './html';
+export type { DocsLink } from './html';
+export { demoDocs, DEMO_DOCS_ORIGIN } from './demo-docs';
