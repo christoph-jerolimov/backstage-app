@@ -104,6 +104,65 @@ export const demoEntities: Entity[] = [
     rel('ownerOf', 'component:default/payments-frontend'),
     rel('ownerOf', 'api:default/payments-api'),
   ]),
+  entity(
+    'Template',
+    'nodejs-service',
+    {
+      type: 'service',
+      owner: 'team-platform',
+      lifecycle: 'production',
+      parameters: [
+        {
+          title: 'Service details',
+          description: 'Basics of the new service.',
+          required: ['name', 'owner'],
+          properties: {
+            name: { title: 'Name', type: 'string', description: 'Unique name of the component.' },
+            description: { title: 'Description', type: 'string' },
+            owner: { title: 'Owner', type: 'string', description: 'Owning group.', default: 'team-platform' },
+          },
+        },
+        {
+          title: 'Deployment',
+          properties: {
+            visibility: { title: 'Visibility', type: 'string', enum: ['public', 'private'], default: 'private' },
+            replicas: { title: 'Replicas', type: 'integer', default: 1 },
+            monitoring: { title: 'Enable monitoring', type: 'boolean', default: true },
+            regions: { title: 'Regions', type: 'array', items: { type: 'string' }, default: ['eu-west-1'] },
+          },
+        },
+      ],
+      steps: [
+        { id: 'fetch', name: 'Fetch base', action: 'fetch:template' },
+        { id: 'publish', name: 'Publish to GitHub', action: 'publish:github' },
+        { id: 'register', name: 'Register in catalog', action: 'catalog:register' },
+      ],
+    },
+    { title: 'Node.js service', description: 'Create a Node.js service with CI, docs, and Kubernetes manifests.', tags: ['nodejs', 'recommended'] },
+    [rel('ownedBy', 'group:default/team-platform')]
+  ),
+  entity(
+    'Template',
+    'docs-site',
+    {
+      type: 'documentation',
+      owner: 'team-platform',
+      parameters: {
+        title: 'Documentation site',
+        required: ['name'],
+        properties: {
+          name: { title: 'Name', type: 'string' },
+          language: { title: 'Language', type: 'string', enum: ['en', 'de', 'fr'], default: 'en' },
+        },
+      },
+      steps: [
+        { id: 'fetch', name: 'Fetch skeleton', action: 'fetch:template' },
+        { id: 'register', name: 'Register in catalog', action: 'catalog:register' },
+      ],
+    },
+    { title: 'Documentation site', description: 'A TechDocs-only site for guides and runbooks.', tags: ['docs'] },
+    [rel('ownedBy', 'group:default/team-platform')]
+  ),
   entity('User', 'jane.doe', { profile: { displayName: 'Jane Doe', email: 'jane.doe@example.com' }, memberOf: ['team-platform'] }, { title: 'Jane Doe' }, [
     rel('memberOf', 'group:default/team-platform'),
   ]),

@@ -1,0 +1,19 @@
+{
+  "name": "@backstage-app/plugin-scaffolder",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "dependencies": {
+    "@backstage-app/core": "*",
+    "@backstage-app/plugin-catalog": "*"
+  },
+  "peerDependencies": {
+    "expo-router": "*",
+    "react": "*",
+    "react-native": "*"
+  },
+  "devDependencies": {
+    "@backstage/catalog-model": "^1.10.0"
+  }
+}
