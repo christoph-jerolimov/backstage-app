@@ -2,6 +2,8 @@ export { homePlugin } from './plugin';
 export { HomePage } from './home-page';
 export type { HomePageProps } from './home-page';
 export { HomeScreen } from './home-screen';
+export { QuickLinks, HOME_ROUTE, quickLinkItems } from './quick-links';
+export type { QuickLinksProps } from './quick-links';
 export { getGreeting, getPeriod } from './greeting';
 export type { Greeting, GreetingPeriod } from './greeting';
 export { useNow } from './use-now';

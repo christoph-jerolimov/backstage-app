@@ -2,6 +2,7 @@ import { createPlugin } from '@backstage-app/core';
 import { entityTemplateHref } from '@backstage-app/plugin-catalog';
 
 import { ActionsScreen } from './actions-screen';
+import { OpenTasksWidget } from './home-widget';
 import { TaskScreen } from './task-screen';
 import { TasksScreen } from './tasks-screen';
 import { TemplateScreen } from './template-screen';
@@ -29,6 +30,7 @@ export const scaffolderPlugin = createPlugin({
       icon: { ios: 'plus.square.on.square', android: 'add_box', web: 'add_box' },
     },
   ],
+  homeWidgets: [{ id: 'scaffolder-open-tasks', title: 'My open tasks', component: OpenTasksWidget, priority: 30, testID: 'widget-open-tasks' }],
   entityActions: [
     {
       id: 'scaffolder',

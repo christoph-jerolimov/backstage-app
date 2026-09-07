@@ -55,6 +55,19 @@ export type EntityAction = {
   testID?: string;
 };
 
+/** A card a plugin contributes to the home page. */
+export type HomeWidget = {
+  /** Unique across every installed plugin (kebab-case). */
+  id: string;
+  title: string;
+  component: ComponentType;
+  /** Lower sorts first; defaults to 100. */
+  priority?: number;
+  testID?: string;
+};
+
+export const DEFAULT_WIDGET_PRIORITY = 100;
+
 export interface BackstagePlugin {
   /** Unique, stable identifier (kebab-case). */
   id: string;
@@ -64,6 +77,8 @@ export interface BackstagePlugin {
   navItems: PluginNavItem[];
   /** Actions offered on the catalog entity page. */
   entityActions?: EntityAction[];
+  /** Cards offered on the home page. */
+  homeWidgets?: HomeWidget[];
 }
 
 /** True when the entity carries the annotation key. */
@@ -84,6 +99,14 @@ export function createPlugin(definition: BackstagePlugin): BackstagePlugin {
         `Plugin "${definition.id}" navigation item "${item.title}" references unknown route "${item.route}"`
       );
     }
+  }
+
+  const widgetIds = new Set<string>();
+  for (const widget of definition.homeWidgets ?? []) {
+    if (widgetIds.has(widget.id)) {
+      throw new Error(`Plugin "${definition.id}" declares the home widget "${widget.id}" more than once`);
+    }
+    widgetIds.add(widget.id);
   }
 
   for (const route of definition.routes) {

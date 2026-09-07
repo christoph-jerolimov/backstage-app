@@ -258,6 +258,10 @@ export function createDemoCatalogApi(entities: Entity[] = demoEntities): Catalog
         tags: collect(ofKind, (item) => item.metadata.tags),
       };
     },
+    async getEntitiesByRefs(refs: string[]) {
+      const byRef = new Map(entities.map((item) => [stringifyEntityRef(entityRefOf(item)), item]));
+      return refs.map((ref) => byRef.get(ref.toLowerCase())).filter((item): item is Entity => !!item);
+    },
     async getEntityByName(ref: EntityRef) {
       const wanted = stringifyEntityRef(ref);
       const found = entities.find((item) => stringifyEntityRef(entityRefOf(item)) === wanted);

@@ -86,3 +86,17 @@ the unread count all work without a backend.
 #### Scenario: Demo mark persists during the session
 - **WHEN** no base URL is configured and the user marks a demo notification read
 - **THEN** it stays read when the list reloads until the app restarts
+
+### Requirement: Unread notifications home widget
+The notifications plugin SHALL contribute an "Unread notifications" home widget showing
+the number of unread notifications from the status endpoint, with an action that opens the
+notifications page. Zero unread SHALL read as "You are all caught up".
+
+#### Scenario: Unread count
+- **WHEN** the backend reports three unread notifications
+- **THEN** the widget shows "3 unread notifications" and opens the notifications page when
+  pressed
+
+#### Scenario: Nothing unread
+- **WHEN** the backend reports no unread notifications
+- **THEN** the widget shows that the user is all caught up

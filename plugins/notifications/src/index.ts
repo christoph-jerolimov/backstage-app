@@ -15,3 +15,5 @@ export type {
 } from './api';
 export { createDemoNotifications, createDemoNotificationsApi } from './demo-api';
 export { useNotificationsApi } from './use-notifications-api';
+export { UnreadCount, UnreadWidget, unreadMessage } from './home-widget';
+export type { UnreadCountProps } from './home-widget';

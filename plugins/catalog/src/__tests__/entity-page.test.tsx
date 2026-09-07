@@ -1,5 +1,5 @@
 import type { Entity } from '@backstage/catalog-model';
-import { BackstageApiError } from '@backstage-app/core';
+import { BackstageApiError, EntityPrefsProvider, createMemoryStorage, RECENT_KEY, STARRED_KEY } from '@backstage-app/core';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
 
 import type { CatalogApi } from '../api';
@@ -51,7 +51,8 @@ describe('EntityPage', () => {
 
     await render(<EntityPage entityRef={{ kind: 'api', namespace: 'default', name: 'petstore-grpc' }} api={createDemoCatalogApi()} actionsFor={actionsFor} />);
     await waitFor(() => expect(screen.getByText('Pet store gRPC surface')).toBeTruthy());
-    expect(screen.queryByTestId('entity-actions')).toBeNull();
+    expect(screen.queryByTestId('open-docs')).toBeNull();
+    expect(within(screen.getByTestId('entity-actions')).getByTestId('star-toggle')).toBeTruthy();
   });
 
   it('links to the entity in Backstage when an instance is active', async () => {
@@ -73,6 +74,7 @@ describe('EntityPage', () => {
     const api: CatalogApi = {
       queryEntities: async () => ({ items: [], totalItems: 0 }),
       getFacets: async () => ({ types: [], owners: [], lifecycles: [], tags: [] }),
+      getEntitiesByRefs: async () => [],
       getEntityByName: async (ref) => {
         attempts += 1;
         if (attempts === 1) throw new Error('Backend unreachable');
@@ -92,6 +94,7 @@ describe('EntityPage', () => {
     const api: CatalogApi = {
       queryEntities: async () => ({ items: [], totalItems: 0 }),
       getFacets: async () => ({ types: [], owners: [], lifecycles: [], tags: [] }),
+      getEntitiesByRefs: async () => [],
       getEntityByName: async () => {
         throw new BackstageApiError(404, 'Not Found');
       },
@@ -206,5 +209,37 @@ describe('EntityPage', () => {
       expect(entitySubtitle(entity)).toBe('User · Priya Patel · priya.patel@example.com');
       expect(profileOf({ apiVersion: 'v1', kind: 'Group', metadata: { name: 'ops' } })).toMatchObject({ displayName: 'ops', initials: 'O' });
     });
+  });
+
+  it('stars an entity and records the visit', async () => {
+    const storage = createMemoryStorage();
+    await render(
+      <EntityPrefsProvider storage={storage}>
+        <EntityPage entityRef={petstore} api={createDemoCatalogApi()} />
+      </EntityPrefsProvider>
+    );
+
+    await waitFor(() => expect(screen.getByTestId('star-toggle')).toBeTruthy());
+    expect(screen.getByRole('button', { name: 'Star entity', selected: false })).toBeTruthy();
+    await waitFor(async () => expect(await storage.getItem(RECENT_KEY)).toBe(JSON.stringify(['component:default/petstore'])));
+
+    await fireEvent.press(screen.getByTestId('star-toggle'));
+    expect(screen.getByRole('button', { name: 'Remove star', selected: true })).toBeTruthy();
+    await waitFor(async () => expect(await storage.getItem(STARRED_KEY)).toBe(JSON.stringify(['component:default/petstore'])));
+
+    await fireEvent.press(screen.getByTestId('star-toggle'));
+    expect(screen.getByRole('button', { name: 'Star entity', selected: false })).toBeTruthy();
+  });
+
+  it('does not record a visit for an entity that fails to load', async () => {
+    const storage = createMemoryStorage();
+    await render(
+      <EntityPrefsProvider storage={storage}>
+        <EntityPage entityRef={{ ...petstore, name: 'missing' }} api={createDemoCatalogApi()} />
+      </EntityPrefsProvider>
+    );
+
+    await waitFor(() => expect(screen.getByText(/was not found/)).toBeTruthy());
+    expect(await storage.getItem(RECENT_KEY)).toBeNull();
   });
 });
