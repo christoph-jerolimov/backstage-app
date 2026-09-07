@@ -1,7 +1,7 @@
 export { createBackstageConfig, normalizeBaseUrl, readBackstageConfigFromEnv } from './config';
 export type { BackstageConfig } from './config';
 export { BackstageApiError, createBackstageClient } from './client';
-export type { BackstageClientOptions, FetchJson, FetchText } from './client';
+export type { BackstageClientOptions, FetchJson } from './client';
 export { BackstageProvider, createBackstage, deriveBackstage, seedFromEnv, useBackstage, useBackstageInstances } from './provider';
 export type { Backstage, BackstageInstances, BackstageProviderProps } from './provider';
 export { InvalidBaseUrlError, createInstanceStore, createMemoryStorage, validateBaseUrl } from './instances';

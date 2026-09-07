@@ -9,10 +9,7 @@
     "@backstage-app/plugin-catalog": "*"
   },
   "peerDependencies": {
-    "expo-router": "*",
-    "expo-web-browser": "*",
     "react": "*",
-    "react-native": "*",
-    "react-native-webview": "*"
+    "react-native": "*"
   }
 }

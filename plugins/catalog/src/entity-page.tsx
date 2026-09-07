@@ -1,6 +1,5 @@
 import type { Entity } from '@backstage/catalog-model';
 import {
-  ActionButton,
   BackstageApiError,
   Collapsible,
   ExternalLink,
@@ -26,11 +25,7 @@ export type EntityPageProps = {
   baseUrl?: string;
   /** Called when the user presses a relation target. */
   onOpenEntity?: (ref: EntityRef) => void;
-  /** When set, documented entities (TechDocs annotation) offer a "Documentation" action. */
-  onOpenDocs?: (ref: EntityRef) => void;
 };
-
-export const TECHDOCS_ANNOTATION = 'backstage.io/techdocs-ref';
 
 const DETAIL_FIELDS = ['type', 'lifecycle', 'owner', 'system'] as const;
 
@@ -79,9 +74,8 @@ function DetailRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-function EntityDetails({ entity, entityRef, baseUrl, onOpenEntity, onOpenDocs }: { entity: Entity } & Omit<EntityPageProps, 'api'>) {
+function EntityDetails({ entity, entityRef, baseUrl, onOpenEntity }: { entity: Entity } & Omit<EntityPageProps, 'api'>) {
   const theme = useTheme();
-  const documented = entity.metadata.annotations?.[TECHDOCS_ANNOTATION] !== undefined;
   const tags = entity.metadata.tags ?? [];
   const links = entity.metadata.links ?? [];
   const annotations = Object.entries(entity.metadata.annotations ?? {}).sort(([a], [b]) => a.localeCompare(b));
@@ -117,11 +111,6 @@ function EntityDetails({ entity, entityRef, baseUrl, onOpenEntity, onOpenDocs }:
             </ThemedText>
           </ExternalLink>
         ) : null}
-        {documented && onOpenDocs ? (
-          <View style={styles.actions}>
-            <ActionButton label="Documentation" onPress={() => onOpenDocs(entityRef)} compact testID="open-docs" />
-          </View>
-        ) : null}
       </ThemedView>
 
       {relations.map((group) => (
@@ -156,7 +145,7 @@ function EntityDetails({ entity, entityRef, baseUrl, onOpenEntity, onOpenDocs }:
 }
 
 /** Details of one catalog entity: about card, links, relations, and annotations. */
-export function EntityPage({ entityRef, api, baseUrl, onOpenEntity, onOpenDocs }: EntityPageProps) {
+export function EntityPage({ entityRef, api, baseUrl, onOpenEntity }: EntityPageProps) {
   const ref = stringifyEntityRef(entityRef);
   const entity = useRemoteData(
     useCallback((signal: AbortSignal) => api.getEntityByName(entityRef, signal), [api, entityRef]),
@@ -171,7 +160,7 @@ export function EntityPage({ entityRef, api, baseUrl, onOpenEntity, onOpenDocs }
       {notFound ? <StateView kind="empty" message={`Entity ${ref} was not found`} /> : null}
       {entity.status === 'error' && !notFound ? <StateView kind="error" message={entity.error.message} onRetry={entity.reload} /> : null}
       {entity.status === 'success' ? (
-        <EntityDetails entity={entity.data} entityRef={entityRef} baseUrl={baseUrl} onOpenEntity={onOpenEntity} onOpenDocs={onOpenDocs} />
+        <EntityDetails entity={entity.data} entityRef={entityRef} baseUrl={baseUrl} onOpenEntity={onOpenEntity} />
       ) : null}
     </Page>
   );
@@ -205,10 +194,6 @@ const styles = StyleSheet.create({
   },
   section: {
     gap: Spacing.one,
-  },
-  actions: {
-    flexDirection: 'row',
-    gap: Spacing.two,
   },
   annotations: {
     gap: Spacing.two,

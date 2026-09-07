@@ -46,22 +46,4 @@ describe('createBackstageClient', () => {
 
     await expect(client.fetchJson('/x')).rejects.toMatchObject({ status: 404, message: 'Not Found' });
   });
-
-  it('fetches text with the token and HTML accept header', async () => {
-    const fetchMock = jest.fn(async () => new Response('<html>hi</html>', { status: 200, headers: { 'Content-Type': 'text/html' } }));
-    const client = createBackstageClient({ baseUrl: 'https://b.example', token: 'secret', fetch: fetchMock });
-
-    await expect(client.fetchText('/api/techdocs/static/docs/default/component/petstore/index.html')).resolves.toBe('<html>hi</html>');
-    const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
-    expect(url).toBe('https://b.example/api/techdocs/static/docs/default/component/petstore/index.html');
-    const headers = new Headers(init.headers);
-    expect(headers.get('Authorization')).toBe('Bearer secret');
-    expect(headers.get('Accept')).toContain('text/html');
-  });
-
-  it('rejects text fetches with the API error on non-2xx', async () => {
-    const fetchMock = jest.fn(async () => new Response('missing', { status: 404, statusText: 'Not Found' }));
-    const client = createBackstageClient({ baseUrl: 'https://b.example', fetch: fetchMock });
-    await expect(client.fetchText('/x')).rejects.toMatchObject({ status: 404, message: 'Not Found' });
-  });
 });

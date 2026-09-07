@@ -3,7 +3,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo } from 'react';
 
 import { EntityPage } from './entity-page';
-import { DEFAULT_NAMESPACE, entityDocsHref, entityHref, type EntityRef } from './entity-ref';
+import { DEFAULT_NAMESPACE, entityHref, type EntityRef } from './entity-ref';
 import { useCatalogApi } from './use-catalog-api';
 
 function first(value: string | string[] | undefined): string | undefined {
@@ -28,7 +28,6 @@ export function EntityScreen() {
       api={api}
       baseUrl={instance?.baseUrl}
       onOpenEntity={(target) => router.push(entityHref(target))}
-      onOpenDocs={(target) => router.push(entityDocsHref(target))}
     />
   );
 }

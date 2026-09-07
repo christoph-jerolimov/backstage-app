@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from 'react';
 
 import { isSessionExpired, sessionFromToken } from './auth';
-import { createBackstageClient, type FetchJson, type FetchText } from './client';
+import { createBackstageClient, type FetchJson } from './client';
 import { readBackstageConfigFromEnv, type BackstageConfig } from './config';
 import {
   createInstanceStore,
@@ -16,8 +16,6 @@ import { createPlatformStorage } from './storage';
 export type Backstage = BackstageConfig & {
   /** Authenticated JSON fetch bound to the base URL. Rejects in demo mode. */
   fetchJson: FetchJson;
-  /** Authenticated text/HTML fetch bound to the base URL. Rejects in demo mode. */
-  fetchText: FetchText;
   /** The active instance, or undefined in demo mode. */
   instance?: BackstageInstance;
   /** The active instance's stored session, expired or not. */
@@ -33,7 +31,7 @@ export type Backstage = BackstageConfig & {
 const BackstageContext = createContext<Backstage | undefined>(undefined);
 const StoreContext = createContext<InstanceStore | undefined>(undefined);
 
-function demoFetch<T>(): Promise<T> {
+function demoFetchJson<T>(): Promise<T> {
   return Promise.reject(new Error('No Backstage backend configured (demo mode)'));
 }
 
@@ -41,10 +39,10 @@ function demoFetch<T>(): Promise<T> {
 export function createBackstage(config: BackstageConfig, fetchImpl?: typeof fetch): Backstage {
   const base = { ...config, signedIn: !!config.token, sessionExpired: false, loaded: true };
   if (!config.baseUrl) {
-    return { ...base, demo: true, fetchJson: demoFetch, fetchText: demoFetch };
+    return { ...base, demo: true, fetchJson: demoFetchJson };
   }
   const client = createBackstageClient({ baseUrl: config.baseUrl, token: config.token, fetch: fetchImpl });
-  return { ...base, demo: false, fetchJson: client.fetchJson, fetchText: client.fetchText };
+  return { ...base, demo: false, fetchJson: client.fetchJson };
 }
 
 export function deriveBackstage(state: InstancesState, fetchImpl?: typeof fetch, now: number = Date.now()): Backstage {
