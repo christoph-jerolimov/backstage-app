@@ -39,6 +39,7 @@ export const demoEntities: Entity[] = [
         'backstage.io/techdocs-ref': 'dir:.',
         'github.com/project-slug': 'example/petstore',
         'backstage.io/kubernetes-id': 'petstore',
+        'backstage.io/source-location': 'url:https://github.com/example/petstore/tree/main/',
       },
       links: [{ url: 'https://petstore.example/dashboard', title: 'Dashboard' }],
     },
@@ -51,7 +52,10 @@ export const demoEntities: Entity[] = [
     {
       description: 'Customer-facing payments UI',
       tags: ['react', 'typescript'],
-      annotations: { 'backstage.io/kubernetes-id': 'payments-frontend' },
+      annotations: {
+        'backstage.io/kubernetes-id': 'payments-frontend',
+        'backstage.io/source-location': 'url:https://github.com/example/payments-frontend/tree/main/',
+      },
     },
     [rel('ownedBy', 'group:default/team-payments'), rel('partOf', 'system:default/payments'), rel('consumesApi', 'api:default/payments-api')]
   ),
