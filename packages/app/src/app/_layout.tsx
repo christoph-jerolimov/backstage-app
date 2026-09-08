@@ -1,3 +1,4 @@
+import { AnalyticsProvider, NavigationAnalytics } from '@backstage-app/analytics-api';
 import { BackstageProvider, EntityPrefsProvider, PluginRegistryProvider, ThemeProvider, useResolvedScheme, useTheme } from '@backstage-app/core';
 import { DarkTheme, DefaultTheme, ThemeProvider as NavigationThemeProvider, useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
@@ -67,6 +68,8 @@ function NavigationChrome() {
 
   return (
     <NavigationThemeProvider value={navigationTheme}>
+      {/* Inside the router, where the route hooks it reads have their store context. */}
+      <NavigationAnalytics />
       <AnimatedSplashOverlay />
       <Drawer
         initialRouteName="index"
@@ -124,9 +127,11 @@ export default function RootLayout() {
       <PluginRegistryProvider registry={registry}>
         <ThemeProvider>
           <BackstageProvider>
-            <EntityPrefsProvider>
-              <NavigationChrome />
-            </EntityPrefsProvider>
+            <AnalyticsProvider>
+              <EntityPrefsProvider>
+                <NavigationChrome />
+              </EntityPrefsProvider>
+            </AnalyticsProvider>
           </BackstageProvider>
         </ThemeProvider>
       </PluginRegistryProvider>

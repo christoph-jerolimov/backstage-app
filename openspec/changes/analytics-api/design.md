@@ -85,8 +85,18 @@ distinguishable rather than malformed.
 
 `createRestAnalyticsApi(options)` and `createNoopAnalyticsApi()` match how every other API
 in this repo is built (`createRestTechDocsApi`, `createDemoCatalogApi`, …). The REST one
-takes `fetchJson`, `path`, `batchSize`, `flushIntervalMs` and an injectable timer/AppState
-pair so the batching rules in the spec are testable with fake timers and without a device.
+takes `path`, `batchSize`, `flushIntervalMs` and an injectable `AppState` so the batching
+rules in the spec are testable with fake timers and without a device.
+
+It takes the connection's **`fetchText`, not `fetchJson`** — a deviation from what every
+other API in the repo uses, found while implementing. `fetchJson` calls `response.json()`
+unconditionally, so an analytics endpoint answering 202 or 204 with an empty body (the
+normal case for a fire-and-forget ingest) would reject while parsing, and D4 would turn
+every *successful* flush into a console warning. `fetchText` reads the body as text and
+discards it while still raising `BackstageApiError` for a non-2xx status, which is the only
+part of the response this cares about. The repo's other write calls (`refreshEntity`,
+`cancelTask`) have the same latent issue against a 204; fixing those is not this change's
+business, but repeating the bug here would have been.
 
 Provider selection lives in `AnalyticsProvider`: it reads `useBackstage()` and picks the
 no-op implementation when `demo` is true or `EXPO_PUBLIC_BACKSTAGE_ANALYTICS` is `false`,
