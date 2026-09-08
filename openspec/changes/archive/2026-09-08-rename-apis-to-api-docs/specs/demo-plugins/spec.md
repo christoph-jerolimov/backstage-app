@@ -1,12 +1,4 @@
-# demo-plugins
-
-## Purpose
-
-The set of plugins bundled with the app (home, catalog, search, notifications) and the
-guarantee that each one is registered, navigable, and covered by the repository checks.
-Each plugin's page behavior is specified by its own capability.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Bundled plugins are installed
 The app SHALL install the home, catalog, search, notifications, api-docs, techdocs,

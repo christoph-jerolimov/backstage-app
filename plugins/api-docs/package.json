@@ -1,5 +1,5 @@
 {
-  "name": "@backstage-app/plugin-apis",
+  "name": "@backstage-app/plugin-api-docs",
   "version": "1.0.0",
   "private": true,
   "backstage": {
