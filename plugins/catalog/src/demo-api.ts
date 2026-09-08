@@ -1,4 +1,4 @@
-import type { Entity, EntityLink, EntityRelation } from '@backstage/catalog-model';
+import type { Entity, EntityLink, EntityRelation } from '@backstage-app/catalog-model';
 import { BackstageApiError } from '@backstage-app/core';
 
 import type { CatalogApi, CatalogFacets } from './api';

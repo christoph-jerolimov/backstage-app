@@ -1,4 +1,4 @@
-import type { Entity } from '@backstage/catalog-model';
+import type { Entity } from '@backstage-app/catalog-model';
 import { useBackstage } from '@backstage-app/core';
 import { useRouter } from 'expo-router';
 

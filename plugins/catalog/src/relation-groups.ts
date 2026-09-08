@@ -1,4 +1,4 @@
-import type { Entity } from '@backstage/catalog-model';
+import type { Entity } from '@backstage-app/catalog-model';
 
 export type RelationGroupName = 'Dependencies' | 'APIs' | 'Composition' | 'Ownership' | 'Membership' | 'Other';
 

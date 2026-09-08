@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "types": "src/index.ts",
   "dependencies": {
+    "@backstage-app/catalog-model": "*",
     "@backstage-app/core": "*"
   },
   "peerDependencies": {
@@ -12,8 +13,5 @@
     "expo-symbols": "*",
     "react": "*",
     "react-native": "*"
-  },
-  "devDependencies": {
-    "@backstage/catalog-model": "^1.10.0"
   }
 }

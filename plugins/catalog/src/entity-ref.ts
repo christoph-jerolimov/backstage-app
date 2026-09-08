@@ -1,4 +1,4 @@
-import type { Entity } from '@backstage/catalog-model';
+import type { Entity } from '@backstage-app/catalog-model';
 
 export type EntityRef = {
   kind: string;
@@ -11,7 +11,10 @@ export const DEFAULT_NAMESPACE = 'default';
 /**
  * Parses `kind:namespace/name`, `kind:name`, or `namespace/name` (with `defaultKind`).
  * Kind and namespace are lower-cased; the namespace defaults to `default`.
- * Implemented locally because `@backstage/catalog-model`'s runtime is not Hermes-safe.
+ * Implemented locally because `@backstage/catalog-model` cannot be imported at runtime
+ * on Hermes at all: it depends on ajv, which compiles the JSON-schema meta-schema with
+ * `new Function` while the module initialises. `@backstage-app/catalog-model` therefore
+ * re-exports its types only.
  */
 export function parseEntityRef(ref: string, defaultKind?: string): EntityRef {
   const trimmed = ref.trim();

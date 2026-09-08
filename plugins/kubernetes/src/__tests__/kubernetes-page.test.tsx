@@ -1,4 +1,4 @@
-import type { Entity } from '@backstage/catalog-model';
+import type { Entity } from '@backstage-app/catalog-model';
 import { BackstageProvider } from '@backstage-app/core';
 import { demoEntities } from '@backstage-app/plugin-catalog';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
