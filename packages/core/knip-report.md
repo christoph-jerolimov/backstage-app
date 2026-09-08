@@ -4,5 +4,5 @@
 
 | Name                     | Location          | Severity |
 | :----------------------- | :---------------- | :------- |
-| @backstage/catalog-model | package.json:18:6 | error    |
+| @backstage/catalog-model | package.json:21:6 | error    |
 

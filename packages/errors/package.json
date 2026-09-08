@@ -2,6 +2,9 @@
   "name": "@backstage-app/errors",
   "version": "1.0.0",
   "private": true,
+  "backstage": {
+    "role": "common-library"
+  },
   "main": "src/index.ts",
   "types": "src/index.ts",
   "dependencies": {

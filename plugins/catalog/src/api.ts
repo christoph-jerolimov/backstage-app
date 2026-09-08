@@ -64,7 +64,7 @@ type QueryEntitiesResponse = {
   totalItems?: number;
 };
 
-type FacetsResponse = {
+export type FacetsResponse = {
   facets?: Record<string, { value: string; count: number }[] | undefined>;
 };
 

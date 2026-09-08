@@ -2,6 +2,9 @@
   "name": "@backstage-app/app",
   "version": "1.0.0",
   "private": true,
+  "backstage": {
+    "role": "frontend"
+  },
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",

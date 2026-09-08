@@ -4,7 +4,7 @@
 
 | Name              | Location          | Severity |
 | :---------------- | :---------------- | :------- |
-| expo-glass-effect | package.json:30:6 | error    |
-| expo-status-bar   | package.json:36:6 | error    |
-| expo-device       | package.json:28:6 | error    |
+| expo-glass-effect | package.json:33:6 | error    |
+| expo-status-bar   | package.json:39:6 | error    |
+| expo-device       | package.json:31:6 | error    |
 

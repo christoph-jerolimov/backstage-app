@@ -15,7 +15,7 @@ export {
   PAGE_SIZE,
   REFRESH_PATH,
 } from './api';
-export type { CatalogApi, CatalogFacets, CatalogLocation, EntityQueryPage } from './api';
+export type { CatalogApi, CatalogFacets, CatalogLocation, EntityQueryPage, FacetsResponse } from './api';
 export { createDemoCatalogApi, demoEntities } from './demo-api';
 export { KIND_OPTIONS, annotationPair, buildFilterParam, defaultFilters, matchesQuery, ownerRefs, withKind } from './filters';
 export type { CatalogFilters } from './filters';

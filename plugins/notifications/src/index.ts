@@ -12,6 +12,7 @@ export type {
   NotificationStatus,
   NotificationsApi,
   UpdateInput,
+  WireNotification,
 } from './api';
 export { createDemoNotifications, createDemoNotificationsApi } from './demo-api';
 export { useNotificationsApi } from './use-notifications-api';

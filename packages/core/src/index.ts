@@ -17,7 +17,9 @@ export type { EntityPrefsProviderProps, EntityPrefsValue } from './entity-prefs'
 
 export { Collapsible } from './components/collapsible';
 export { ExternalLink } from './components/external-link';
+export type { ExternalLinkProps } from './components/external-link';
 export { HintRow } from './components/hint-row';
+export type { HintRowProps } from './components/hint-row';
 export { ListCard } from './components/list-card';
 export type { ListCardItem, ListCardProps } from './components/list-card';
 export { Page } from './components/page';
