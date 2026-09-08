@@ -1,20 +1,8 @@
-export { DEFAULT_WIDGET_PRIORITY, createPlugin, hasAnnotation } from './plugin';
-export type { BackstagePlugin, EntityAction, EntityLike, EntityRefLike, HomeWidget, PluginIcon, PluginNavItem, PluginRoute } from './plugin';
+export { DEFAULT_WIDGET_PRIORITY, createPlugin } from './plugin';
+export type { BackstagePlugin, HomeWidget, PluginIcon, PluginNavItem, PluginRoute } from './plugin';
 export { createPluginRegistry } from './registry';
 export type { PluginRegistry } from './registry';
 export { PluginRegistryProvider, usePluginRegistry } from './registry-context';
-export {
-  EntityPrefsProvider,
-  RECENT_KEY,
-  RECENT_LIMIT,
-  STARRED_KEY,
-  useRecentEntities,
-  useStarredEntities,
-  withStarToggled,
-  withVisit,
-} from './entity-prefs';
-export type { EntityPrefsProviderProps, EntityPrefsValue } from './entity-prefs';
-
 export { Collapsible } from './components/collapsible';
 export { ExternalLink } from './components/external-link';
 export { HintRow } from './components/hint-row';
@@ -50,9 +38,6 @@ export { TextFilter } from './components/text-filter';
 export type { TextFilterProps } from './components/text-filter';
 export { StateView } from './components/state-view';
 export type { StateViewProps } from './components/state-view';
-
-export { useOwnership } from './use-ownership';
-export type { Ownership } from './use-ownership';
 
 export { useRemoteData } from './hooks/use-remote-data';
 export type { RemoteData, RemoteDataResult } from './hooks/use-remote-data';

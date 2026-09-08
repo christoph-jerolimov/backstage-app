@@ -1,4 +1,5 @@
-import { Spacing, ThemedText, useStarredEntities, useTheme } from '@backstage-app/core';
+import { Spacing, ThemedText, useTheme } from '@backstage-app/core';
+import { useStarredEntities } from '@backstage-app/catalog-api';
 import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet } from 'react-native';
 

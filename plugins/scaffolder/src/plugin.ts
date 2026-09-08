@@ -1,5 +1,5 @@
 import { createPlugin } from '@backstage-app/core';
-import { entityTemplateHref } from '@backstage-app/plugin-catalog';
+import { type EntityActionsPlugin, entityTemplateHref } from '@backstage-app/catalog-api';
 
 import { ActionsScreen } from './actions-screen';
 import { OpenTasksWidget } from './home-widget';
@@ -13,7 +13,7 @@ export const TASKS_ROUTE = 'create/tasks/index';
 export const TASK_ROUTE = 'create/tasks/[taskId]';
 export const ACTIONS_ROUTE = 'create/actions';
 
-export const scaffolderPlugin = createPlugin({
+export const scaffolderPlugin = createPlugin<EntityActionsPlugin>({
   id: 'scaffolder',
   name: 'Create',
   routes: [

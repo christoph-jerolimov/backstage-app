@@ -1,6 +1,6 @@
 import type { Entity } from '@backstage-app/catalog-model';
 import { BackstageApiError, type FetchJson, type FetchText } from '@backstage-app/core';
-import { entityRefOf, stringifyEntityRef } from '@backstage-app/plugin-catalog';
+import { entityRefOf, stringifyEntityRef } from '@backstage-app/catalog-api';
 
 import { demoEvents, demoLogs, demoObjects } from './demo-objects';
 import type { KubernetesEvent, KubernetesObject, ObjectsByEntityResponse, PodLogQuery, PodRef } from './types';

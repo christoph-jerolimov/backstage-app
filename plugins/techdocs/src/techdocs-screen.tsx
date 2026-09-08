@@ -1,5 +1,5 @@
 import { useBackstage } from '@backstage-app/core';
-import { DEFAULT_NAMESPACE, type EntityRef } from '@backstage-app/plugin-catalog';
+import { DEFAULT_NAMESPACE, type EntityRef } from '@backstage-app/catalog-api';
 import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import { openBrowserAsync } from 'expo-web-browser';
 import { useEffect, useMemo } from 'react';

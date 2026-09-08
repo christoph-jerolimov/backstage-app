@@ -29,14 +29,6 @@ describe('createPluginRegistry', () => {
     );
   });
 
-  it('lists entity actions across plugins in order', () => {
-    const action = (id: string) => ({ id, title: id, isAvailable: () => true, href: () => `/${id}` });
-    const withActions = (id: string, actions: ReturnType<typeof action>[]) => ({ ...plugin(id, id), entityActions: actions });
-    const registry = createPluginRegistry([withActions('docs', [action('docs')]), plugin('plain', 'Plain'), withActions('k8s', [action('k8s')])]);
-
-    expect(registry.entityActions().map((item) => item.id)).toEqual(['docs', 'k8s']);
-  });
-
   it('sorts home widgets by priority then registration order', () => {
     const Widget = () => null;
     const widget = (id: string, priority?: number) => ({ id, title: id, component: Widget, priority });

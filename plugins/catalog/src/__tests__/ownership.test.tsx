@@ -2,7 +2,7 @@ import { BackstageProvider, createInstanceStore, createMemoryStorage, type Insta
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
 import type { ReactNode } from 'react';
 
-import { createDemoCatalogApi } from '../demo-api';
+import { createDemoCatalogApi } from '@backstage-app/catalog-api';
 import { MineScreen } from '../mine-screen';
 import { MyEntitiesList, MyTeamsList } from '../ownership-widgets';
 import { catalogPlugin } from '../plugin';
@@ -11,9 +11,10 @@ const mockPush = jest.fn();
 jest.mock('expo-router', () => ({ ...jest.requireActual('expo-router'), useRouter: () => ({ push: mockPush }) }));
 
 // The signed-in store points at a real base URL, so the screen would otherwise use the REST API.
-jest.mock('../use-catalog-api', () => {
-  const demo = jest.requireActual('../demo-api').createDemoCatalogApi();
-  return { useCatalogApi: () => demo };
+jest.mock('@backstage-app/catalog-api', () => {
+  const actual = jest.requireActual('@backstage-app/catalog-api');
+  const demo = actual.createDemoCatalogApi();
+  return { ...actual, useCatalogApi: () => demo };
 });
 
 async function signedInStore(ownershipEntityRefs = ['user:default/jane.doe', 'group:default/team-platform']): Promise<InstanceStore> {

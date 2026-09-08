@@ -1,10 +1,9 @@
-import { ListCard, StateView, useRecentEntities, useRemoteData, useStarredEntities } from '@backstage-app/core';
+import { ListCard, StateView, useRemoteData } from '@backstage-app/core';
+import { entityHref, entityRefOf, parseEntityRef, stringifyEntityRef, useCatalogApi, useRecentEntities, useStarredEntities } from '@backstage-app/catalog-api';
 import { useRouter } from 'expo-router';
 import { useCallback } from 'react';
 
 import { entitySubtitle } from './catalog-page';
-import { entityHref, entityRefOf, parseEntityRef, stringifyEntityRef } from './entity-ref';
-import { useCatalogApi } from './use-catalog-api';
 
 function EntityRefList({ refs, emptyMessage, testID }: { refs: string[]; emptyMessage: string; testID: string }) {
   const api = useCatalogApi();
