@@ -1,4 +1,4 @@
-import type { Entity } from '@backstage/catalog-model';
+import type { Entity } from '@backstage-app/catalog-model';
 import type { FetchJson } from '@backstage-app/core';
 
 import { createDemoKubernetesApi, createRestKubernetesApi, objectsByEntityPath } from '../api';

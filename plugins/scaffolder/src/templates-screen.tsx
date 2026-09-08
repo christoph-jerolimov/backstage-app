@@ -1,5 +1,7 @@
-import { ActionButton, Spacing } from '@backstage-app/core';
-import { CatalogScreen, entityRefOf, entityTemplateHref } from '@backstage-app/plugin-catalog';
+import { Spacing } from '@backstage-app/theme';
+import { ActionButton } from '@backstage-app/ui';
+import { CatalogScreen } from '@backstage-app/plugin-catalog';
+import { entityRefOf, entityTemplateHref } from '@backstage-app/catalog-api';
 import { useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 

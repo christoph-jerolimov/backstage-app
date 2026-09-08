@@ -2,6 +2,9 @@
   "name": "@backstage-app/app",
   "version": "1.0.0",
   "private": true,
+  "backstage": {
+    "role": "frontend"
+  },
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
@@ -10,8 +13,10 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@backstage-app/analytics-api": "*",
+    "@backstage-app/catalog-api": "*",
     "@backstage-app/core": "*",
-    "@backstage-app/plugin-apis": "*",
+    "@backstage-app/plugin-api-docs": "*",
     "@backstage-app/plugin-auth": "*",
     "@backstage-app/plugin-catalog": "*",
     "@backstage-app/plugin-home": "*",
@@ -21,6 +26,9 @@
     "@backstage-app/plugin-search": "*",
     "@backstage-app/plugin-settings": "*",
     "@backstage-app/plugin-techdocs": "*",
+    "@backstage-app/plugin-todo": "*",
+    "@backstage-app/theme": "*",
+    "@backstage-app/ui": "*",
     "@expo/ui": "~57.0.16",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@tanstack/query-async-storage-persister": "^5.102.8",

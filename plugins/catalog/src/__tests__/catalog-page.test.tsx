@@ -1,9 +1,8 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
 import { Text } from 'react-native';
 
-import type { CatalogApi } from '../api';
+import { type CatalogApi, createDemoCatalogApi } from '@backstage-app/catalog-api';
 import { CatalogPage } from '../catalog-page';
-import { createDemoCatalogApi } from '../demo-api';
 import { catalogPlugin } from '../plugin';
 
 describe('CatalogPage', () => {

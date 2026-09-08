@@ -1,14 +1,6 @@
-import {
-  ActionButton,
-  FilterChips,
-  Fonts,
-  InvalidBaseUrlError,
-  Spacing,
-  ThemedText,
-  ThemedView,
-  useTheme,
-  type NewInstance,
-} from '@backstage-app/core';
+import { InvalidBaseUrlError, type NewInstance } from '@backstage-app/core';
+import { Fonts, Spacing, useTheme } from '@backstage-app/theme';
+import { ActionButton, FilterChips, ThemedText, ThemedView } from '@backstage-app/ui';
 import { useState } from 'react';
 import { StyleSheet, TextInput } from 'react-native';
 

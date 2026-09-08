@@ -1,4 +1,6 @@
-import { ActionButton, ExternalLink, ListCard, Page, Spacing, StateView, ThemedText, ThemedView, formatRelativeTime, useRemoteData } from '@backstage-app/core';
+import { formatRelativeTime, useRemoteData } from '@backstage-app/core';
+import { Spacing } from '@backstage-app/theme';
+import { ActionButton, ExternalLink, ListCard, Page, StateView, ThemedText, ThemedView } from '@backstage-app/ui';
 import { useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 

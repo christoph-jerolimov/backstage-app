@@ -47,7 +47,7 @@ export const PAGE_SIZE = 25;
 
 export const defaultFilters: NotificationFilters = { read: false, search: '' };
 
-type WireNotification = {
+export type WireNotification = {
   id: string;
   created: string;
   read?: string | null;

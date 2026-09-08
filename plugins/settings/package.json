@@ -2,10 +2,15 @@
   "name": "@backstage-app/plugin-settings",
   "version": "1.0.0",
   "private": true,
+  "backstage": {
+    "role": "frontend-plugin"
+  },
   "main": "src/index.ts",
   "types": "src/index.ts",
   "dependencies": {
-    "@backstage-app/core": "*"
+    "@backstage-app/core": "*",
+    "@backstage-app/theme": "*",
+    "@backstage-app/ui": "*"
   },
   "peerDependencies": {
     "react": "*",

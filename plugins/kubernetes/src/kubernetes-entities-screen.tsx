@@ -1,4 +1,5 @@
-import { CatalogScreen, entityKubernetesHref, entityRefOf } from '@backstage-app/plugin-catalog';
+import { CatalogScreen } from '@backstage-app/plugin-catalog';
+import { entityKubernetesHref, entityRefOf } from '@backstage-app/catalog-api';
 import { useRouter } from 'expo-router';
 
 import { KUBERNETES_ANNOTATION } from './types';

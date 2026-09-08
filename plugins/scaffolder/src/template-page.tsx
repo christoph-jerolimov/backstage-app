@@ -1,4 +1,5 @@
-import { ActionButton, ListCard, Page, Spacing, StateView, ThemedText, ThemedView } from '@backstage-app/core';
+import { Spacing } from '@backstage-app/theme';
+import { ActionButton, ListCard, Page, StateView, ThemedText, ThemedView } from '@backstage-app/ui';
 import { useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 

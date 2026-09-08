@@ -1,5 +1,5 @@
 import type { HomeWidget, PluginNavItem } from '@backstage-app/core';
-import { StateView, ThemedText } from '@backstage-app/core';
+import { StateView, ThemedText } from '@backstage-app/ui';
 import { fireEvent, render, screen, within } from '@testing-library/react-native';
 
 import { HomePage } from '../home-page';

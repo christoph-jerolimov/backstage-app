@@ -1,13 +1,12 @@
-import { ActionButton, ListCard, StateView, useOwnership, useRemoteData } from '@backstage-app/core';
+import { useRemoteData } from '@backstage-app/core';
+import { ActionButton, ListCard, StateView } from '@backstage-app/ui';
+import { type CatalogApi, entityHref, entityRefOf, parseEntityRef, stringifyEntityRef, useCatalogApi, useOwnership } from '@backstage-app/catalog-api';
 import { useRouter } from 'expo-router';
 import { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import type { CatalogApi } from './api';
 import { entitySubtitle } from './catalog-page';
-import { entityHref, entityRefOf, parseEntityRef, stringifyEntityRef } from './entity-ref';
 import { MINE_HREF } from './mine-screen';
-import { useCatalogApi } from './use-catalog-api';
 
 /** How many owned entities the widget lists before linking to the full page. */
 export const MY_ENTITIES_LIMIT = 5;

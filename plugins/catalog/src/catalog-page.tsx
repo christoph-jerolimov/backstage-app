@@ -1,20 +1,11 @@
-import type { Entity } from '@backstage/catalog-model';
-import {
-  FilterChips,
-  ListCard,
-  Page,
-  Spacing,
-  StateView,
-  TextFilter,
-  ThemedText,
-  ThemedView,
-  useRemoteData,
-} from '@backstage-app/core';
+import type { Entity } from '@backstage-app/catalog-model';
+import { useRemoteData } from '@backstage-app/core';
+import { Spacing } from '@backstage-app/theme';
+import { FilterChips, ListCard, Page, StateView, TextFilter, ThemedText, ThemedView } from '@backstage-app/ui';
 import { type ReactNode, useCallback, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
-import type { CatalogApi, CatalogFacets } from './api';
-import { KIND_OPTIONS, defaultFilters, withKind, type CatalogFilters } from './filters';
+import { type CatalogApi, type CatalogFacets, type CatalogFilters, defaultFilters, KIND_OPTIONS, withKind } from '@backstage-app/catalog-api';
 
 export type CatalogPageProps = {
   api: CatalogApi;

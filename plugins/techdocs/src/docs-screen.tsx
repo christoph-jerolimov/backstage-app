@@ -1,4 +1,5 @@
-import { CatalogScreen, entityDocsHref, entityRefOf } from '@backstage-app/plugin-catalog';
+import { CatalogScreen } from '@backstage-app/plugin-catalog';
+import { entityDocsHref, entityRefOf } from '@backstage-app/catalog-api';
 import { useRouter } from 'expo-router';
 
 export const TECHDOCS_ANNOTATION = 'backstage.io/techdocs-ref';

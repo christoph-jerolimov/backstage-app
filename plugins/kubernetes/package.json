@@ -2,18 +2,22 @@
   "name": "@backstage-app/plugin-kubernetes",
   "version": "1.0.0",
   "private": true,
+  "backstage": {
+    "role": "frontend-plugin"
+  },
   "main": "src/index.ts",
   "types": "src/index.ts",
   "dependencies": {
+    "@backstage-app/catalog-api": "*",
+    "@backstage-app/catalog-model": "*",
     "@backstage-app/core": "*",
-    "@backstage-app/plugin-catalog": "*"
+    "@backstage-app/plugin-catalog": "*",
+    "@backstage-app/theme": "*",
+    "@backstage-app/ui": "*"
   },
   "peerDependencies": {
     "expo-router": "*",
     "react": "*",
     "react-native": "*"
-  },
-  "devDependencies": {
-    "@backstage/catalog-model": "^1.10.0"
   }
 }

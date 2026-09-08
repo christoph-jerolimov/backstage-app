@@ -1,9 +1,8 @@
-import type { Entity } from '@backstage/catalog-model';
-import { BackstageApiError, EntityPrefsProvider, createMemoryStorage, RECENT_KEY, STARRED_KEY } from '@backstage-app/core';
+import type { Entity } from '@backstage-app/catalog-model';
+import { BackstageApiError, createMemoryStorage } from '@backstage-app/core';
+import { type CatalogApi, createDemoCatalogApi, EntityPrefsProvider, RECENT_KEY, STARRED_KEY } from '@backstage-app/catalog-api';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
 
-import type { CatalogApi } from '../api';
-import { createDemoCatalogApi } from '../demo-api';
 import { EntityPage, groupRelations, initialsOf, profileOf, refListOf, relationLabel } from '../entity-page';
 import { entitySubtitle } from '../catalog-page';
 import { catalogPlugin } from '../plugin';
@@ -33,8 +32,8 @@ describe('EntityPage', () => {
     await fireEvent.press(within(screen.getByTestId('relations-ownedBy')).getByRole('button', { name: 'group:default/team-platform' }));
     expect(onOpenEntity).toHaveBeenCalledWith({ kind: 'group', namespace: 'default', name: 'team-platform' });
 
-    expect(screen.getByText('Annotations (3)')).toBeTruthy();
-    await fireEvent.press(screen.getByText('Annotations (3)'));
+    expect(screen.getByText('Annotations (4)')).toBeTruthy();
+    await fireEvent.press(screen.getByText('Annotations (4)'));
     expect(within(screen.getByTestId('entity-annotations')).getByText('backstage.io/techdocs-ref')).toBeTruthy();
   });
 

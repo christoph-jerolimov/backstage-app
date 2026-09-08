@@ -1,0 +1,28 @@
+// Declaration-only compile that feeds `backstage-repo-tools api-reports`.
+// API Extractor analyses .d.ts files and expects them under
+// dist-types/<workspace>/src/index.d.ts; nothing else in this repo emits any.
+{
+  "extends": "./packages/app/tsconfig.json",
+  "compilerOptions": {
+    // expo/tsconfig.base sets noEmit; declarations are the whole point here.
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationMap": false,
+    "outDir": "dist-types",
+    "rootDir": ".",
+    // expo/types declares the CSS module shims that packages/theme/src/theme.ts
+    // relies on for its `./global.css` side-effect import. Tests are excluded
+    // below, so jest types are not needed.
+    "types": ["expo/types"]
+  },
+  // Globbed so a new workspace is covered without touching this file.
+  "include": [
+    "packages/*/src/**/*.ts",
+    "packages/*/src/**/*.tsx",
+    "plugins/*/src/**/*.ts",
+    "plugins/*/src/**/*.tsx"
+  ],
+  // packages/app is the application, not a library, and has no API report.
+  "exclude": ["packages/app/**", "**/__tests__/**"]
+}

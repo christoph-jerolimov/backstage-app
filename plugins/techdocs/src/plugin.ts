@@ -1,12 +1,12 @@
-import { createPlugin, hasAnnotation } from '@backstage-app/core';
-import { entityDocsHref } from '@backstage-app/plugin-catalog';
+import { createPlugin } from '@backstage-app/core';
+import { type EntityActionsPlugin, entityDocsHref, hasAnnotation } from '@backstage-app/catalog-api';
 
 import { DocsScreen, TECHDOCS_ANNOTATION } from './docs-screen';
 import { TechDocsScreen } from './techdocs-screen';
 
 export const TECHDOCS_ROUTE = 'docs/[kind]/[namespace]/[name]';
 
-export const techdocsPlugin = createPlugin({
+export const techdocsPlugin = createPlugin<EntityActionsPlugin>({
   id: 'techdocs',
   name: 'TechDocs',
   routes: [

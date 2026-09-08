@@ -1,5 +1,7 @@
-import { ActionButton, BackstageApiError, Spacing, StateView, ThemedText, ThemedView, useRemoteData } from '@backstage-app/core';
-import { type EntityRef, stringifyEntityRef } from '@backstage-app/plugin-catalog';
+import { BackstageApiError, useRemoteData } from '@backstage-app/core';
+import { Spacing } from '@backstage-app/theme';
+import { ActionButton, StateView, ThemedText, ThemedView } from '@backstage-app/ui';
+import { type EntityRef, stringifyEntityRef } from '@backstage-app/catalog-api';
 import { useCallback, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 

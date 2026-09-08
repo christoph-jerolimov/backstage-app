@@ -41,3 +41,6 @@ example
 # generated native folders
 /packages/app/ios
 /packages/app/android
+
+# api reports (declaration output for API Extractor)
+dist-types/
