@@ -115,7 +115,11 @@ describe('useRemoteData', () => {
 
   it('serves a cached result inside a shared client without refetching', async () => {
     const client = createQueryClient();
-    // The app client keeps results for a day; clear it so its timers do not outlive the test.
+    // The app client collects an unused query a day out, and React Query schedules that as a
+    // real timer. An observer that moves off a query leaves the timer on a query the cache no
+    // longer holds, where clearing cannot cancel it, so a day-long window would keep the Jest
+    // worker alive for good. `query-provider.test.tsx` asserts the real window.
+    client.setDefaultOptions({ queries: { ...client.getDefaultOptions().queries, gcTime: 1000 } });
     clients.push(client);
     const wrapper = ({ children }: { children: ReactNode }) => <QueryClientProvider client={client}>{children}</QueryClientProvider>;
     const { calls, fetcher } = collector();
