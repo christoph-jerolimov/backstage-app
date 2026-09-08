@@ -3,7 +3,7 @@ import { Pressable, ScrollView, StyleSheet } from 'react-native';
 import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
 
-import { Spacing } from '../theme';
+import { Spacing } from '@backstage-app/theme';
 
 export type FilterChipOption = {
   value: string;

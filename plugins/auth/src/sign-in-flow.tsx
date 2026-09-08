@@ -1,15 +1,6 @@
-import {
-  ActionButton,
-  Spacing,
-  ThemedText,
-  ThemedView,
-  authRefreshUrl,
-  buildAuthStartUrl,
-  sessionFromAuthResponse,
-  type BackstageAuthResponse,
-  type BackstageInstance,
-  type BackstageSession,
-} from '@backstage-app/core';
+import { authRefreshUrl, buildAuthStartUrl, sessionFromAuthResponse, type BackstageAuthResponse, type BackstageInstance, type BackstageSession } from '@backstage-app/core';
+import { Spacing } from '@backstage-app/theme';
+import { ActionButton, ThemedText, ThemedView } from '@backstage-app/ui';
 import { useState } from 'react';
 import { Modal, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';

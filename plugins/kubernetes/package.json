@@ -8,7 +8,9 @@
     "@backstage-app/catalog-api": "*",
     "@backstage-app/catalog-model": "*",
     "@backstage-app/core": "*",
-    "@backstage-app/plugin-catalog": "*"
+    "@backstage-app/plugin-catalog": "*",
+    "@backstage-app/theme": "*",
+    "@backstage-app/ui": "*"
   },
   "peerDependencies": {
     "expo-router": "*",

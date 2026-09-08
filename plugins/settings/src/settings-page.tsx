@@ -1,13 +1,5 @@
-import {
-  type ColorScheme,
-  Colors,
-  FilterChips,
-  Page,
-  Spacing,
-  type ThemePreference,
-  ThemedText,
-  ThemedView,
-} from '@backstage-app/core';
+import { type ColorScheme, Colors, Spacing, type ThemePreference } from '@backstage-app/theme';
+import { FilterChips, Page, ThemedText, ThemedView } from '@backstage-app/ui';
 import { StyleSheet, View } from 'react-native';
 
 export const THEME_OPTIONS: { value: ThemePreference; label: string }[] = [

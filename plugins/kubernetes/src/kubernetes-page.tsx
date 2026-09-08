@@ -1,5 +1,7 @@
 import type { Entity } from '@backstage-app/catalog-model';
-import { ActionButton, FilterChips, ListCard, Page, Spacing, StateView, ThemedText, ThemedView, useRemoteData } from '@backstage-app/core';
+import { useRemoteData } from '@backstage-app/core';
+import { Spacing } from '@backstage-app/theme';
+import { ActionButton, FilterChips, ListCard, Page, StateView, ThemedText, ThemedView } from '@backstage-app/ui';
 import { entityRefOf, stringifyEntityRef } from '@backstage-app/catalog-api';
 import { useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';

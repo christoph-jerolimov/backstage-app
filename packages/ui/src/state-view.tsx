@@ -4,8 +4,7 @@ import { ActionButton } from './action-button';
 import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
 
-import { useTheme } from '../hooks/use-theme';
-import { Spacing } from '../theme';
+import { Spacing, useTheme } from '@backstage-app/theme';
 
 export type StateViewProps =
   | { kind: 'loading'; message?: string }

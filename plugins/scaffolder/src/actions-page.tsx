@@ -1,4 +1,6 @@
-import { Collapsible, Page, Spacing, StateView, TextFilter, ThemedText, ThemedView, useRemoteData } from '@backstage-app/core';
+import { useRemoteData } from '@backstage-app/core';
+import { Spacing } from '@backstage-app/theme';
+import { Collapsible, Page, StateView, TextFilter, ThemedText, ThemedView } from '@backstage-app/ui';
 import { useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 

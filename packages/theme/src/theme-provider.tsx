@@ -1,9 +1,31 @@
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-import type { KeyValueStorage } from './backstage/instances';
-import { createPlatformStorage } from './backstage/storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { useColorScheme } from './hooks/use-color-scheme';
 import { type ColorScheme, Colors, type ThemeColors } from './theme';
+
+/**
+ * The slice of a key/value store this provider needs. Declared here rather than
+ * imported so the theme stays a leaf package: persisting a colour preference should
+ * not pull in the Backstage connection. Structurally compatible with core's
+ * `KeyValueStorage`, so callers can still pass that.
+ */
+export type KeyValueStorage = {
+  getItem(key: string): Promise<string | null>;
+  setItem(key: string, value: string): Promise<void>;
+  removeItem(key: string): Promise<void>;
+};
+
+/**
+ * Plain app storage. A colour preference is not a secret, so it deliberately does not
+ * reach for the platform secure store that core's session storage uses.
+ */
+const defaultStorage: KeyValueStorage = {
+  getItem: (key) => AsyncStorage.getItem(key),
+  setItem: (key, value) => AsyncStorage.setItem(key, value),
+  removeItem: (key) => AsyncStorage.removeItem(key),
+};
 
 /** `system` follows the device; `light` and `dark` force a scheme. */
 export type ThemePreference = 'system' | 'light' | 'dark';
@@ -44,7 +66,7 @@ export type ThemeProviderProps = {
 
 /** Holds the user's theme preference, persists it, and resolves it to a color scheme. */
 export function ThemeProvider({ storage, initialPreference = 'system', children }: ThemeProviderProps) {
-  const [store] = useState(() => storage ?? createPlatformStorage().instances);
+  const [store] = useState(() => storage ?? defaultStorage);
   const [preference, setPreferenceState] = useState<ThemePreference>(initialPreference);
   const deviceScheme = useColorScheme();
 

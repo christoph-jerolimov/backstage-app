@@ -5,8 +5,7 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 
 import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
-import { Spacing } from '../theme';
-import { useTheme } from '../hooks/use-theme';
+import { Spacing, useTheme } from '@backstage-app/theme';
 
 export function Collapsible({ children, title }: PropsWithChildren & { title: string }) {
   const [isOpen, setIsOpen] = useState(false);

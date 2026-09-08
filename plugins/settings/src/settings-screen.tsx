@@ -1,4 +1,4 @@
-import { useThemePreference } from '@backstage-app/core';
+import { useThemePreference } from '@backstage-app/theme';
 
 import { SettingsPage } from './settings-page';
 

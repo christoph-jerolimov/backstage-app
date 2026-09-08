@@ -1,4 +1,6 @@
-import { ExternalLink, type PluginNavItem, Spacing, ThemedText, ThemedView } from '@backstage-app/core';
+import { type PluginNavItem } from '@backstage-app/core';
+import { Spacing } from '@backstage-app/theme';
+import { ExternalLink, ThemedText, ThemedView } from '@backstage-app/ui';
 import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, View } from 'react-native';
 

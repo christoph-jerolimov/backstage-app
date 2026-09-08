@@ -1,4 +1,6 @@
-import { type HomeWidget, Page, type PluginNavItem, Spacing, ThemedText, ThemedView } from '@backstage-app/core';
+import { type HomeWidget, type PluginNavItem } from '@backstage-app/core';
+import { Spacing } from '@backstage-app/theme';
+import { Page, ThemedText, ThemedView } from '@backstage-app/ui';
 import { StyleSheet } from 'react-native';
 
 import { getGreeting } from './greeting';

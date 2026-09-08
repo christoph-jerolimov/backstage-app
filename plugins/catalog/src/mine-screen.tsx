@@ -1,4 +1,4 @@
-import { ActionButton, Page, StateView } from '@backstage-app/core';
+import { ActionButton, Page, StateView } from '@backstage-app/ui';
 import { entityHref, entityRefOf, useOwnership } from '@backstage-app/catalog-api';
 import { useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';

@@ -1,4 +1,6 @@
-import { ActionButton, Spacing, StateView, ThemedText, ThemedView, useRemoteData } from '@backstage-app/core';
+import { useRemoteData } from '@backstage-app/core';
+import { Spacing } from '@backstage-app/theme';
+import { ActionButton, StateView, ThemedText, ThemedView } from '@backstage-app/ui';
 import { useRouter } from 'expo-router';
 import { useCallback } from 'react';
 import { StyleSheet } from 'react-native';
