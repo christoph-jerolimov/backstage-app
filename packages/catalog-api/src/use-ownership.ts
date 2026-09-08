@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { useBackstage } from './backstage/provider';
+import { useBackstage } from '@backstage-app/core';
 
 export type Ownership = {
   /** True when a non-expired session provides an identity. */

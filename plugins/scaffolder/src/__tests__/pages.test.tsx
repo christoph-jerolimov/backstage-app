@@ -1,5 +1,5 @@
 import { BackstageProvider } from '@backstage-app/core';
-import { demoEntities } from '@backstage-app/plugin-catalog';
+import { demoEntities } from '@backstage-app/catalog-api';
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
 
 import { ActionsPage } from '../actions-page';

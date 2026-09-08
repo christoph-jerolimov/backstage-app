@@ -1,10 +1,8 @@
-import type { Entity } from '@backstage/catalog-model';
+import type { Entity } from '@backstage-app/catalog-model';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
 
-import type { CatalogApi } from '../api';
-import { createDemoCatalogApi } from '../demo-api';
+import { type CatalogApi, createDemoCatalogApi, groupNameOf, groupRelationsByMeaning } from '@backstage-app/catalog-api';
 import { catalogPlugin } from '../plugin';
-import { groupNameOf, groupRelationsByMeaning } from '../relation-groups';
 import { RelationsPage } from '../relations-page';
 import { parseTrail, relationsHref } from '../relations-screen';
 

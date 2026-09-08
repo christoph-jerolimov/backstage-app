@@ -1,4 +1,4 @@
-import type { Entity } from '@backstage/catalog-model';
+import type { Entity } from '@backstage-app/catalog-model';
 import { BackstageApiError, type FetchJson } from '@backstage-app/core';
 
 import { stringifyEntityRef, type EntityRef } from './entity-ref';

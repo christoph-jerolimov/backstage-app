@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@backstage-app/analytics-api": "*",
+    "@backstage-app/catalog-api": "*",
     "@backstage-app/core": "*",
     "@backstage-app/plugin-apis": "*",
     "@backstage-app/plugin-auth": "*",

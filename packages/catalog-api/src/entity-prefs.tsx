@@ -1,7 +1,6 @@
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-import type { KeyValueStorage } from './backstage/instances';
-import { createPlatformStorage } from './backstage/storage';
+import { type KeyValueStorage, createPlatformStorage } from '@backstage-app/core';
 
 export const STARRED_KEY = 'app.starredEntities';
 export const RECENT_KEY = 'app.recentEntities';

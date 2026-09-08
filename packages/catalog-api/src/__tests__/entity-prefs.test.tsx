@@ -1,7 +1,7 @@
 import { act, renderHook, waitFor } from '@testing-library/react-native';
 import type { ReactNode } from 'react';
 
-import { createMemoryStorage, type KeyValueStorage } from '../backstage/instances';
+import { createMemoryStorage, type KeyValueStorage } from '@backstage-app/core';
 import {
   EntityPrefsProvider,
   RECENT_KEY,
