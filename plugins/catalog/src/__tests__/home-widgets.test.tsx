@@ -1,4 +1,5 @@
-import { BackstageProvider, EntityPrefsProvider, createMemoryStorage, STARRED_KEY, RECENT_KEY } from '@backstage-app/core';
+import { BackstageProvider, createMemoryStorage } from '@backstage-app/core';
+import { EntityPrefsProvider, STARRED_KEY, RECENT_KEY } from '@backstage-app/catalog-api';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import type { ReactNode } from 'react';
 

@@ -26,35 +26,6 @@ export type PluginNavItem = {
   icon: PluginIcon;
 };
 
-/** The subset of a catalog entity that entity actions may inspect. */
-export type EntityLike = {
-  kind: string;
-  metadata: {
-    name: string;
-    namespace?: string;
-    annotations?: Record<string, string>;
-  };
-};
-
-/** A lower-cased kind and namespace plus the entity name. */
-export type EntityRefLike = {
-  kind: string;
-  namespace: string;
-  name: string;
-};
-
-/** An action a plugin offers on the catalog entity page, such as "Documentation". */
-export type EntityAction = {
-  /** Unique across plugins (kebab-case). */
-  id: string;
-  title: string;
-  /** Whether the action applies to the entity, typically by annotation. */
-  isAvailable: (entity: EntityLike) => boolean;
-  /** The in-app path the action opens for the entity. */
-  href: (ref: EntityRefLike) => string;
-  testID?: string;
-};
-
 /** A card a plugin contributes to the home page. */
 export type HomeWidget = {
   /** Unique across every installed plugin (kebab-case). */
@@ -75,22 +46,19 @@ export interface BackstagePlugin {
   name: string;
   routes: PluginRoute[];
   navItems: PluginNavItem[];
-  /** Actions offered on the catalog entity page. */
-  entityActions?: EntityAction[];
   /** Cards offered on the home page. */
   homeWidgets?: HomeWidget[];
-}
-
-/** True when the entity carries the annotation key. */
-export function hasAnnotation(entity: EntityLike, key: string): boolean {
-  return entity.metadata.annotations?.[key] !== undefined;
 }
 
 /**
  * Validates and returns a plugin definition. Navigation items must point at a route the
  * plugin declares, so a typo surfaces at module load instead of as a dead drawer entry.
+ *
+ * Generic in the definition so a plugin may carry fields core does not define — an
+ * extension point owned by another package, such as the catalog's `entityActions`. Core
+ * validates only what it declares and passes everything else through with its type intact.
  */
-export function createPlugin(definition: BackstagePlugin): BackstagePlugin {
+export function createPlugin<T extends BackstagePlugin>(definition: T): T {
   const routeNames = new Set(definition.routes.map((route) => route.name));
 
   for (const item of definition.navItems) {

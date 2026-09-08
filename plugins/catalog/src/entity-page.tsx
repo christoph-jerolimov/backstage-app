@@ -1,26 +1,10 @@
 import type { Entity } from '@backstage-app/catalog-model';
-import {
-  ActionButton,
-  BackstageApiError,
-  Collapsible,
-  ExternalLink,
-  ListCard,
-  Page,
-  Spacing,
-  StateView,
-  ThemedText,
-  ThemedView,
-  useRecentEntities,
-  useRemoteData,
-  useTheme,
-} from '@backstage-app/core';
+import { ActionButton, BackstageApiError, Collapsible, ExternalLink, ListCard, Page, Spacing, StateView, ThemedText, ThemedView, useRemoteData, useTheme } from '@backstage-app/core';
+import { backstageEntityUrl, type CatalogApi, type CatalogFilters, type CatalogLocation, type EntityRef, entityRefOf, parseEntityRef, stringifyEntityRef, useRecentEntities } from '@backstage-app/catalog-api';
 import { useCallback, useEffect, useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 
-import type { CatalogApi, CatalogLocation } from './api';
 import { entitySubtitle } from './catalog-page';
-import { backstageEntityUrl, type EntityRef, entityRefOf, parseEntityRef, stringifyEntityRef } from './entity-ref';
-import type { CatalogFilters } from './filters';
 import { StarButton } from './star-button';
 
 export type EntityPageProps = {

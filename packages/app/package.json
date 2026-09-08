@@ -10,6 +10,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@backstage-app/catalog-api": "*",
     "@backstage-app/core": "*",
     "@backstage-app/plugin-apis": "*",
     "@backstage-app/plugin-auth": "*",

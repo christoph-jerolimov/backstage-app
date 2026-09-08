@@ -1,8 +1,8 @@
 import { renderHook, waitFor } from '@testing-library/react-native';
 import type { ReactNode } from 'react';
 
-import { createInstanceStore, createMemoryStorage, type InstanceStore } from '../backstage/instances';
-import { BackstageProvider } from '../backstage/provider';
+import { createInstanceStore, createMemoryStorage, type InstanceStore } from '@backstage-app/core';
+import { BackstageProvider } from '@backstage-app/core';
 import { useOwnership } from '../use-ownership';
 
 const OWNERSHIP = ['user:default/jane.doe', 'group:default/team-platform', 'Group:default/engineering'];

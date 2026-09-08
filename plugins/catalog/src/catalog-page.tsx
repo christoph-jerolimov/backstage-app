@@ -13,8 +13,7 @@ import {
 import { type ReactNode, useCallback, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
-import type { CatalogApi, CatalogFacets } from './api';
-import { KIND_OPTIONS, defaultFilters, withKind, type CatalogFilters } from './filters';
+import { type CatalogApi, type CatalogFacets, type CatalogFilters, defaultFilters, KIND_OPTIONS, withKind } from '@backstage-app/catalog-api';
 
 export type CatalogPageProps = {
   api: CatalogApi;

@@ -1,6 +1,6 @@
 import type { Entity } from '@backstage-app/catalog-model';
 import { ActionButton, FilterChips, ListCard, Page, Spacing, StateView, ThemedText, ThemedView, useRemoteData } from '@backstage-app/core';
-import { entityRefOf, stringifyEntityRef } from '@backstage-app/plugin-catalog';
+import { entityRefOf, stringifyEntityRef } from '@backstage-app/catalog-api';
 import { useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 

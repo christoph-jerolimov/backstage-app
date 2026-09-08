@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "types": "src/index.ts",
   "dependencies": {
+    "@backstage-app/catalog-api": "*",
     "@backstage-app/catalog-model": "*",
     "@backstage-app/core": "*",
     "@backstage-app/plugin-catalog": "*"

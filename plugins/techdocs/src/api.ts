@@ -1,5 +1,5 @@
 import { BackstageApiError, type FetchJson, type FetchText } from '@backstage-app/core';
-import { type EntityRef, stringifyEntityRef } from '@backstage-app/plugin-catalog';
+import { type EntityRef, stringifyEntityRef } from '@backstage-app/catalog-api';
 
 import { DEMO_DOCS_ORIGIN, demoDocs } from './demo-docs';
 import { docsBasePath, normalizeDocsPath } from './html';

@@ -1,4 +1,4 @@
-import { DEFAULT_WIDGET_PRIORITY, type BackstagePlugin, type EntityAction, type HomeWidget, type PluginNavItem, type PluginRoute } from './plugin';
+import { DEFAULT_WIDGET_PRIORITY, type BackstagePlugin, type HomeWidget, type PluginNavItem, type PluginRoute } from './plugin';
 
 export interface PluginRegistry {
   /** Installed plugins in registration order. */
@@ -7,8 +7,6 @@ export interface PluginRegistry {
   navItems(): PluginNavItem[];
   /** Every route, in plugin registration order. */
   routes(): PluginRoute[];
-  /** Every entity action, in plugin registration order. */
-  entityActions(): EntityAction[];
   /** Every home widget, by ascending priority then registration order. */
   homeWidgets(): HomeWidget[];
   /** Look up a plugin by id. */
@@ -38,7 +36,6 @@ export function createPluginRegistry(plugins: BackstagePlugin[]): PluginRegistry
     plugins,
     navItems: () => plugins.flatMap((plugin) => plugin.navItems),
     routes: () => plugins.flatMap((plugin) => plugin.routes),
-    entityActions: () => plugins.flatMap((plugin) => plugin.entityActions ?? []),
     homeWidgets: () =>
       plugins
         .flatMap((plugin) => plugin.homeWidgets ?? [])
