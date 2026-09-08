@@ -2,6 +2,9 @@
   "name": "@backstage-app/catalog-api",
   "version": "1.0.0",
   "private": true,
+  "backstage": {
+    "role": "web-library"
+  },
   "main": "src/index.ts",
   "types": "src/index.ts",
   "dependencies": {

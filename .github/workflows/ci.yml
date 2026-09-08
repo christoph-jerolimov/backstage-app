@@ -40,6 +40,9 @@ jobs:
       - name: Knip reports
         run: npm run knip-reports:check
 
+      - name: API reports
+        run: npm run api-reports:check
+
       - name: Export web bundle
         run: npx expo export --platform web
         working-directory: packages/app

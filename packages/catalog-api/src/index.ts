@@ -23,7 +23,7 @@ export {
   locationPath,
   parseFacets,
 } from './api';
-export type { CatalogApi, CatalogFacets, CatalogLocation, EntityQueryPage } from './api';
+export type { CatalogApi, CatalogFacets, CatalogLocation, EntityQueryPage, FacetsResponse } from './api';
 
 export { createDemoCatalogApi, demoEntities } from './demo-api';
 
