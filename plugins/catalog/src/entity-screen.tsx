@@ -1,11 +1,10 @@
-import type { Entity } from '@backstage/catalog-model';
+import type { Entity } from '@backstage-app/catalog-model';
 import { useBackstage, usePluginRegistry } from '@backstage-app/core';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useMemo } from 'react';
 
 import { EntityPage } from './entity-page';
-import { DEFAULT_NAMESPACE, entityHref, entityRefOf, type EntityRef } from './entity-ref';
-import { useCatalogApi } from './use-catalog-api';
+import { DEFAULT_NAMESPACE, entityActionsOf, entityHref, type EntityRef, entityRefOf, useCatalogApi } from '@backstage-app/catalog-api';
 
 function first(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
@@ -26,8 +25,7 @@ export function EntityScreen() {
 
   const actionsFor = useCallback(
     (entity: Entity) =>
-      registry
-        .entityActions()
+      entityActionsOf(registry)
         .filter((action) => action.isAvailable(entity))
         .map((action) => ({
           id: action.id,

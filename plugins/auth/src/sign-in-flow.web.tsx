@@ -1,14 +1,6 @@
-import {
-  ActionButton,
-  Spacing,
-  ThemedText,
-  ThemedView,
-  buildAuthStartUrl,
-  sessionFromAuthResponse,
-  type BackstageAuthResponse,
-  type BackstageInstance,
-  type BackstageSession,
-} from '@backstage-app/core';
+import { buildAuthStartUrl, sessionFromAuthResponse, type BackstageAuthResponse, type BackstageInstance, type BackstageSession } from '@backstage-app/core';
+import { Spacing } from '@backstage-app/theme';
+import { ActionButton, ThemedText, ThemedView } from '@backstage-app/ui';
 import { useEffect, useRef } from 'react';
 import { StyleSheet } from 'react-native';
 

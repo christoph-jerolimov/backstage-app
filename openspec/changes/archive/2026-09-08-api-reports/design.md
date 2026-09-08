@@ -2,7 +2,7 @@
 
 See proposal.md — Why. The constraints that shape the approach:
 
-- npm workspaces, `packages/*` and `plugins/*`, 13 workspaces total. Twelve of them are
+- npm workspaces, `packages/*` and `plugins/*`, 20 workspaces total. Nineteen of them are
   `private` libraries with `main: src/index.ts` and **no build step** — nothing in this repo
   has ever emitted a `.d.ts`. `packages/app` is the Expo application and has no entry module.
 - `@backstage/repo-tools@0.19.0` is already a root devDependency, added by the previous
@@ -55,14 +55,14 @@ the older `api-report.md`.
 `repo-tools` decides what to do with a workspace from `package.json`'s `backstage.role`:
 a package **without** a role is skipped entirely, and the roles `frontend`, `backend`, and
 `cli` are excluded from TypeScript API reports. So the role field is not decoration — it is
-how the twelve libraries opt in and how `packages/app` opts out:
+how the nineteen libraries opt in and how `packages/app` opts out:
 
 | Workspace | Role | Report |
 | --- | --- | --- |
 | `packages/app` | `frontend` | no — it is the application |
-| `packages/core` | `web-library` | yes |
-| `packages/errors` | `common-library` | yes |
-| `plugins/*` (10) | `frontend-plugin` | yes |
+| `packages/{core,ui,theme,catalog-api,analytics-api}` | `web-library` | yes |
+| `packages/{errors,types,catalog-model}` | `common-library` | yes |
+| `plugins/*` (11) | `frontend-plugin` | yes |
 
 These are the same role assignments the Backstage monorepo uses for the same kinds of package,
 including `frontend` for its app. Nothing else in this repo reads `backstage.role`, so the
@@ -79,11 +79,11 @@ unusable. Emit them with our own config instead and run it as the first half of 
 
 - `noEmit: false`, `declaration: true`, `emitDeclarationOnly: true` — undo `expo/tsconfig.base`
 - `outDir: "dist-types"`, `rootDir: "."` — produce exactly the layout API Extractor expects
-- `types: ["expo/types"]` — **required**: `packages/core/src/theme.ts` has a side-effect import
+- `types: ["expo/types"]` — **required**: `packages/theme/src/theme.ts` has a side-effect import
   of `./global.css`, and without Expo's ambient types that is `TS2882`. `jest` is dropped from
   the inherited list since tests are excluded.
-- `include` of `packages/{core,errors}/src` and `plugins/*/src`, `exclude` of `**/__tests__/**`
-  — the app is not included, matching D2.
+- `include` globs `packages/*/src` and `plugins/*/src` so a new workspace is covered without
+  editing this file; `exclude` drops `packages/app/**` (matching D2) and `**/__tests__/**`.
 
 *Alternative — make the root `tsconfig.json` emit declarations:* rejected. It would couple
 `npm run typecheck` to the report pipeline and pull `packages/app` into declaration emit for
@@ -117,15 +117,15 @@ run's findings get fixed rather than baked into the reports:
 
 | Package | Symbol | Fix |
 | --- | --- | --- |
-| `packages/core` | `Props` in `components/external-link.tsx` | rename to `ExternalLinkProps`, export from module and index |
-| `packages/core` | `HintRowProps` | export from module and index |
+| `packages/ui` | `Props` in `external-link.tsx` | rename to `ExternalLinkProps`, export from module and index |
+| `packages/ui` | `HintRowProps` | export from module and index |
 | `plugins/auth` | `AddInstanceFormProps`, `TokenFormProps` | already exported from their modules; add to index |
-| `plugins/catalog` | `FacetsResponse` in `src/api.ts` | export from module and index |
+| `packages/catalog-api` | `FacetsResponse` in `src/api.ts` | export from module and index |
 | `plugins/notifications` | `WireNotification` in `src/api.ts` | export from module and index |
 | `plugins/kubernetes` | `KubernetesEvent`, `PodRef`, `PodLogQuery` | already exported from `types.ts`; add to index |
 
 The bare name `Props` is renamed because it would otherwise be exported as `Props` from
-`@backstage-app/core`, which is meaningless at a package boundary. All other symbols keep their
+`@backstage-app/ui`, which is meaningless at a package boundary. All other symbols keep their
 names. Every change is additive — no existing export is removed or re-typed.
 
 *Alternative — pass `--allow-warnings` and keep the findings in the reports:* rejected. It would

@@ -8,8 +8,11 @@
   "main": "src/index.ts",
   "types": "src/index.ts",
   "dependencies": {
+    "@backstage-app/catalog-api": "*",
     "@backstage-app/core": "*",
-    "@backstage-app/plugin-catalog": "*"
+    "@backstage-app/plugin-catalog": "*",
+    "@backstage-app/theme": "*",
+    "@backstage-app/ui": "*"
   },
   "peerDependencies": {
     "expo-router": "*",

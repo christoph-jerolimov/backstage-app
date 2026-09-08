@@ -1,4 +1,4 @@
-import { demoEntities } from '@backstage-app/plugin-catalog';
+import { demoEntities } from '@backstage-app/catalog-api';
 
 import { fieldsFromSchema, formStepsFromSchema, initialValues, isComplete, parameterSchemaFromTemplate, submitValues } from '../schema-form';
 import type { TemplateEntity } from '../types';

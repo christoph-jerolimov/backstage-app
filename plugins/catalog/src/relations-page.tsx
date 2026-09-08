@@ -1,22 +1,12 @@
-import type { Entity } from '@backstage/catalog-model';
-import {
-  ActionButton,
-  BackstageApiError,
-  ListCard,
-  Page,
-  Spacing,
-  StateView,
-  ThemedText,
-  ThemedView,
-  useRemoteData,
-} from '@backstage-app/core';
+import type { Entity } from '@backstage-app/catalog-model';
+import { BackstageApiError, useRemoteData } from '@backstage-app/core';
+import { Spacing } from '@backstage-app/theme';
+import { ActionButton, ListCard, Page, StateView, ThemedText, ThemedView } from '@backstage-app/ui';
 import { useCallback, useMemo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import type { CatalogApi } from './api';
+import { type CatalogApi, type EntityRef, entityRefOf, groupRelationsByMeaning, parseEntityRef, stringifyEntityRef } from '@backstage-app/catalog-api';
 import { relationLabel } from './entity-page';
-import { entityRefOf, parseEntityRef, stringifyEntityRef, type EntityRef } from './entity-ref';
-import { groupRelationsByMeaning } from './relation-groups';
 
 export type RelationsPageProps = {
   entityRef: EntityRef;

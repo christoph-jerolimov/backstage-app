@@ -1,10 +1,9 @@
-import type { Entity } from '@backstage/catalog-model';
+import type { Entity } from '@backstage-app/catalog-model';
 import { useBackstage } from '@backstage-app/core';
 import { useRouter } from 'expo-router';
 
 import { CatalogPage, type CatalogPageProps } from './catalog-page';
-import { entityHref, entityRefOf } from './entity-ref';
-import { useCatalogApi } from './use-catalog-api';
+import { entityHref, entityRefOf, useCatalogApi } from '@backstage-app/catalog-api';
 
 export type CatalogScreenProps = Pick<CatalogPageProps, 'title' | 'description' | 'fixedKind' | 'allowAllKinds' | 'requiredAnnotation' | 'onSelectEntity' | 'toolbar' | 'initialFilters'>;
 

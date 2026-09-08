@@ -1,4 +1,4 @@
-import type { EntityRef } from '@backstage-app/plugin-catalog';
+import type { EntityRef } from '@backstage-app/catalog-api';
 
 /** Backend path of an entity's built documentation site (no trailing slash). */
 export function docsBasePath(ref: EntityRef): string {

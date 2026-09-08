@@ -1,3 +1,4 @@
+import type { EntityActionsPlugin } from '@backstage-app/catalog-api';
 import { createPlugin } from '@backstage-app/core';
 
 import { CatalogScreen } from './catalog-screen';
@@ -11,7 +12,7 @@ export const ENTITY_ROUTE = 'entity/[kind]/[namespace]/[name]';
 export const MINE_ROUTE = 'mine';
 export const RELATIONS_ROUTE = 'relations/[kind]/[namespace]/[name]';
 
-export const catalogPlugin = createPlugin({
+export const catalogPlugin = createPlugin<EntityActionsPlugin>({
   id: 'catalog',
   name: 'Catalog',
   routes: [

@@ -1,9 +1,7 @@
 import { BackstageApiError } from '@backstage-app/core';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
 
-import type { CatalogApi, CatalogLocation } from '../api';
-import { REFRESH_PATH, createRestCatalogApi, locationByEntityPath, locationPath } from '../api';
-import { createDemoCatalogApi } from '../demo-api';
+import { type CatalogApi, type CatalogLocation, createDemoCatalogApi, createRestCatalogApi, locationByEntityPath, locationPath, REFRESH_PATH } from '@backstage-app/catalog-api';
 import { EntityPage } from '../entity-page';
 
 const petstore = { kind: 'component', namespace: 'default', name: 'petstore' };

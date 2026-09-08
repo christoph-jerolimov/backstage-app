@@ -1,6 +1,6 @@
 ## Why
 
-Twelve workspaces (`packages/core`, `packages/errors`, and ten `plugins/*`) export a public
+Nineteen workspaces (eight under `packages/` and all eleven `plugins/*`) export a public
 surface that other workspaces consume, and nothing in the repo records what that surface is.
 A PR can widen `@backstage-app/core`'s exports, change a prop type every plugin depends on, or
 leak a type by accident, and the diff shows only the implementation — never the API shape.
@@ -20,9 +20,11 @@ way to name its argument.
   already a devDependency (added for `knip-reports`), so no new dependency is needed.
   `@backstage/cli` has no `api-reports` command — it lives in `repo-tools`.
 - Give every workspace a **`backstage.role`**, which is what `repo-tools` uses to decide how to
-  treat a package: `web-library` for `packages/core`, `common-library` for `packages/errors`,
-  `frontend-plugin` for all ten `plugins/*`, and `frontend` for `packages/app`.
-- Commit a **`report.api.md` to each of the twelve library workspaces**, recording every exported
+  treat a package: `web-library` for the React-facing libraries (`core`, `ui`, `theme`,
+  `catalog-api`, `analytics-api`), `common-library` for the dependency-free ones (`errors`,
+  `types`, `catalog-model`), `frontend-plugin` for all eleven `plugins/*`, and `frontend` for
+  `packages/app`.
+- Commit a **`report.api.md` to each of the nineteen library workspaces**, recording every exported
   symbol and its type signature.
 - Add a **`tsconfig.api-reports.json`** that emits declaration files to `dist-types/`, because
   API Extractor reads `.d.ts`, not source. `repo-tools`' own `--tsc` flag shells out to
@@ -31,10 +33,10 @@ way to name its argument.
   **CI step** so a PR that changes an exported signature without regenerating its report fails,
   the same way `lint`, `typecheck`, and `knip-reports:check` do.
 - **Fix all nine `ae-forgotten-export` findings**, because each is a genuine hole in a package's
-  entry point: export `ExternalLinkProps` and `HintRowProps` from `packages/core`,
+  entry point: export `ExternalLinkProps` and `HintRowProps` from `packages/ui`,
   `AddInstanceFormProps` and `TokenFormProps` from `plugins/auth`, `FacetsResponse` from
-  `plugins/catalog`, `WireNotification` from `plugins/notifications`, and `KubernetesEvent`,
-  `PodRef`, and `PodLogQuery` from `plugins/kubernetes`.
+  `packages/catalog-api`, `WireNotification` from `plugins/notifications`, and
+  `KubernetesEvent`, `PodRef`, and `PodLogQuery` from `plugins/kubernetes`.
 - Ignore `dist-types/` in git.
 
 ## Non-goals
@@ -66,11 +68,12 @@ None.
 ## Impact
 
 - **Root `package.json`**: two scripts (`api-reports`, `api-reports:check`). No new dependency.
-- **All 13 workspace `package.json` files**: a `backstage.role` field.
-- **Twelve workspaces**: a new committed `report.api.md` each.
-- **Six source files** across `packages/core`, `plugins/auth`, `plugins/catalog`,
-  `plugins/kubernetes`, and `plugins/notifications`: added type exports, plus their five
+- **All 20 workspace `package.json` files**: a `backstage.role` field.
+- **Nineteen workspaces**: a new committed `report.api.md` each.
+- **Six source files** across `packages/ui`, `packages/catalog-api`, `plugins/auth`,
+  `plugins/kubernetes`, and `plugins/notifications`: added type exports, plus their
   `src/index.ts` entry points.
-- **New root `tsconfig.api-reports.json`**; **`.gitignore`** gains `dist-types/`.
+- **New root `tsconfig.api-reports.json`**; **`.gitignore`** gains `dist-types/`, and
+  **`eslint.config.js`** ignores it too.
 - **`.github/workflows/ci.yml`**: one added step in the existing `check` job.
 - No runtime or app-bundle impact — declaration emit and API Extractor are dev-time only.

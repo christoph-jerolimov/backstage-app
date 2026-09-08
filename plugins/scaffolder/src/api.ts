@@ -1,5 +1,5 @@
 import { BackstageApiError, type FetchJson } from '@backstage-app/core';
-import { type EntityRef, demoEntities, stringifyEntityRef } from '@backstage-app/plugin-catalog';
+import { type EntityRef, demoEntities, stringifyEntityRef } from '@backstage-app/catalog-api';
 
 import { demoActions, demoEvents, demoTasks } from './demo-data';
 import { parameterSchemaFromTemplate } from './schema-form';

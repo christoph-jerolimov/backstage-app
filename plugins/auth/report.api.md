@@ -4,7 +4,6 @@
 
 ```ts
 import { BackstageInstance } from "@backstage-app/core";
-import { BackstagePlugin } from "@backstage-app/core";
 import { BackstageSession } from "@backstage-app/core";
 import { ComponentType } from "react";
 import { InstancesState } from "@backstage-app/core";
@@ -44,7 +43,23 @@ export type AddInstanceFormProps = {
 };
 
 // @public (undocumented)
-export const authPlugin: BackstagePlugin;
+export const authPlugin: {
+  id: string;
+  name: string;
+  routes: {
+    name: string;
+    component: typeof AccountScreen;
+  }[];
+  navItems: {
+    title: string;
+    route: string;
+    icon: {
+      ios: "person.crop.circle";
+      android: "person";
+      web: "person";
+    };
+  }[];
+};
 
 // @public
 export function buildRefreshProbeScript(refreshUrl: string): string;

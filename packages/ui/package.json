@@ -1,0 +1,21 @@
+{
+  "name": "@backstage-app/ui",
+  "version": "1.0.0",
+  "private": true,
+  "backstage": {
+    "role": "web-library"
+  },
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "dependencies": {
+    "@backstage-app/theme": "*"
+  },
+  "peerDependencies": {
+    "expo-router": "*",
+    "expo-symbols": "*",
+    "expo-web-browser": "*",
+    "react": "*",
+    "react-native": "*",
+    "react-native-reanimated": "*"
+  }
+}

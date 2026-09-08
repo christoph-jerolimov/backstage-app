@@ -11,19 +11,18 @@
     "declarationMap": false,
     "outDir": "dist-types",
     "rootDir": ".",
-    // expo/types declares the CSS module shims that packages/core/src/theme.ts
+    // expo/types declares the CSS module shims that packages/theme/src/theme.ts
     // relies on for its `./global.css` side-effect import. Tests are excluded
     // below, so jest types are not needed.
     "types": ["expo/types"]
   },
-  // packages/app is the application, not a library, and has no API report.
+  // Globbed so a new workspace is covered without touching this file.
   "include": [
-    "packages/core/src/**/*.ts",
-    "packages/core/src/**/*.tsx",
-    "packages/errors/src/**/*.ts",
-    "packages/errors/src/**/*.tsx",
+    "packages/*/src/**/*.ts",
+    "packages/*/src/**/*.tsx",
     "plugins/*/src/**/*.ts",
     "plugins/*/src/**/*.tsx"
   ],
-  "exclude": ["**/__tests__/**"]
+  // packages/app is the application, not a library, and has no API report.
+  "exclude": ["packages/app/**", "**/__tests__/**"]
 }

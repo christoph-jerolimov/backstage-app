@@ -1,9 +1,8 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo } from 'react';
 
-import { DEFAULT_NAMESPACE, entityHref, stringifyEntityRef, type EntityRef } from './entity-ref';
+import { DEFAULT_NAMESPACE, entityHref, type EntityRef, stringifyEntityRef, useCatalogApi } from '@backstage-app/catalog-api';
 import { RelationsPage } from './relations-page';
-import { useCatalogApi } from './use-catalog-api';
 
 function first(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;

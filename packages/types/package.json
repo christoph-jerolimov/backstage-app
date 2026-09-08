@@ -1,0 +1,13 @@
+{
+  "name": "@backstage-app/types",
+  "version": "1.0.0",
+  "private": true,
+  "backstage": {
+    "role": "common-library"
+  },
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "dependencies": {
+    "@backstage/types": "^1.2.2"
+  }
+}

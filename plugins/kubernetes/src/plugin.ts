@@ -1,5 +1,5 @@
-import { createPlugin, hasAnnotation } from '@backstage-app/core';
-import { entityKubernetesHref } from '@backstage-app/plugin-catalog';
+import { createPlugin } from '@backstage-app/core';
+import { type EntityActionsPlugin, entityKubernetesHref, hasAnnotation } from '@backstage-app/catalog-api';
 
 import { KubernetesEntitiesScreen } from './kubernetes-entities-screen';
 import { KubernetesScreen } from './kubernetes-screen';
@@ -9,7 +9,7 @@ import { KUBERNETES_ANNOTATION } from './types';
 export const KUBERNETES_ROUTE = 'kubernetes/[kind]/[namespace]/[name]';
 export const POD_ROUTE = 'kubernetes/pod/[cluster]/[namespace]/[name]';
 
-export const kubernetesPlugin = createPlugin({
+export const kubernetesPlugin = createPlugin<EntityActionsPlugin>({
   id: 'kubernetes',
   name: 'Kubernetes',
   routes: [
