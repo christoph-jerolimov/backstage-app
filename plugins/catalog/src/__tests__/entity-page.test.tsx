@@ -32,8 +32,8 @@ describe('EntityPage', () => {
     await fireEvent.press(within(screen.getByTestId('relations-ownedBy')).getByRole('button', { name: 'group:default/team-platform' }));
     expect(onOpenEntity).toHaveBeenCalledWith({ kind: 'group', namespace: 'default', name: 'team-platform' });
 
-    expect(screen.getByText('Annotations (3)')).toBeTruthy();
-    await fireEvent.press(screen.getByText('Annotations (3)'));
+    expect(screen.getByText('Annotations (4)')).toBeTruthy();
+    await fireEvent.press(screen.getByText('Annotations (4)'));
     expect(within(screen.getByTestId('entity-annotations')).getByText('backstage.io/techdocs-ref')).toBeTruthy();
   });
 

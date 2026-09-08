@@ -23,6 +23,7 @@
     "@backstage-app/plugin-search": "*",
     "@backstage-app/plugin-settings": "*",
     "@backstage-app/plugin-techdocs": "*",
+    "@backstage-app/plugin-todo": "*",
     "@backstage-app/theme": "*",
     "@backstage-app/ui": "*",
     "@expo/ui": "~57.0.16",

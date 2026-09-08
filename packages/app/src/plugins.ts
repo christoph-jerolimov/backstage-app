@@ -9,6 +9,7 @@ import { scaffolderPlugin } from '@backstage-app/plugin-scaffolder';
 import { searchPlugin } from '@backstage-app/plugin-search';
 import { settingsPlugin } from '@backstage-app/plugin-settings';
 import { techdocsPlugin } from '@backstage-app/plugin-techdocs';
+import { todoPlugin } from '@backstage-app/plugin-todo';
 
 /**
  * The installed plugins, in drawer order. To add a plugin: add it here and mount its
@@ -23,6 +24,7 @@ export const registry = createPluginRegistry([
   techdocsPlugin,
   kubernetesPlugin,
   scaffolderPlugin,
+  todoPlugin,
   authPlugin,
   settingsPlugin,
 ]);
