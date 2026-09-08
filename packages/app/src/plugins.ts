@@ -1,5 +1,5 @@
 import { createPluginRegistry } from '@backstage-app/core';
-import { apisPlugin } from '@backstage-app/plugin-apis';
+import { apiDocsPlugin } from '@backstage-app/plugin-api-docs';
 import { authPlugin } from '@backstage-app/plugin-auth';
 import { catalogPlugin } from '@backstage-app/plugin-catalog';
 import { homePlugin } from '@backstage-app/plugin-home';
@@ -20,7 +20,7 @@ export const registry = createPluginRegistry([
   catalogPlugin,
   searchPlugin,
   notificationsPlugin,
-  apisPlugin,
+  apiDocsPlugin,
   techdocsPlugin,
   kubernetesPlugin,
   scaffolderPlugin,

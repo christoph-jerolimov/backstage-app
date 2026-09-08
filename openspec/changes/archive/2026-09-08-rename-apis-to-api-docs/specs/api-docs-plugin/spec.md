@@ -1,19 +1,21 @@
-# apis-plugin
-
 ## Purpose
 
-The APIs plugin gives API entities from the Backstage catalog their own entry point in
+The API-docs plugin gives API entities from the Backstage catalog their own entry point in
 the main navigation, reusing the catalog listing fixed to the API kind.
 
-## Requirements
+## ADDED Requirements
 
 ### Requirement: APIs entry in the main navigation
-The app SHALL install an APIs plugin that contributes one "APIs" navigation item, listed
-after Notifications, opening the APIs page at route `apis`.
+The app SHALL install an API-docs plugin that contributes one "APIs" navigation item, listed
+after Notifications, opening the APIs page at route `api-docs`.
 
 #### Scenario: Drawer entry
 - **WHEN** the app starts
 - **THEN** the drawer shows an "APIs" entry after "Notifications" that opens the APIs page
+
+#### Scenario: Deep link to the APIs page
+- **WHEN** the app opens the `/api-docs` path (web URL or app scheme link)
+- **THEN** the APIs page is shown and the drawer marks APIs as active
 
 ### Requirement: APIs page lists API entities
 The APIs page SHALL show the title "APIs" and list catalog entities of kind `api` using
