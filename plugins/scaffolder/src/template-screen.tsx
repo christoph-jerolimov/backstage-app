@@ -1,4 +1,5 @@
-import { BackstageApiError, Page, StateView, useRemoteData } from '@backstage-app/core';
+import { BackstageApiError, useRemoteData } from '@backstage-app/core';
+import { Page, StateView } from '@backstage-app/ui';
 import { DEFAULT_NAMESPACE, type EntityRef, useCatalogApi } from '@backstage-app/catalog-api';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useMemo } from 'react';

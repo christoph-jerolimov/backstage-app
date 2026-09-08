@@ -1,4 +1,5 @@
-import { BackstageProvider, PluginRegistryProvider, ThemeProvider, useResolvedScheme, useTheme } from '@backstage-app/core';
+import { BackstageProvider, PluginRegistryProvider } from '@backstage-app/core';
+import { ThemeProvider, useResolvedScheme, useTheme } from '@backstage-app/theme';
 import { EntityPrefsProvider } from '@backstage-app/catalog-api';
 import { DarkTheme, DefaultTheme, ThemeProvider as NavigationThemeProvider, useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';

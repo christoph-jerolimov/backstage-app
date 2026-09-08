@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, TextInput } from 'react-native';
 
-import { Fonts, Spacing } from '../theme';
-import { useTheme } from '../hooks/use-theme';
+import { Fonts, Spacing, useTheme } from '@backstage-app/theme';
 
 export type TextFilterProps = {
   value: string;

@@ -1,15 +1,6 @@
-import {
-  ActionButton,
-  Fonts,
-  InvalidTokenError,
-  Spacing,
-  ThemedText,
-  ThemedView,
-  sessionFromToken,
-  useTheme,
-  type BackstageInstance,
-  type BackstageSession,
-} from '@backstage-app/core';
+import { InvalidTokenError, sessionFromToken, type BackstageInstance, type BackstageSession } from '@backstage-app/core';
+import { Fonts, Spacing, useTheme } from '@backstage-app/theme';
+import { ActionButton, ThemedText, ThemedView } from '@backstage-app/ui';
 import { useState } from 'react';
 import { StyleSheet, TextInput } from 'react-native';
 

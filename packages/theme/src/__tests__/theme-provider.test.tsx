@@ -2,7 +2,7 @@ import { act, renderHook, waitFor } from '@testing-library/react-native';
 import type { ReactNode } from 'react';
 import { useColorScheme as useDeviceColorScheme } from 'react-native';
 
-import { createMemoryStorage } from '../backstage/instances';
+import { createMemoryStorage } from '@backstage-app/core';
 import { useTheme } from '../hooks/use-theme';
 import { Colors } from '../theme';
 import { THEME_PREFERENCE_KEY, ThemeProvider, resolveScheme, useThemePreference } from '../theme-provider';

@@ -1,15 +1,7 @@
 import type { Entity } from '@backstage-app/catalog-model';
-import {
-  ActionButton,
-  BackstageApiError,
-  ListCard,
-  Page,
-  Spacing,
-  StateView,
-  ThemedText,
-  ThemedView,
-  useRemoteData,
-} from '@backstage-app/core';
+import { BackstageApiError, useRemoteData } from '@backstage-app/core';
+import { Spacing } from '@backstage-app/theme';
+import { ActionButton, ListCard, Page, StateView, ThemedText, ThemedView } from '@backstage-app/ui';
 import { useCallback, useMemo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 

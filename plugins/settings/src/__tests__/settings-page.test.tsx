@@ -1,4 +1,5 @@
-import { Colors, ThemeProvider, createMemoryStorage } from '@backstage-app/core';
+import { createMemoryStorage } from '@backstage-app/core';
+import { Colors, ThemeProvider } from '@backstage-app/theme';
 import { act, fireEvent, render, screen, within } from '@testing-library/react-native';
 
 import { settingsPlugin } from '../plugin';

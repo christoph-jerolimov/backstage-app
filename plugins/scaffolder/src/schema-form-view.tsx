@@ -1,4 +1,5 @@
-import { FilterChips, Spacing, ThemedText, ThemedView, useTheme } from '@backstage-app/core';
+import { Spacing, useTheme } from '@backstage-app/theme';
+import { FilterChips, ThemedText, ThemedView } from '@backstage-app/ui';
 import { StyleSheet, Switch, TextInput, View } from 'react-native';
 
 import type { FormValues } from './schema-form';

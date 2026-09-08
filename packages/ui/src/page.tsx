@@ -4,8 +4,7 @@ import { ScrollView, StyleSheet } from 'react-native';
 import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
 
-import { useTheme } from '../hooks/use-theme';
-import { MaxContentWidth, Spacing } from '../theme';
+import { MaxContentWidth, Spacing, useTheme } from '@backstage-app/theme';
 
 export type PageProps = {
   title: string;
