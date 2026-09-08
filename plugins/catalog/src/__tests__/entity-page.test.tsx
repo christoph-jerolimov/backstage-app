@@ -1,4 +1,4 @@
-import type { Entity } from '@backstage/catalog-model';
+import type { Entity } from '@backstage-app/catalog-model';
 import { BackstageApiError, EntityPrefsProvider, createMemoryStorage, RECENT_KEY, STARRED_KEY } from '@backstage-app/core';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
 
