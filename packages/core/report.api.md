@@ -5,6 +5,7 @@
 ```ts
 import type { ComponentType } from "react";
 import { JSX } from "react";
+import { QueryClient } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import type { SymbolViewProps } from "expo-symbols";
 
@@ -104,6 +105,12 @@ export function buildAuthStartUrl(
   origin?: string,
 ): string;
 
+// @public (undocumented)
+export const CACHE_STORAGE_KEY = "app.queryCache";
+
+// @public
+export const CACHE_TIME_MS: number;
+
 // @public
 export function createBackstage(
   config: BackstageConfig,
@@ -140,6 +147,9 @@ export function createPlugin<T extends BackstagePlugin>(definition: T): T;
 export function createPluginRegistry(
   plugins: BackstagePlugin[],
 ): PluginRegistry;
+
+// @public
+export function createQueryClient(): QueryClient;
 
 // @public
 export function decodeIdentityToken(token: string): IdentityClaims;
@@ -285,6 +295,18 @@ export type PluginRoute = {
 };
 
 // @public
+export function QueryProvider(input: QueryProviderProps): JSX.Element;
+
+// @public (undocumented)
+export type QueryProviderProps = {
+  storage?: KeyValueStorage;
+  cacheKey?: string;
+  client?: QueryClient;
+  persistThrottleMs?: number;
+  children: ReactNode;
+};
+
+// @public
 export function readBackstageConfigFromEnv(): BackstageConfig;
 
 // @public
@@ -334,6 +356,9 @@ export function sessionFromToken(
   token: string,
   provider: string,
 ): BackstageSession;
+
+// @public
+export const STALE_TIME_MS = 30000;
 
 // @public
 export function useBackstage(): Backstage;

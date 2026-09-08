@@ -9,6 +9,9 @@
   "types": "src/index.ts",
   "peerDependencies": {
     "@react-native-async-storage/async-storage": "*",
+    "@tanstack/query-async-storage-persister": "*",
+    "@tanstack/react-query": "*",
+    "@tanstack/react-query-persist-client": "*",
     "expo-router": "*",
     "expo-secure-store": "*",
     "expo-symbols": "*",

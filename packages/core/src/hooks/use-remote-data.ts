@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
+import { QueryClient, QueryClientContext, keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useCallback, useContext, useState } from 'react';
 
 export type RemoteData<T> =
   | { status: 'loading'; data?: T; error?: undefined }
@@ -10,43 +11,53 @@ export type RemoteDataResult<T> = RemoteData<T> & {
   reload: () => void;
 };
 
-type Settled<T> = { id: string } & ({ status: 'success'; data: T } | { status: 'error'; error: Error });
-
 function toError(value: unknown): Error {
   return value instanceof Error ? value : new Error(String(value));
 }
 
+/** A client for components rendered outside `QueryProvider`: private and not persisted. */
+function createStandaloneClient(): QueryClient {
+  return new QueryClient({ defaultOptions: { queries: { retry: false, gcTime: 0, staleTime: 0 } } });
+}
+
 /**
- * Runs `fetcher` whenever `key` (a string describing the inputs) or the fetcher identity
- * changes, reporting loading / success / error. Results for superseded keys are dropped so
- * only the latest inputs are ever shown. Pass a memoized fetcher (`useCallback`).
+ * Runs `fetcher` for `key` (a string describing the inputs) and reports loading / success /
+ * error. Results are cached and revalidated by the app's query client, so returning to a
+ * page shows what it last read; outside `QueryProvider` each component gets a private
+ * client instead. Pass a memoized fetcher (`useCallback`).
  */
 export function useRemoteData<T>(fetcher: (signal: AbortSignal) => Promise<T>, key: string): RemoteDataResult<T> {
-  const [tick, setTick] = useState(0);
-  const [settled, setSettled] = useState<Settled<T> | undefined>(undefined);
-  const requestId = `${key}#${tick}`;
+  const provided = useContext(QueryClientContext);
+  const [standalone] = useState(() => (provided ? undefined : createStandaloneClient()));
+  const client = provided ?? (standalone as QueryClient);
 
-  useEffect(() => {
-    const controller = new AbortController();
-    fetcher(controller.signal).then(
-      (data) => {
-        if (!controller.signal.aborted) setSettled({ id: requestId, status: 'success', data });
+  const query = useQuery<T, Error>(
+    {
+      queryKey: [key],
+      // Keep the previous key's result on screen while the new one loads, so changing a
+      // filter does not blank the list.
+      placeholderData: keepPreviousData,
+      queryFn: async ({ signal }) => {
+        try {
+          return await fetcher(signal);
+        } catch (error) {
+          throw toError(error);
+        }
       },
-      (error: unknown) => {
-        if (!controller.signal.aborted) setSettled({ id: requestId, status: 'error', error: toError(error) });
-      }
-    );
-    return () => controller.abort();
-  }, [fetcher, requestId]);
+    },
+    client
+  );
 
-  const reload = useCallback(() => setTick((value) => value + 1), []);
+  const { refetch } = query;
+  const reload = useCallback(() => {
+    void refetch();
+  }, [refetch]);
 
-  const lastData = settled?.status === 'success' ? settled.data : undefined;
-  if (!settled || settled.id !== requestId) {
-    return { status: 'loading', data: lastData, reload };
+  if (query.isError) {
+    return { status: 'error', data: query.data, error: toError(query.error), reload };
   }
-  if (settled.status === 'error') {
-    return { status: 'error', data: lastData, error: settled.error, reload };
+  if (query.data !== undefined) {
+    return { status: 'success', data: query.data, reload };
   }
-  return { status: 'success', data: settled.data, reload };
+  return { status: 'loading', reload };
 }

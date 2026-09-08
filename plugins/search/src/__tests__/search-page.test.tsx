@@ -34,9 +34,11 @@ describe('SearchPage', () => {
     await type('payments');
     await waitFor(() => expect(screen.getByText('payments-api')).toBeTruthy());
 
+    // Results of the previous filters stay on screen until the new ones arrive, so wait for
+    // the catalog result to go rather than for a result both filter sets contain.
     await fireEvent.press(screen.getByRole('button', { name: 'TechDocs' }));
-    await waitFor(() => expect(screen.getByText('Payments API guide')).toBeTruthy());
-    expect(screen.queryByText('payments-api')).toBeNull();
+    await waitFor(() => expect(screen.queryByText('payments-api')).toBeNull());
+    expect(screen.getByText('Payments API guide')).toBeTruthy();
 
     await type('zzz-nothing');
     await waitFor(() => expect(screen.getByText('No results for "zzz-nothing"')).toBeTruthy());
