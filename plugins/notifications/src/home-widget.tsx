@@ -2,10 +2,13 @@ import { useRemoteData } from '@backstage-app/core';
 import { Spacing } from '@backstage-app/theme';
 import { ActionButton, StateView, ThemedText, ThemedView } from '@backstage-app/ui';
 import { useRouter } from 'expo-router';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import type { NotificationsApi } from './api';
+import { useSignal } from '@backstage-app/signals-react';
+
+import { NOTIFICATIONS_CHANNEL } from './api';
 import { useNotificationsApi } from './use-notifications-api';
 
 export function unreadMessage(unread: number): string {
@@ -20,10 +23,21 @@ export type UnreadCountProps = {
 /** The widget's content, with the API injected. */
 export function UnreadCount({ api }: UnreadCountProps) {
   const router = useRouter();
+  const [tick, setTick] = useState(0);
   const result = useRemoteData(
     useCallback((signal: AbortSignal) => api.status(signal), [api]),
-    'status'
+    `status#${tick}`
   );
+
+  // Reload the count when the backend signals a change; the signal is a trigger, not data.
+  const { lastSignal } = useSignal(NOTIFICATIONS_CHANNEL);
+  const seenSignal = useRef(lastSignal);
+  useEffect(() => {
+    if (lastSignal && lastSignal !== seenSignal.current) {
+      seenSignal.current = lastSignal;
+      setTick((value) => value + 1);
+    }
+  }, [lastSignal]);
 
   return (
     <>

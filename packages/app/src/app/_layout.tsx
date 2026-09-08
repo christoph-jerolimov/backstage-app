@@ -1,6 +1,7 @@
 import { BackstageProvider, PluginRegistryProvider } from '@backstage-app/core';
 import { ThemeProvider, useResolvedScheme, useTheme } from '@backstage-app/theme';
 import { EntityPrefsProvider } from '@backstage-app/catalog-api';
+import { SignalsProvider } from '@backstage-app/signals-react';
 import { DarkTheme, DefaultTheme, ThemeProvider as NavigationThemeProvider, useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 import * as SplashScreen from 'expo-splash-screen';
@@ -126,9 +127,11 @@ export default function RootLayout() {
       <PluginRegistryProvider registry={registry}>
         <ThemeProvider>
           <BackstageProvider>
-            <EntityPrefsProvider>
-              <NavigationChrome />
-            </EntityPrefsProvider>
+            <SignalsProvider>
+              <EntityPrefsProvider>
+                <NavigationChrome />
+              </EntityPrefsProvider>
+            </SignalsProvider>
           </BackstageProvider>
         </ThemeProvider>
       </PluginRegistryProvider>
