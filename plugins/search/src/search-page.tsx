@@ -1,13 +1,6 @@
-import {
-  FilterChips,
-  Page,
-  Spacing,
-  StateView,
-  TextFilter,
-  ThemedText,
-  ThemedView,
-  useRemoteData,
-} from '@backstage-app/core';
+import { useRemoteData } from '@backstage-app/core';
+import { Spacing } from '@backstage-app/theme';
+import { FilterChips, Page, StateView, TextFilter, ThemedText, ThemedView } from '@backstage-app/ui';
 import { useCallback, useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 

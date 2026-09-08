@@ -1,6 +1,7 @@
 import { AnalyticsProvider, NavigationAnalytics } from '@backstage-app/analytics-api';
 import { EntityPrefsProvider } from '@backstage-app/catalog-api';
-import { BackstageProvider, PluginRegistryProvider, ThemeProvider, useResolvedScheme, useTheme } from '@backstage-app/core';
+import { BackstageProvider, PluginRegistryProvider } from '@backstage-app/core';
+import { ThemeProvider, useResolvedScheme, useTheme } from '@backstage-app/theme';
 import { DarkTheme, DefaultTheme, ThemeProvider as NavigationThemeProvider, useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 import * as SplashScreen from 'expo-splash-screen';

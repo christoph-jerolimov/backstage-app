@@ -10,7 +10,8 @@ import {
   Text,
   TextInput,
 } from '@expo/ui';
-import { MaxContentWidth, Spacing, ThemedText, ThemedView, useTheme } from '@backstage-app/core';
+import { MaxContentWidth, Spacing, useTheme } from '@backstage-app/theme';
+import { ThemedText, ThemedView } from '@backstage-app/ui';
 import { useState } from 'react';
 import { Platform, ScrollView, StyleSheet } from 'react-native';
 

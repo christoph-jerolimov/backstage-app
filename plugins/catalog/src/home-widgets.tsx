@@ -1,4 +1,5 @@
-import { ListCard, StateView, useRemoteData } from '@backstage-app/core';
+import { useRemoteData } from '@backstage-app/core';
+import { ListCard, StateView } from '@backstage-app/ui';
 import { entityHref, entityRefOf, parseEntityRef, stringifyEntityRef, useCatalogApi, useRecentEntities, useStarredEntities } from '@backstage-app/catalog-api';
 import { useRouter } from 'expo-router';
 import { useCallback } from 'react';

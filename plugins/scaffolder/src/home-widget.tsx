@@ -1,4 +1,5 @@
-import { ListCard, StateView, formatRelativeTime, useBackstage, useRemoteData } from '@backstage-app/core';
+import { formatRelativeTime, useBackstage, useRemoteData } from '@backstage-app/core';
+import { ListCard, StateView } from '@backstage-app/ui';
 import { useRouter } from 'expo-router';
 import { useCallback } from 'react';
 

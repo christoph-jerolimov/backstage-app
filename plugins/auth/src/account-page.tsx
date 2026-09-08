@@ -1,17 +1,6 @@
-import {
-  ActionButton,
-  Page,
-  Spacing,
-  StateView,
-  ThemedText,
-  ThemedView,
-  isSessionExpired,
-  refreshSession,
-  type BackstageInstance,
-  type BackstageSession,
-  type InstancesState,
-  type NewInstance,
-} from '@backstage-app/core';
+import { isSessionExpired, refreshSession, type BackstageInstance, type BackstageSession, type InstancesState, type NewInstance } from '@backstage-app/core';
+import { Spacing } from '@backstage-app/theme';
+import { ActionButton, Page, StateView, ThemedText, ThemedView } from '@backstage-app/ui';
 import { useState, type ComponentType } from 'react';
 import { StyleSheet } from 'react-native';
 

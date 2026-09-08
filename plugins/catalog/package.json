@@ -7,7 +7,9 @@
   "dependencies": {
     "@backstage-app/catalog-api": "*",
     "@backstage-app/catalog-model": "*",
-    "@backstage-app/core": "*"
+    "@backstage-app/core": "*",
+    "@backstage-app/theme": "*",
+    "@backstage-app/ui": "*"
   },
   "peerDependencies": {
     "expo-router": "*",

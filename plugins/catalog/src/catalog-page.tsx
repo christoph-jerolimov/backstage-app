@@ -1,15 +1,7 @@
 import type { Entity } from '@backstage-app/catalog-model';
-import {
-  FilterChips,
-  ListCard,
-  Page,
-  Spacing,
-  StateView,
-  TextFilter,
-  ThemedText,
-  ThemedView,
-  useRemoteData,
-} from '@backstage-app/core';
+import { useRemoteData } from '@backstage-app/core';
+import { Spacing } from '@backstage-app/theme';
+import { FilterChips, ListCard, Page, StateView, TextFilter, ThemedText, ThemedView } from '@backstage-app/ui';
 import { type ReactNode, useCallback, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
