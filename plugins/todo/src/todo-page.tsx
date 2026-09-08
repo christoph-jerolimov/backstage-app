@@ -3,7 +3,7 @@ import { entityRefOf } from '@backstage-app/catalog-api';
 import { useRemoteData } from '@backstage-app/core';
 import { Spacing } from '@backstage-app/theme';
 import { ActionButton, FilterChips, ListCard, Page, StateView, TextFilter, ThemedView } from '@backstage-app/ui';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { TODO_PAGE_SIZE, wildcard } from './query';
@@ -45,15 +45,15 @@ export type TodoPageProps = {
 /** Lists an entity's todos, with a text filter, tag chips and "Load more" paging. */
 export function TodoPage({ entity, api, onOpenTodo }: TodoPageProps) {
   const [filters, setFilters] = useState<TodoFilters>(defaultTodoFilters);
-  const entityRef = entityRefOf(entity);
+  // Memoized so it can be an honest dependency below rather than a new object each render.
+  const entityRef = useMemo(() => entityRefOf(entity), [entity]);
   const key = JSON.stringify({ entityRef, filters });
 
   const first = useRemoteData(
     useCallback(
       (signal: AbortSignal) =>
         api.listTodos({ entity: entityRef, offset: 0, limit: TODO_PAGE_SIZE, orderBy: TODO_ORDER, filters: todoFilterParams(filters) }, signal),
-      // eslint-disable-next-line react-hooks/exhaustive-deps -- entityRef is rebuilt each render; `key` covers its identity.
-      [api, key]
+      [api, entityRef, filters]
     ),
     key
   );
