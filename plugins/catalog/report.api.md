@@ -75,6 +75,7 @@ export type EntityPageProps = {
   onOpenEntity?: (ref: EntityRef) => void;
   actionsFor?: (entity: Entity) => EntityActionItem[];
   onUnregistered?: () => void;
+  canUnregister?: boolean;
 };
 
 // @public (undocumented)
