@@ -50,7 +50,7 @@ export const NOTIFICATIONS_CHANNEL = 'notifications';
 
 export const defaultFilters: NotificationFilters = { read: false, search: '' };
 
-type WireNotification = {
+export type WireNotification = {
   id: string;
   created: string;
   read?: string | null;

@@ -6,7 +6,7 @@ import { ThemedView } from './themed-view';
 
 import { Spacing } from '@backstage-app/theme';
 
-type HintRowProps = {
+export type HintRowProps = {
   title?: string;
   hint?: ReactNode;
 };

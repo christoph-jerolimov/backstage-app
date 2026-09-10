@@ -1,6 +1,6 @@
 import { AnalyticsProvider, NavigationAnalytics } from '@backstage-app/analytics-api';
 import { EntityPrefsProvider } from '@backstage-app/catalog-api';
-import { BackstageProvider, PluginRegistryProvider } from '@backstage-app/core';
+import { BackstageProvider, PluginRegistryProvider, QueryProvider, useBackstage } from '@backstage-app/core';
 import { SignalsProvider } from '@backstage-app/signals-react';
 import { ThemeProvider, useResolvedScheme, useTheme } from '@backstage-app/theme';
 import { DarkTheme, DefaultTheme, ThemeProvider as NavigationThemeProvider, useRouter } from 'expo-router';
@@ -48,6 +48,12 @@ function drawerIcon(name: SymbolViewProps['name']) {
   return function DrawerIcon({ color, size }: { color: ColorValue; size: number }) {
     return <SymbolView name={name} tintColor={color} size={size} />;
   };
+}
+
+/** Scopes the cached and persisted reads to the active instance. */
+function CachedData({ children }: { children: React.ReactNode }) {
+  const { instance } = useBackstage();
+  return <QueryProvider cacheKey={instance?.id ?? ''}>{children}</QueryProvider>;
 }
 
 /** Builds the navigation theme and drawer from the active theme tokens. */
@@ -131,11 +137,13 @@ export default function RootLayout() {
         <ThemeProvider>
           <BackstageProvider>
             <AnalyticsProvider>
-              <SignalsProvider>
-                <EntityPrefsProvider>
-                  <NavigationChrome />
-                </EntityPrefsProvider>
-              </SignalsProvider>
+              <CachedData>
+                <SignalsProvider>
+                  <EntityPrefsProvider>
+                    <NavigationChrome />
+                  </EntityPrefsProvider>
+                </SignalsProvider>
+              </CachedData>
             </AnalyticsProvider>
           </BackstageProvider>
         </ThemeProvider>

@@ -81,8 +81,8 @@ The repository is an npm-workspaces monorepo:
   `createPluginRegistry`), shared UI primitives (`Page`, `ListCard`, `ThemedText`, …), the
   theme tokens, and the color-scheme hooks.
 - `plugins/*/` — one package per plugin (`@backstage-app/plugin-home`, `-catalog`,
-  `-search`, `-notifications`, `-apis`, `-techdocs`, `-kubernetes`, `-scaffolder`, `-auth`, `-settings`). Each exports a plugin definition and
-  its page components. `plugin-apis` and `plugin-techdocs` compose the catalog listing
+  `-search`, `-notifications`, `-api-docs`, `-techdocs`, `-kubernetes`, `-scaffolder`, `-auth`, `-settings`). Each exports a plugin definition and
+  its page components. `plugin-api-docs` and `plugin-techdocs` compose the catalog listing
   (fixed to API entities, and to entities with the TechDocs annotation); `plugin-techdocs`
   also renders the built TechDocs HTML of an entity in a web view (iframe on web).
   `plugin-kubernetes` lists entities with a Kubernetes id and shows their workloads per

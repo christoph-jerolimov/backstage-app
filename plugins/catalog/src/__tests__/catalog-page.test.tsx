@@ -19,9 +19,11 @@ describe('CatalogPage', () => {
     await waitFor(() => expect(screen.getByText('payments-api')).toBeTruthy());
     expect(screen.queryByText('Petstore')).toBeNull();
 
+    // `petstore-grpc` is in both result sets, so wait for the entity that only the wider
+    // filter matched to go away rather than for one that is already on screen.
     await fireEvent.press(screen.getByRole('button', { name: 'grpc' }));
-    await waitFor(() => expect(screen.getByText('petstore-grpc')).toBeTruthy());
-    expect(screen.queryByText('payments-api')).toBeNull();
+    await waitFor(() => expect(screen.queryByText('payments-api')).toBeNull());
+    expect(screen.getByText('petstore-grpc')).toBeTruthy();
     expect(screen.getByText('1 entity')).toBeTruthy();
   });
 

@@ -27,13 +27,15 @@ describe('NotificationsPage', () => {
       await render(<NotificationsPage api={demoApi()} now={now} />);
       await waitFor(() => expect(screen.getByText('● Deployment of petstore succeeded')).toBeTruthy());
 
+      // The previous filter's notifications stay until the new ones load, so wait for one to
+      // disappear rather than for a notification the next filter also matches.
       await fireEvent.press(screen.getByRole('button', { name: 'Read' }));
-      await waitFor(() => expect(screen.getByText('Template "New Service" finished')).toBeTruthy());
-      expect(screen.queryByText('● Deployment of petstore succeeded')).toBeNull();
+      await waitFor(() => expect(screen.queryByText('● Deployment of petstore succeeded')).toBeNull());
+      expect(screen.getByText('Template "New Service" finished')).toBeTruthy();
 
       await fireEvent.press(screen.getByRole('button', { name: 'High' }));
-      await waitFor(() => expect(screen.getByText('Incident INC-2041 resolved')).toBeTruthy());
-      expect(screen.queryByText('Template "New Service" finished')).toBeNull();
+      await waitFor(() => expect(screen.queryByText('Template "New Service" finished')).toBeNull());
+      expect(screen.getByText('Incident INC-2041 resolved')).toBeTruthy();
 
       await fireEvent.changeText(screen.getByTestId('notifications-search'), 'zzz');
       await act(async () => {

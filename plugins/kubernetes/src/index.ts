@@ -34,4 +34,4 @@ export {
 } from './summaries';
 export type { ClusterSummary, ResourceSummary } from './summaries';
 export { KUBERNETES_ANNOTATION, KUBERNETES_LABEL_SELECTOR_ANNOTATION } from './types';
-export type { ClusterAttributes, ClusterObjects, FetchResponse, KubernetesFetchError, KubernetesObject, ObjectsByEntityResponse } from './types';
+export type { ClusterAttributes, ClusterObjects, FetchResponse, KubernetesEvent, KubernetesFetchError, KubernetesObject, ObjectsByEntityResponse, PodLogQuery, PodRef } from './types';

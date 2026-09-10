@@ -15,6 +15,8 @@
     "typecheck": "tsc --noEmit",
     "knip-reports": "backstage-repo-tools knip-reports",
     "knip-reports:check": "backstage-repo-tools knip-reports --ci",
+    "api-reports": "tsc -p tsconfig.api-reports.json && backstage-repo-tools api-reports -o ae-wrong-input-file-type,ae-undocumented,ae-missing-release-tag",
+    "api-reports:check": "tsc -p tsconfig.api-reports.json && backstage-repo-tools api-reports --ci -o ae-wrong-input-file-type,ae-undocumented,ae-missing-release-tag",
     "test": "jest"
   },
   "devDependencies": {
