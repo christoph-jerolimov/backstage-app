@@ -11,8 +11,10 @@
     "@backstage-app/catalog-api": "*",
     "@backstage-app/catalog-model": "*",
     "@backstage-app/core": "*",
+    "@backstage-app/permissions-react": "*",
     "@backstage-app/theme": "*",
-    "@backstage-app/ui": "*"
+    "@backstage-app/ui": "*",
+    "@backstage/plugin-catalog-common": "^1.1.10"
   },
   "peerDependencies": {
     "expo-router": "*",

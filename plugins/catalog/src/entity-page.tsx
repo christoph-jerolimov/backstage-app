@@ -20,6 +20,12 @@ export type EntityPageProps = {
   actionsFor?: (entity: Entity) => EntityActionItem[];
   /** Called after the entity's location has been removed. */
   onUnregistered?: () => void;
+  /**
+   * Whether the signed-in user may unregister this entity. Defaults to true, so a caller
+   * that does not ask about permission renders what it always has — absence of an answer
+   * is not evidence of denial. `EntityScreen` supplies the real verdict.
+   */
+  canUnregister?: boolean;
 };
 
 export type EntityActionItem = {
@@ -240,7 +246,19 @@ function refOfSpecField(entity: Entity, value: string, defaultKind: string): Ent
 }
 
 /** Refresh and Unregister, the two catalog write operations offered on an entity. */
-function MaintenanceActions({ entityRef, api, onRefreshed, onUnregistered }: { entityRef: EntityRef; api: CatalogApi; onRefreshed: () => void; onUnregistered?: () => void }) {
+function MaintenanceActions({
+  entityRef,
+  api,
+  onRefreshed,
+  onUnregistered,
+  canUnregister = true,
+}: {
+  entityRef: EntityRef;
+  api: CatalogApi;
+  onRefreshed: () => void;
+  onUnregistered?: () => void;
+  canUnregister?: boolean;
+}) {
   const ref = stringifyEntityRef(entityRef);
   const [busy, setBusy] = useState(false);
   const [confirming, setConfirming] = useState(false);
@@ -286,12 +304,12 @@ function MaintenanceActions({ entityRef, api, onRefreshed, onUnregistered }: { e
     <ThemedView type="backgroundElement" style={styles.card} testID="entity-maintenance">
       <View style={styles.actions}>
         <ActionButton label="Refresh" onPress={refresh} disabled={busy} compact testID="refresh-entity" />
-        {target && !confirming ? (
+        {target && canUnregister && !confirming ? (
           <ActionButton label="Unregister" onPress={() => setConfirming(true)} disabled={busy} compact testID="unregister-entity" />
         ) : null}
       </View>
 
-      {confirming && target ? (
+      {confirming && target && canUnregister ? (
         <ThemedView style={styles.confirm} testID="unregister-confirm">
           <ThemedText type="small">
             {`Unregistering removes the ${target.type} location that produced this entity:`}
@@ -418,7 +436,7 @@ function EntityDetails({ entity, entityRef, api, baseUrl, onOpenEntity, actionsF
 }
 
 /** Details of one catalog entity: about card, links, relations, and annotations. */
-export function EntityPage({ entityRef, api, baseUrl, onOpenEntity, actionsFor, onUnregistered }: EntityPageProps) {
+export function EntityPage({ entityRef, api, baseUrl, onOpenEntity, actionsFor, onUnregistered, canUnregister }: EntityPageProps) {
   const ref = stringifyEntityRef(entityRef);
   const entity = useRemoteData(
     useCallback((signal: AbortSignal) => api.getEntityByName(entityRef, signal), [api, entityRef]),
@@ -442,7 +460,13 @@ export function EntityPage({ entityRef, api, baseUrl, onOpenEntity, actionsFor, 
       {entity.data ? (
         <>
           <EntityDetails entity={entity.data} entityRef={entityRef} api={api} baseUrl={baseUrl} onOpenEntity={onOpenEntity} actionsFor={actionsFor} />
-          <MaintenanceActions entityRef={entityRef} api={api} onRefreshed={entity.reload} onUnregistered={onUnregistered} />
+          <MaintenanceActions
+            entityRef={entityRef}
+            api={api}
+            onRefreshed={entity.reload}
+            onUnregistered={onUnregistered}
+            canUnregister={canUnregister}
+          />
         </>
       ) : null}
     </Page>

@@ -1,10 +1,12 @@
 import type { Entity } from '@backstage-app/catalog-model';
 import { useBackstage, usePluginRegistry } from '@backstage-app/core';
+import { usePermission } from '@backstage-app/permissions-react';
+import { catalogEntityDeletePermission } from '@backstage/plugin-catalog-common/alpha';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useMemo } from 'react';
 
 import { EntityPage } from './entity-page';
-import { DEFAULT_NAMESPACE, entityActionsOf, entityHref, type EntityRef, entityRefOf, useCatalogApi } from '@backstage-app/catalog-api';
+import { DEFAULT_NAMESPACE, entityActionsOf, entityHref, type EntityRef, entityRefOf, stringifyEntityRef, useCatalogApi } from '@backstage-app/catalog-api';
 
 function first(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
@@ -22,6 +24,15 @@ export function EntityScreen() {
   const namespace = first(params.namespace) ?? DEFAULT_NAMESPACE;
   const name = first(params.name) ?? '';
   const entityRef = useMemo<EntityRef>(() => ({ kind, namespace, name }), [kind, namespace, name]);
+
+  // Asked here rather than inside EntityPage: the page is the presentational half of this
+  // plugin's split and takes even its api as a prop. `catalog.entity.delete` is a resource
+  // permission, so the entity's own ref is sent and the answer is about this entity, not
+  // about deletion in general.
+  const { allowed: canUnregister } = usePermission({
+    permission: catalogEntityDeletePermission,
+    resourceRef: stringifyEntityRef(entityRef),
+  });
 
   const actionsFor = useCallback(
     (entity: Entity) =>
@@ -44,6 +55,7 @@ export function EntityScreen() {
       onOpenEntity={(target) => router.push(entityHref(target))}
       actionsFor={actionsFor}
       onUnregistered={() => router.replace('/catalog')}
+      canUnregister={canUnregister}
     />
   );
 }
