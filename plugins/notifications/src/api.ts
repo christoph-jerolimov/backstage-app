@@ -45,6 +45,9 @@ export interface NotificationsApi {
 
 export const PAGE_SIZE = 25;
 
+/** The Backstage signals channel on which the backend announces notification changes. */
+export const NOTIFICATIONS_CHANNEL = 'notifications';
+
 export const defaultFilters: NotificationFilters = { read: false, search: '' };
 
 export type WireNotification = {

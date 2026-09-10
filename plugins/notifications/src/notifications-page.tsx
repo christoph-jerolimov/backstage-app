@@ -1,19 +1,11 @@
 import { formatRelativeTime, useRemoteData } from '@backstage-app/core';
+import { useSignal } from '@backstage-app/signals-react';
 import { Spacing } from '@backstage-app/theme';
 import { ActionButton, FilterChips, Page, StateView, TextFilter, ThemedText, ThemedView } from '@backstage-app/ui';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
-import {
-  PAGE_SIZE,
-  SEVERITIES,
-  defaultFilters,
-  type AppNotification,
-  type NotificationFilters,
-  type NotificationPage as NotificationPageData,
-  type NotificationSeverity,
-  type NotificationsApi,
-} from './api';
+import { type AppNotification, defaultFilters, type NotificationFilters, type NotificationPage as NotificationPageData, NOTIFICATIONS_CHANNEL, type NotificationsApi, type NotificationSeverity, PAGE_SIZE, SEVERITIES } from './api';
 
 export type NotificationsPageProps = {
   api: NotificationsApi;
@@ -61,11 +53,24 @@ export function NotificationsPage({ api, demo = false, now }: NotificationsPageP
   const totalCount = first.data?.totalCount ?? 0;
   const hasMore = items.length < totalCount;
 
-  const refresh = () => {
+  const refresh = useCallback(() => {
     setMore({ key, pages: [] });
     first.reload();
     setStatusTick((value) => value + 1);
-  };
+  }, [key, first]);
+
+  // The backend pushes a signal when this user's notifications change. It is used purely
+  // as an invalidation trigger: the list is reloaded from the API rather than built from
+  // the payload, so a missed or unexpected signal degrades to manual refresh instead of
+  // showing something the API never returned.
+  const { lastSignal } = useSignal(NOTIFICATIONS_CHANNEL);
+  const seenSignal = useRef(lastSignal);
+  useEffect(() => {
+    if (lastSignal && lastSignal !== seenSignal.current) {
+      seenSignal.current = lastSignal;
+      refresh();
+    }
+  }, [lastSignal, refresh]);
 
   const loadMore = async () => {
     if (!hasMore || loadingMore) return;

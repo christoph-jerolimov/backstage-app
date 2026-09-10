@@ -1,6 +1,7 @@
 import { AnalyticsProvider, NavigationAnalytics } from '@backstage-app/analytics-api';
 import { EntityPrefsProvider } from '@backstage-app/catalog-api';
 import { BackstageProvider, PluginRegistryProvider, QueryProvider, useBackstage } from '@backstage-app/core';
+import { SignalsProvider } from '@backstage-app/signals-react';
 import { ThemeProvider, useResolvedScheme, useTheme } from '@backstage-app/theme';
 import { DarkTheme, DefaultTheme, ThemeProvider as NavigationThemeProvider, useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
@@ -137,9 +138,11 @@ export default function RootLayout() {
           <BackstageProvider>
             <AnalyticsProvider>
               <CachedData>
-                <EntityPrefsProvider>
-                  <NavigationChrome />
-                </EntityPrefsProvider>
+                <SignalsProvider>
+                  <EntityPrefsProvider>
+                    <NavigationChrome />
+                  </EntityPrefsProvider>
+                </SignalsProvider>
               </CachedData>
             </AnalyticsProvider>
           </BackstageProvider>
