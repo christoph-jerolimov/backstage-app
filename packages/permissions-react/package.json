@@ -1,0 +1,18 @@
+{
+  "name": "@backstage-app/permissions-react",
+  "version": "1.0.0",
+  "private": true,
+  "backstage": {
+    "role": "web-library"
+  },
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "dependencies": {
+    "@backstage-app/core": "*",
+    "@backstage/plugin-permission-common": "^0.9.10"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  }
+}
